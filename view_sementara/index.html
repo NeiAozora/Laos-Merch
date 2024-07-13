@@ -14,24 +14,31 @@
 <!-- navbar -->
    <nav class="navbar navbar-light navbar-expand-lg shadow-lg" style="background-color: #fff;">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <a class="navbar-brand" href="#"><img src="4beebce89d681837ba2f4105ce43afac.png" alt="ini foto" class="rounded-circle" width="30" height="30"></a>
-            <h6 class="title">LAOS Merch</h6>
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="LogoLaos.png" alt="ini foto" class="me-2" width="30" height="30">
+            <h6 class="title mb-0">LAOS Merch</h6>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 w-100 d-flex justify-content-center">
-                <div class="search-bar-container">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 w-100 d-flex flex-column align-items-center mt-3">
+                <div class="search-bar-container mb-2 w-100 d-flex justify-content-center">
                     <form class="d-flex search-bar" role="search">
                         <input class="form-control me-2" type="search" placeholder="Mau cari apa?" aria-label="Search" autofocus>
                         <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
                     </form>
                 </div>
+                <div class="order-history-container text-center">
+                    <ul class="list-inline">
+                        <li class="list-inline-item"><a href="#" style="text-decoration: none; color: inherit;">Baju</a></li>
+                        <li class="list-inline-item"><a href="#" style="text-decoration: none; color: inherit;">Jaket</a></li>
+                        <li class="list-inline-item"><a href="#" style="text-decoration: none; color: inherit;">Celana</a></li>
+                    </ul>
+                </div>
             </ul>
-            <button class="btn btn-outline-dark me-2" type="button"><i class="fa-solid fa-cart-shopping"></i></button>
             <a class="d-inline-flex gap-1">
+                <button class="btn btn-outline-dark me-2" type="button"><i class="fa-solid fa-cart-shopping"></i></button>
                 <button class="btn btn-dark hover-collapse" type="submit" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="fa-solid fa-user"></i></button>
             </a>
         </div>
@@ -53,13 +60,13 @@
     <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <a href=""><img src="OldTrafford.jpg" class="d-block w-100" height="500" alt="..."></a>
+                <a href=""><img src="OldTrafford.jpg" class="d-block w-100 carousel-img" alt="..."></a>
             </div>
             <div class="carousel-item">
-                <a href=""><img src="OldTrafford.jpg" class="d-block w-100" height="500" alt="..."></a>
+                <a href=""><img src="OldTrafford.jpg" class="d-block w-100 carousel-img" alt="..."></a>
             </div>
             <div class="carousel-item">
-                <a href=""><img src="OldTrafford.jpg" class="d-block w-100" height="500" alt="..."></a>
+                <a href=""><img src="OldTrafford.jpg" class="d-block w-100 carousel-img" alt="..."></a>
             </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
@@ -70,6 +77,11 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
+        <ol class="carousel-indicators">
+            <li data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="0" class="active"></li>
+            <li data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="1"></li>
+            <li data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="2"></li>
+        </ol>
     </div>
 
 

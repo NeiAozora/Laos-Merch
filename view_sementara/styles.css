@@ -38,10 +38,20 @@ h3.notfound{
     margin:0;
 }
 h6.title{
-    padding-top: 10px;
+    padding-top: 5px;
     font-family: sans-serif;
-    font-weight: bold;
+    font-weight: lighter;
 
+}
+.carousel-img {
+    height: 500px; /* Set a maximum height */
+    object-fit: cover; /* Ensure the image covers the entire area without stretching */
+}
+
+@media (max-width: 768px) {
+    .carousel-img {
+        height: 300px; /* Adjust height for mobile devices */
+    }
 }
 .footer {
     background-color: #f8f9fa;
