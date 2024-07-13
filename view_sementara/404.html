@@ -6,28 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous"> -->
-    <style>
-        /* .hover-collapse:hover + .collapse:hover {
-            display: block !important;
-
-        } */
-
-        html, body {
-            height: 100%;
-        }
-        body {
-            display: flex;
-            flex-direction: column;
-        }
-        .content {
-            flex: 1;
-        }
-        .footer {
-            background-color: #f8f9fa;
-            padding: 20px 0;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -36,21 +15,23 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
             <a class="navbar-brand" href="#"><img src="4beebce89d681837ba2f4105ce43afac.png" alt="ini foto" class="rounded-circle" width="30" height="30"></a>
-            LAOS Merch
+            <h6 class="title">LAOS Merch</h6>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 w-100 d-flex justify-content-center">
-                <form class="d-flex" role="search">
-                    <input class="form-control" style="width:100%;" type="search" placeholder="Mau cari apa?" aria-label="Search" autofocus>
-                    <button class="btn btn-outline-success" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                </form>
+                <div class="search-bar-container">
+                    <form class="d-flex search-bar" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Mau cari apa?" aria-label="Search" autofocus>
+                        <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
+                    </form>
+                </div>
             </ul>
             <button class="btn btn-outline-dark me-2" type="button"><i class="fa-solid fa-cart-shopping"></i></button>
             <a class="d-inline-flex gap-1">
-                <button class="btn btn-outline-dark hover-collapse" type="submit" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="fa-solid fa-user"></i></button>
+                <button class="btn btn-dark hover-collapse" type="submit" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="fa-solid fa-user"></i></button>
             </a>
         </div>
     </div>
@@ -67,53 +48,21 @@
 
 
 <!-- not found -->
-    <div class="container mt-5 content" style="text-align: center;">
-        <h1>404</h1>
-        <h3>NOT FOUND</h3>
+    <div class="container mt-5 content notfound" style="text-align: center;">
+        <h1 class="notfound">404</h1>
+        <h3 class="notfound">NOT FOUND</h3>
     </div>
 
 
 <!-- footer -->
-<footer class="footer mt-5">
+<footer class="footer mt-5" style="background-color: black; color: #fff;">
     <div class="container bottom_border">
         <p class="text-center">Copyright &copy;2024 | Designed by <a href="#" style="text-decoration: none; color: inherit;" target="_blank">Tim Dadakan</a></p>
     </div>
 </footer>
 
 
-<!-- <script>
-    document.querySelector('.hover-collapse').addEventListener('mouseover', function () {
-        var collapseElement = document.getElementById('collapseExample');
-        var bsCollapse = new bootstrap.Collapse(collapseElement, {
-            toggle: false
-        });
-        bsCollapse.show();
-    });
 
-    document.querySelector('.hover-collapse').addEventListener('mouseout', function () {
-        var collapseElement = document.getElementById('collapseExample');
-        var bsCollapse = new bootstrap.Collapse(collapseElement, {
-            toggle: false
-        });
-        bsCollapse.hide();
-    });
-
-    document.getElementById('collapseExample').addEventListener('mouseover', function () {
-        var collapseElement = document.getElementById('collapseExample');
-        var bsCollapse = new bootstrap.Collapse(collapseElement, {
-            toggle: false
-        });
-        bsCollapse.show();
-    });
-
-    document.getElementById('collapseExample').addEventListener('mouseout', function () {
-        var collapseElement = document.getElementById('collapseExample');
-        var bsCollapse = new bootstrap.Collapse(collapseElement, {
-            toggle: false
-        });
-        bsCollapse.hide();
-    });
-</script> -->
     <script src="https://kit.fontawesome.com/36f40da328.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
     integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
