@@ -1,5 +1,8 @@
 <?php
 
+Router::get('/test/{custom_value}/test', function($custom_value) {
+    echo "Custom Value: " . htmlspecialchars($custom_value);
+});
 
 
 Router::getInstance()->addGlobalMiddleware(function(){

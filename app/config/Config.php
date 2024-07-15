@@ -1,6 +1,6 @@
 <?php
 
-define ('BASEURL', $url);
+define ('BASEURL', "http://localhost/Laos-Merch/");
 define("ROOT", dirname(dirname(__DIR__)));
 define("VIEWS", ROOT . "/views/");
 define('DB_HOST', 'localhost');

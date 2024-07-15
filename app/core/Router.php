@@ -63,6 +63,8 @@ class Router {
         $this->currentMethod = $_SERVER['REQUEST_METHOD'];
         $this->currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
+        $this->currentPath = str_replace("/Laos-Merch", "", $this->currentPath); // KOMENTARKAN BARIS INI JIKA MENDEPLOY DI CLOUD
+
         $publicDir = ROOT . '/public';
         $filePath = $publicDir . $this->currentPath;
 
