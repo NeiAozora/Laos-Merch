@@ -1,8 +1,9 @@
 <!-- navbar -->
+
 <nav class="navbar navbar-light navbar-expand-lg shadow-lg" style="background-color: #fff;">
     <div class="container-fluid">
         <a class="navbar-brand d-flex align-items-center" href="#">
-            <img src="LogoLaos.png" alt="ini foto" class="me-2" width="30" height="30">
+            <img src="<?= BASEURL ?>/public/assets/LogoLaos.png" alt="ini foto" class="me-2" width="30" height="30">
             <h6 class="title mb-0">LAOS Merch</h6>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

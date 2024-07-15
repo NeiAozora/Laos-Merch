@@ -2,7 +2,9 @@
 
 function dd(...$data)
 {
-    var_dump($data);
+    foreach($data as $d){
+        var_dump($d);
+    }
     die;
 }
 

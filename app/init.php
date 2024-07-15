@@ -10,7 +10,7 @@ require_once 'core/Router.php';
 require_once 'config/Config.php';
 require_once 'helpers/functions.php';
 
-dd(PUBLIC_ASSETS);
+
 
 // Otomatis include semua controllers
 foreach (glob(__DIR__ . "/controllers/" . "*.php") as $file) {

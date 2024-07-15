@@ -61,9 +61,18 @@ class Router {
 
     public function dispatch(): void {
         $this->currentMethod = $_SERVER['REQUEST_METHOD'];
-        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-        $this->currentPath = str_replace("http://localhost/PHP-MVC-Template", "", $url);
-        // $this->currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $this->currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+        $publicDir = ROOT . '/public';
+        $filePath = $publicDir . $this->currentPath;
+
+        if (file_exists($filePath) && is_file($filePath)) {
+            $this->serveStaticFile($filePath);
+            return;
+        } elseif (strpos($this->currentPath, '/public/') === 0) {
+            throw new Exception("Target file public tidak ada: " . $this->currentPath);
+        }
+
 
         // Terapkan middleware global
         foreach ($this->globalMiddlewares as $middleware) {
@@ -92,6 +101,37 @@ class Router {
         } catch (Exception $e) {
             $this->handleException($e);
         }
+    }
+
+
+    private function serveStaticFile(string $filePath): void {
+        $fileInfo = pathinfo($filePath);
+        $extension = isset($fileInfo['extension']) ? $fileInfo['extension'] : '';
+        $mimeType = $this->getMimeType($extension);
+        if ($mimeType) {
+            header('Content-Type: ' . $mimeType);
+        }
+        readfile($filePath);
+    }
+
+    private function getMimeType(string $extension): ?string {
+        $mimeTypes = [
+            'html' => 'text/html',
+            'css' => 'text/css',
+            'js' => 'application/javascript',
+            'json' => 'application/json',
+            'png' => 'image/png',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'gif' => 'image/gif',
+            'svg' => 'image/svg+xml',
+            'ico' => 'image/x-icon',
+            'txt' => 'text/plain',
+            'pdf' => 'application/pdf',
+            'zip' => 'application/zip',
+            'rar' => 'application/x-rar-compressed',
+        ];
+        return $mimeTypes[$extension] ?? null;
     }
 
     private function handleNotFound(): void {

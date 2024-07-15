@@ -1,7 +1,7 @@
 <?php
 
-require_once "../partials/head.php";
-require_once "../partials/navbar.php";
+require_once VIEWS . "/partials/head.php";
+require_once VIEWS . "/partials/navbar.php";
 
 ?>
 
@@ -14,4 +14,4 @@ require_once "../partials/navbar.php";
 
 <?php
 
-require_once "../partials/footer.php";
+require_once VIEWS . "/partials/footer.php";
