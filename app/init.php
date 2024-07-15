@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 
 require_once 'core/App.php';
 require_once 'core/Controller.php';
@@ -8,6 +9,8 @@ require_once 'core/Router.php';
 
 require_once 'config/Config.php';
 require_once 'helpers/functions.php';
+
+dd(PUBLIC_ASSETS);
 
 // Otomatis include semua controllers
 foreach (glob(__DIR__ . "/controllers/" . "*.php") as $file) {
@@ -23,4 +26,3 @@ foreach (glob(__DIR__ . "/models/" . "*.php") as $file) {
 foreach (glob(__DIR__ . "/middlewares/" . "*.php") as $file) {
     include $file;
 }
-

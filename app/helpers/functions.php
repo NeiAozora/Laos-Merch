@@ -8,7 +8,11 @@ function dd(...$data)
 
 function view($view, $data = [])
 {
-   require_once 'app/views/' . $view . '.php';
+    // Extract the data array into variables
+    extract($data);
+
+    // Include the view file
+    require_once 'views/' . $view . '.php';
 }
 
 function invokeClass($className, $methodName) : callable

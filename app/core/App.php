@@ -17,7 +17,7 @@ class App {
     }
 
     private function initRoutes() {
-        require_once dirname(dirname(__FILE__)) . '/routes/web.php'; // Ensure to include the Router class
+        require_once dirname(dirname(dirname(__FILE__))) . '/routes/web.php'; // Ensure to include the Router class
     }
 
 
