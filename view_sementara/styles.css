@@ -1,8 +1,7 @@
 html, body {
     height: 100%;
-}
-body {
-    display: flex;
+    margin: 0;
+    /* display: flex; */
     flex-direction: column;
 }
 
@@ -19,7 +18,6 @@ body {
     flex: 1;
     max-width: 600px;
 }
-
 .content {
     flex: 1;
 }
@@ -40,20 +38,26 @@ h3.notfound{
 h6.title{
     padding-top: 5px;
     font-family: sans-serif;
+    font-weight: bold;
+}
+.footer-list{
+    margin: 0;
+    font-family: sans-serif;
     font-weight: lighter;
-
 }
 .carousel-img {
-    height: 500px; /* Set a maximum height */
-    object-fit: cover; /* Ensure the image covers the entire area without stretching */
+    height: 500px; 
+    object-fit: cover; 
 }
 
 @media (max-width: 768px) {
     .carousel-img {
-        height: 300px; /* Adjust height for mobile devices */
+        height: 300px;
     }
 }
 .footer {
     background-color: #f8f9fa;
-    padding: 20px 0;
+    padding-top: 20px;
+    flex-shrink: 0;
+    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.5);
 }
