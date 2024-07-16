@@ -1,7 +1,7 @@
 <?php
 
 require_once "views/partials/head.php";
-require_once "views/partials/navbar.php"
+require_once "views/partials/navbar.php";
 
 ?>
 <section class="content">
@@ -16,7 +16,7 @@ require_once "views/partials/navbar.php"
                 <a href=""><img src="<?= BASEURL ?>public/assets/OldTrafford.jpg" class="d-block w-100 carousel-img" alt="..."></a>
             </div>
             <div class="carousel-item">
-                <a href=""><img src="<?= BASEURL ?>public/assets/OldTraffor.jpg" class="d-block w-100 carousel-img" alt="..."></a>
+                <a href=""><img src="<?= BASEURL ?>public/assets/OldTrafford.jpg" class="d-block w-100 carousel-img" alt="..."></a>
             </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
@@ -116,3 +116,7 @@ require_once "views/partials/navbar.php"
         </div>
         
 </section>
+
+<?php
+require_once "views/partials/footer.php";
+?>
