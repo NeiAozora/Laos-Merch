@@ -1,7 +1,7 @@
 <?php
 
-require_once "../partials/head.php";
-require_once "../partials/navbar.php"
+require_once "views/partials/head.php";
+require_once "views/partials/navbar.php"
 
 ?>
 <section class="content">
@@ -10,13 +10,13 @@ require_once "../partials/navbar.php"
     <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <a href=""><img src="OldTrafford.jpg" class="d-block w-100 carousel-img" alt="..."></a>
+                <a href=""><img src="<?= BASEURL ?>public/assets/OldTrafford.jpg" class="d-block w-100 carousel-img" alt="..."></a>
             </div>
             <div class="carousel-item">
-                <a href=""><img src="OldTrafford.jpg" class="d-block w-100 carousel-img" alt="..."></a>
+                <a href=""><img src="<?= BASEURL ?>public/assets/OldTrafford.jpg" class="d-block w-100 carousel-img" alt="..."></a>
             </div>
             <div class="carousel-item">
-                <a href=""><img src="OldTrafford.jpg" class="d-block w-100 carousel-img" alt="..."></a>
+                <a href=""><img src="<?= BASEURL ?>public/assets/OldTraffor.jpg" class="d-block w-100 carousel-img" alt="..."></a>
             </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
