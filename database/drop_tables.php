@@ -2,7 +2,6 @@
 
 require_once dirname(dirname(__FILE__)) . "/app/config/Config.php";
 require_once dirname(dirname(__FILE__)) . "/app/core/Database.php";
-require_once "helper.php";
 
 
 $query = 
