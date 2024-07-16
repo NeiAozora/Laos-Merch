@@ -10,7 +10,7 @@ Router::getInstance()->addGlobalMiddleware(function(){
 });
 
 Router::get('/', invokeClass(IndexController::class, "index"));
-
+Router::get('/product/{id}', invokeClass(ProductController::class, "index"));
 
 
 // Custom 404 Not Found handler

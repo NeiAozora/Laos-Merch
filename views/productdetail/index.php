@@ -1,5 +1,5 @@
 <?php
-require_once "view/partials/head.php";
+require_once "views/partials/head.php";
 require_once "views/partials/navbar.php";
 ?>
 
@@ -46,7 +46,7 @@ require_once "views/partials/navbar.php";
         </div>
         <!-- checkout -->
         <div class="col-sm-4 col-md-4 col-12 mt-5 d-flex justify-content-center">
-            <div class="card" style="width:18rem;">
+            <div class="card d-flex flex-column justify-content-between" style="width:18rem; height:100%">
                 <h5 class="mt-2 d-flex justify-content-center">Atur Pilihanmu</h5>
                 <div class="ms-2">
                     <p>Warna :</p>
@@ -54,7 +54,7 @@ require_once "views/partials/navbar.php";
                     <p>Jumlah :</p>
                     <p>Subtotal :</p>
                 </div>
-                <div class="text-center">
+                <div class="mt-auto text-center">
                     <button class="btn btn-success mb-2 mt-3" style="width:12rem;">Masukkan Keranjang</button>
                     <button class="btn btn-outline-success mb-3" style="width:12rem;">Beli Langsung</button>
                 </div>
