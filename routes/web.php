@@ -10,6 +10,7 @@ Router::getInstance()->addGlobalMiddleware(function(){
 });
 
 Router::get('/', invokeClass(IndexController::class, "index"));
+Router::get('/login', invokeClass(LoginController::class, "index"));
 Router::get('/product/{id}', invokeClass(ProductController::class, "index"));
 
 
