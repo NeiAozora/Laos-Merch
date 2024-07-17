@@ -34,13 +34,13 @@ require_once "views/partials/navbar.php";
             <div>
                 <label for="">Warna:</label>
                 <div>
-                    <a href="" class="btn btn-outline-success active">Hitam</a>
+                    <a href="" class="btn laos-outline-button active">Hitam</a>
                 </div>
                 <label for="">Ukuran:</label>
                 <div>
-                    <a href="" class="btn btn-outline-success active">L</a>
-                    <a href="" class="btn btn-outline-success">XL</a>
-                    <a href="" class="btn btn-outline-success">XXL</a>
+                    <a href="" class="btn laos-outline-button active">L</a>
+                    <a href="" class="btn laos-outline-button">XL</a>
+                    <a href="" class="btn laos-outline-button">XXL</a>
                 </div>
             </div>
         </div>
@@ -55,8 +55,8 @@ require_once "views/partials/navbar.php";
                     <p>Subtotal :</p>
                 </div>
                 <div class="mt-auto text-center">
-                    <button class="btn btn-success mb-2 mt-3" style="width:12rem;">Masukkan Keranjang</button>
-                    <button class="btn btn-outline-success mb-3" style="width:12rem;">Beli Langsung</button>
+                    <button class="btn laos-button mb-2 mt-3" style="width:12rem;">Masukkan Keranjang</button>
+                    <button class="btn laos-outline-button mb-3" style="width:12rem;">Beli Langsung</button>
                 </div>
             </div>
         </div>
@@ -67,7 +67,7 @@ require_once "views/partials/navbar.php";
             
             <div class="row justify-content-center">
                 <div class="col-6 col-md-3 mt-3">
-                    <div class="card" style="text-align: left;">
+                    <div class="card extra" style="text-align: left;">
                         <a href="#" style="text-decoration: none; color: inherit;">
                         <img src="#" class="card-img-top" alt="ini foto">
                         <div class="card-body">
@@ -79,7 +79,7 @@ require_once "views/partials/navbar.php";
                 </div>  
     
                 <div class="col-6 col-md-3 mt-3">
-                    <div class="card" style="text-align: left;">
+                    <div class="card extra" style="text-align: left;">
                         <a href="#" style="text-decoration: none; color: inherit;">
                         <img src="#" class="card-img-top" alt="ini foto">
                         <div class="card-body">
@@ -91,7 +91,7 @@ require_once "views/partials/navbar.php";
                 </div>  
                 
                 <div class="col-6 col-md-3 mt-3">
-                    <div class="card" style="text-align: left;">
+                    <div class="card extra" style="text-align: left;">
                         <a href="#" style="text-decoration: none; color: inherit;">
                         <img src="#" class="card-img-top" alt="ini foto">
                         <div class="card-body">
@@ -103,7 +103,7 @@ require_once "views/partials/navbar.php";
                 </div>  
     
                 <div class="col-6 col-md-3 mt-3">
-                    <div class="card" style="text-align: left;">
+                    <div class="card extra" style="text-align: left;">
                         <a href="#" style="text-decoration: none; color: inherit;">
                         <img src="#" class="card-img-top" alt="ini foto">
                         <div class="card-body">

@@ -4,17 +4,17 @@
         <div class="row">
             <div class=" col-sm-4 col-md col-sm-4  col-6 col mt-2">
                 <h5 >Layanan Pelanggan</h5>
-                <p class="footer-list">Bantuan</p>
-                <p class="footer-list">Metode Pembayaran</p>
-                <p class="footer-list">Pengembalian Barang & Dana</p>
-                <p class="footer-list">Lacak Pesanan Pembeli</p>
-                <p class="footer-list">Lacak Pengiriman</p>
+                <p class="footer-list"><a href="" style="text-decoration: none; color: inherit;">Bantuan</a></p>
+                <p class="footer-list"><a href="" style="text-decoration: none; color: inherit;">Metode Pembayaran</a></p>
+                <p class="footer-list"><a href="" style="text-decoration: none; color: inherit;">Pengembalian Barang & Dana</a></p>
+                <p class="footer-list"><a href="" style="text-decoration: none; color: inherit;">Lacak Pesanan Pembeli</a></p>
+                <p class="footer-list"><a href="" style="text-decoration: none; color: inherit;">Lacak Pengiriman</a></p>
             </div>
             <div class="col-sm-4 col-md  col-6 col mt-2">
                 <h5>Jelajahi</h5>
-                <p class="footer-list">Tentang Kami</p>
-                <p class="footer-list">Kebijakan LAOS Merch</p>
-                <p class="footer-list">Kebijakan Privasi</p>
+                <p class="footer-list"><a href="" style="text-decoration: none; color: inherit;">Tentang Kami</a></p>
+                <p class="footer-list"><a href="" style="text-decoration: none; color: inherit;">Kebijakan LAOS Merch</a></p>
+                <p class="footer-list"><a href="" style="text-decoration: none; color: inherit;">Kebijakan Privasi</a></p>
             </div>
             <div class="col-sm-4 col-md  col-6 col mt-2">
                 <h5>Metode Pembayaran</h5>
