@@ -5,19 +5,25 @@ require_once dirname(dirname(__FILE__)) . "/app/core/Database.php";
 require_once "helper.php";
 
 $query = 
+
 "
+-- Role
 CREATE TABLE roles (
     id_role BIGINT PRIMARY KEY AUTO_INCREMENT,
     role_name VARCHAR(100) UNIQUE NOT NULL,
     role_description TEXT
 );
 
+
+-- Hak Akses
 CREATE TABLE permissions (
     id_permission BIGINT PRIMARY KEY AUTO_INCREMENT,
     permission_name VARCHAR(100) UNIQUE NOT NULL,
     permission_description TEXT
 );
 
+
+-- Hak Akses Role (tabel penengah)
 CREATE TABLE role_permissions (
     id_role_permission BIGINT PRIMARY KEY AUTO_INCREMENT,
     id_role BIGINT,
@@ -26,6 +32,8 @@ CREATE TABLE role_permissions (
     FOREIGN KEY (id_permission) REFERENCES permissions(id_permission) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+
+-- pengguna
 CREATE TABLE users (
     id_user BIGINT PRIMARY KEY AUTO_INCREMENT,
     id_google VARCHAR(255) UNIQUE,
@@ -38,12 +46,16 @@ CREATE TABLE users (
     FOREIGN KEY (id_role) REFERENCES roles(id_role) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
+
+-- ketegori produk
 CREATE TABLE categories (
     id_category BIGINT PRIMARY KEY AUTO_INCREMENT,
     category_name VARCHAR(255) NOT NULL,
     category_description TEXT
 );
 
+
+-- produk
 CREATE TABLE products (
     id_product BIGINT PRIMARY KEY AUTO_INCREMENT,
     product_name VARCHAR(255) NOT NULL,
@@ -58,14 +70,43 @@ CREATE TABLE products (
     FOREIGN KEY (id_category) REFERENCES categories(id_category) ON UPDATE CASCADE ON DELETE SET NULL 
 );
 
-CREATE TABLE product_variations (
-    id_variation BIGINT PRIMARY KEY AUTO_INCREMENT,
-    id_product BIGINT,
+
+-- Variasi produk
+CREATE TABLE variations (
+    variation_id SERIAL PRIMARY KEY,
+    product_id INT NOT NULL,
     variation_name VARCHAR(255) NOT NULL,
-    price DOUBLE,
-    quantity_in_stock INT,
-    FOREIGN KEY (id_product) REFERENCES products(id_product) ON UPDATE CASCADE ON DELETE CASCADE
+    price DECIMAL(10, 2) NOT NULL,
+    image_url VARCHAR(255),
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
+
+-- table opsi variasi produk dengan recursive relationship
+CREATE TABLE variation_options (
+    option_id SERIAL PRIMARY KEY,
+    variation_id INT NOT NULL,
+    option_name VARCHAR(255) NOT NULL,
+    parent_option_id INT, -- Points to the parent option
+    FOREIGN KEY (variation_id) REFERENCES variations(variation_id),
+    FOREIGN KEY (parent_option_id) REFERENCES variation_options(option_id)
+);
+
+
+-- Create cart_items table
+CREATE TABLE cart_items (
+    id_cart_item BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id_user BIGINT NOT NULL,
+    id_product_variation BIGINT NOT NULL,
+    quantity INT NOT NULL,
+    unit_price DECIMAL(10, 2) NOT NULL,
+    total_price DECIMAL(10, 2) AS (quantity * unit_price) STORED,
+    date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_user) REFERENCES users(id_user) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (id_product_variation) REFERENCES variations(id_variation) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
 
 CREATE TABLE tags (
     id_tag INT PRIMARY KEY AUTO_INCREMENT,
@@ -82,12 +123,12 @@ CREATE TABLE product_tags (
 
 CREATE TABLE reviews (
     id_review BIGINT PRIMARY KEY AUTO_INCREMENT,
-    id_variation BIGINT,
+    id_product_variation BIGINT,
     id_user BIGINT,
     rating INT CHECK (rating BETWEEN 1 AND 5),
     comment TEXT,
     date_posted TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_variation) REFERENCES product_variations(id_variation) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (id_product_variation) REFERENCES product_variations(id_product_variation) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (id_user) REFERENCES users(id_user) ON UPDATE CASCADE ON DELETE CASCADE 
 );
 
@@ -107,9 +148,9 @@ CREATE TABLE discounts (
 
 CREATE TABLE discount_product_variations (
     id_discount BIGINT,
-    id_variation BIGINT,
+    id_product_variation BIGINT,
     FOREIGN KEY (id_discount) REFERENCES discounts(id_discount) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (id_variation) REFERENCES product_variations(id_variation) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (id_product_variation) REFERENCES variations(id_variation) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE shipping_addresses (
@@ -126,7 +167,6 @@ CREATE TABLE shipping_addresses (
     is_temporary BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (id_user) REFERENCES users(id_user) ON UPDATE CASCADE ON DELETE CASCADE
 );
-
 
 CREATE TABLE order_statuses (
     id_status BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -148,12 +188,12 @@ CREATE TABLE orders (
 CREATE TABLE order_items (
     id_order_item BIGINT PRIMARY KEY AUTO_INCREMENT,
     id_order BIGINT,
-    id_variation BIGINT,
+    id_product_variation BIGINT,
     quantity INT,
     unit_price DECIMAL(10, 2),
     total_price DECIMAL(10, 2),
     FOREIGN KEY (id_order) REFERENCES orders(id_order) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (id_variation) REFERENCES product_variations(id_variation)ON UPDATE CASCADE ON DELETE SET NULL
+    FOREIGN KEY (id_product_variation) REFERENCES product_variations(id_product_variation)ON UPDATE CASCADE ON DELETE SET NULL
 );
 
 CREATE TABLE carriers (
@@ -178,7 +218,6 @@ CREATE TABLE shipments (
     FOREIGN KEY (id_carrier) REFERENCES carriers(id_carrier) ON UPDATE CASCADE ON DELETE SET NULL
 );
 
-
 CREATE TABLE shipment_statuses (
     id_shipment_status BIGINT PRIMARY KEY AUTO_INCREMENT,
     id_shipment BIGINT,
@@ -186,7 +225,6 @@ CREATE TABLE shipment_statuses (
     status_description VARCHAR(255),
     FOREIGN KEY (id_shipment) REFERENCES shipments(id_shipment) ON UPDATE CASCADE ON DELETE CASCADE
 );
-
 
 
 ";

@@ -25,9 +25,9 @@ function invokeClass($className, $methodName) : callable
     if (!method_exists($className, $methodName)){
         throw new Exception("Target method '{$methodName}' dari class {$className} tidak ada!");
     }
-    return function() use ($className, $methodName){
+    return function(...$data) use ($className, $methodName){
         $controller = new $className();
-        call_user_func([$controller, $methodName]);
+        call_user_func_array([$controller, $methodName], $data);
     };
 
 }
