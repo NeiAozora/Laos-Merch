@@ -54,6 +54,9 @@ h6.title{
     .carousel-img {
         height: 300px;
     }
+    .card{
+        width: 100px;
+    }
 }
 .footer {
     background-color: #f8f9fa;
