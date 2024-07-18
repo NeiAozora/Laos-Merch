@@ -19,6 +19,7 @@ Router::get('/user/{google_id}/settings', function() {
 
 Router::get('/login', invokeClass(LoginController::class, "index"));
 Router::get('/product/{id}', invokeClass(ProductController::class, "index"));
+Router::get('/order', invokeClass(OrderController::class, "index"));
 
 
 
