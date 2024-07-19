@@ -44,6 +44,7 @@ Router::get("/about/privacy-policy", function(){
 
 Router::get('/login', invokeClass(LoginController::class, "index"));
 Router::get('/product/{id}', invokeClass(ProductController::class, "index"));
+Router::get('/order', invokeClass(OrderController::class, "index"));
 
 
 

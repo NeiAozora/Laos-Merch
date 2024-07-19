@@ -18,6 +18,61 @@ html, body {
     flex: 1;
     max-width: 600px;
 }
+/* end nav */
+
+/* button */
+.laos-button{
+    background-color: limegreen;
+    color: white;
+    border: none;
+}
+.laos-button:hover{
+    background-color: lime;
+    color: white;
+}
+.laos-button.active{
+    background-color: lime;
+    color: white;
+}
+.laos-outline-button{
+    background-color: transparent;
+    color: limegreen;
+    border: 1px solid limegreen;
+
+}
+.laos-outline-button:hover{
+    background-color: limegreen;
+    color: white;
+}
+.laos-outline-button.active{
+    background-color: limegreen;
+    color: white;
+    border: none;
+}
+.cart-button{
+    background-color: black;
+    color: white;
+    border: none;
+}
+.cart-button:hover{
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+}
+.btn-warning.active{
+    background-color: gold;
+    color: white;
+    border: none;
+}
+.btn-warning:hover{
+    background-color: gold;
+    color: black;
+}
+.isi-collapse:hover{
+    background-color: #cccccc;
+}
+/* end button */
+
 .content {
     flex: 1;
 }
@@ -54,10 +109,11 @@ h6.title{
     .carousel-img {
         height: 300px;
     }
-    .card{
+    .card.extra{
         width: 100px;
     }
 }
+
 .footer {
     background-color: #f8f9fa;
     padding-top: 20px;
@@ -67,6 +123,6 @@ h6.title{
 
 /* detailproduk */
 .title-detail{
-    color: green;
+    color: limegreen;
     margin-bottom: 0;
 }
