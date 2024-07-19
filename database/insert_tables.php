@@ -1,6 +1,9 @@
 <?php
 
-require_once dirname(dirname(__FILE__)) . "/app/config/Config.php";
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('DB_NAME', 'laos_merch');
 require_once dirname(dirname(__FILE__)) . "/app/core/Database.php";
 require_once "helper.php";
 
@@ -45,7 +48,7 @@ INSERT INTO products (product_name, description, id_category, weight, dimensions
 ('Novel', 'Bestselling novel', 2, '500g', '200x130x30mm', 'http://example.com/novel.jpg', FALSE);
 
 -- Inserting product variations
-INSERT INTO product_variations (id_product, variation_name, price, quantity_in_stock) VALUES
+INSERT INTO variations (id_product, variation_name, price, quantity_in_stock) VALUES
 (1, '64GB Black', 699.99, 50),
 (1, '128GB Silver', 799.99, 30),
 (2, 'Paperback', 19.99, 100),
@@ -76,7 +79,7 @@ INSERT INTO discounts (id_discount_type, discount_value, start_date, end_date) V
 (2, 5.00, '2024-06-01 00:00:00', '2024-06-30 23:59:59');
 
 -- Inserting discount product variations
-INSERT INTO discount_product_variations (id_discount, id_variation) VALUES
+INSERT INTO discount_variations (id_discount, id_variation) VALUES
 (1, 1),
 (2, 3);
 

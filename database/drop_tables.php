@@ -1,6 +1,9 @@
 <?php
 
-require_once dirname(dirname(__FILE__)) . "/app/config/Config.php";
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('DB_NAME', 'laos_merch');
 require_once dirname(dirname(__FILE__)) . "/app/core/Database.php";
 
 
@@ -32,7 +35,7 @@ DROP TABLE IF EXISTS shipping_addresses;
 DROP TABLE IF EXISTS discount_type;
 
 -- Junction table for discounts and product variations
-DROP TABLE IF EXISTS discount_product_variation;
+DROP TABLE IF EXISTS discount_variation;
 
 -- Discounts table
 DROP TABLE IF EXISTS discounts;
@@ -47,7 +50,7 @@ DROP TABLE IF EXISTS product_tags;
 DROP TABLE IF EXISTS tags;
 
 -- Product variations table
-DROP TABLE IF EXISTS product_variation;
+DROP TABLE IF EXISTS variation;
 
 -- Products table
 DROP TABLE IF EXISTS products;

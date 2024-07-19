@@ -6,6 +6,17 @@ require_once "views/partials/navbar.php";
 ?>
 <section class="content">
 
+<style>
+        .card {
+            text-align: left;
+            margin: auto;
+        }
+        .card img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+
 <!-- carousel -->
     <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
@@ -42,10 +53,13 @@ require_once "views/partials/navbar.php";
     <h1 class="d-flex justify-content-center mt-5">Official Merchandise</h1>
     <div class="container">
         <div class="row justify-content-center">
+
+        <!-- being looped 8 times per page -->
             <div class="col-6 col-md-3 mt-3">
                 <div class="card" style="text-align: left;">
                     <a href="#" style="text-decoration: none; color: inherit;">
                     <img src="#" class="card-img-top" alt="ini foto">
+                    <!-- stars here -->
                     <div class="card-body">
                         <h5 class="card-title">Judul</h5>
                         <p class="card-text">teks</p>
@@ -54,41 +68,6 @@ require_once "views/partials/navbar.php";
                 </div>
             </div>  
 
-            <div class="col-6 col-md-3 mt-3">
-                <div class="card" style="text-align: left;">
-                    <a href="#" style="text-decoration: none; color: inherit;">
-                    <img src="#" class="card-img-top" alt="ini foto">
-                    <div class="card-body">
-                        <h5 class="card-title">Judul</h5>
-                        <p class="card-text">teks</p>
-                    </div>
-                    </a>
-                </div>
-            </div>  
-
-            <div class="col-6 col-md-3 mt-3">
-                <div class="card" style="text-align: left;">
-                    <a href="#" style="text-decoration: none; color: inherit;">
-                    <img src="#" class="card-img-top" alt="ini foto">
-                    <div class="card-body">
-                        <h5 class="card-title">Judul</h5>
-                        <p class="card-text">teks</p>
-                    </div>
-                    </a>
-                </div>
-            </div>  
-
-            <div class="col-6 col-md-3 mt-3">
-                <div class="card" style="text-align: left;">
-                    <a href="#" style="text-decoration: none; color: inherit;">
-                    <img src="#" class="card-img-top" alt="ini foto">
-                    <div class="card-body">
-                        <h5 class="card-title">Judul</h5>
-                        <p class="card-text">teks</p>
-                    </div>
-                    </a>
-                </div>
-            </div>  
             
         </div>
     </div>

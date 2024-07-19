@@ -63,16 +63,21 @@ class Router {
         $this->currentMethod = $_SERVER['REQUEST_METHOD'];
         $this->currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-        $this->currentPath = str_replace("/Laos-Merch", "", $this->currentPath); // KOMENTARKAN BARIS INI JIKA MENDEPLOY DI CLOUD
+
+        if(!WEB_DOMAIN_MODE){  // KOMENTARKAN BLOK KODE INI JIKA MENDEPLOY DI CLOUD
+            $this->currentPath = str_replace("/Laos-Merch/public", "", $this->currentPath);
+            $this->currentPath = str_replace("/Laos-Merch", "", $this->currentPath);
+        }
 
         $publicDir = ROOT . '/public';
         $filePath = $publicDir . $this->currentPath;
+
 
         if (file_exists($filePath) && is_file($filePath)) {
             $this->serveStaticFile($filePath);
             return;
         } elseif (strpos($this->currentPath, '/public/') === 0) {
-            throw new Exception("Target file public tidak ada: " . $this->currentPath);
+            throw new Exception("Target file '$filePath' tidak ada: " . $this->currentPath);
         }
 
 
