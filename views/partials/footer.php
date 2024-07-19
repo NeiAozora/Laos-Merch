@@ -118,6 +118,28 @@ updateDropdownMenuClass();
 window.addEventListener('resize', updateDropdownMenuClass);
 
 </script>
+
+<!-- checkbox cart -->
+<script>
+    document.getElementById('selectAll').addEventListener('change', function(){
+        const checkboxes = document.querySelectorAll('.checkbox-item');
+        checkboxes.forEach(checkbox=>{checkbox.checked = this.checked});
+    });
+</script>
+
+<!-- button plus minus -->
+<script>
+    document.getElementById('decrement').addEventListener('click', function() {
+      let quantity = parseInt(document.getElementById('quantity').value);
+      if (quantity > 1) {document.getElementById('quantity').value = quantity - 1;}
+    });
+
+    document.getElementById('increment').addEventListener('click', function() {
+      let quantity = parseInt(document.getElementById('quantity').value);
+      document.getElementById('quantity').value = quantity + 1;
+    });
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 
 <script src="https://kit.fontawesome.com/36f40da328.js" crossorigin="anonymous"></script>

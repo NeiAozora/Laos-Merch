@@ -19,19 +19,19 @@ Router::get('/user/{firebaseId}/settings', function() {
     view("/404/index");
 });
 // Keranjang
-Router::get('/cart', function() {
-    view("/404/index");
+Router::get('/carts', function() {
+    view("404/index");
 });
 // Checkout
 Router::get('/user/{firebaseId}/settings', function() {
     view("/404/index");
 });
 // Riwayat pesanan-pesanan
-Router::get('/purcase', function() {
+Router::get('/purchase', function() {
     view("/404/index");
 });
 // Detail Pesanan
-Router::get('/purcase/order', function() {
+Router::get('/purchase/order', function() {
     view("/404/index");
 });
 
@@ -42,11 +42,11 @@ Router::get("/about/privacy-policy", function(){
     view("/about/privacy-policy/index");
 });
 
-Router::get('/login', invokeClass(LoginController::class, "index"));
-Router::get('/product/{id}', invokeClass(ProductController::class, "index"));
+// Router::get('/login', invokeClass(LoginController::class, "index"));
+// Router::get('/product/{id}', invokeClass(ProductController::class, "index"));
 Router::get('/order', invokeClass(OrderController::class, "index"));
 Router::get('/carts', invokeClass(CartController::class, "index"));
-Router::get('/checkout', invokeClass(CheckoutController::class, "index"));
+// Router::get('/checkout', invokeClass(CheckoutController::class, "index"));
 
 
 

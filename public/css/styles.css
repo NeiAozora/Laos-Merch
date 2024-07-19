@@ -1,9 +1,15 @@
+/* main */
 html, body {
     height: 100%;
     margin: 0;
     /* display: flex; */
     flex-direction: column;
 }
+.content {
+    flex: 1;
+    padding-top: 80px;
+}
+/* end main */
 
 /* nav */
 .navbar-nav {
@@ -21,17 +27,17 @@ html, body {
 /* end nav */
 
 /* button */
-.laos-button{
+.btn-success{
     background-color: limegreen;
     color: white;
     border: none;
 }
-.laos-button:hover{
+.btn-success:hover{
     background-color: lime;
     color: white;
 }
-.laos-button.active{
-    background-color: lime;
+.laos-button:active{
+    background-color: limegreen;
     color: white;
 }
 .laos-outline-button{
@@ -47,35 +53,26 @@ html, body {
 .laos-outline-button.active{
     background-color: limegreen;
     color: white;
-    border: none;
-}
-.cart-button{
-    background-color: black;
-    color: white;
-    border: none;
-}
-.cart-button:hover{
-    background-color: white;
-    color: black;
-    border: 1px solid black;
 }
 .btn-warning.active{
     background-color: gold;
     color: white;
-    border: none;
 }
 .btn-warning:hover{
     background-color: gold;
     color: black;
 }
-.isi-collapse:hover{
-    background-color: #cccccc;
-}
 /* end button */
 
-.content {
-    flex: 1;
+.decoration-none{
+    text-decoration: none; 
+    color: inherit;
 }
+.me20{
+    margin-right: 20px;
+}
+
+/* 404 */
 .notfound {
     display: flex;
     flex-direction: column;
@@ -90,6 +87,13 @@ h3.notfound{
     font-size: 3rem;
     margin:0;
 }
+/* 404 end */
+
+.cursor-pointer{
+    cursor: pointer;
+    user-select: none;
+}
+
 h6.title{
     padding-top: 5px;
     font-family: sans-serif;
@@ -101,7 +105,7 @@ h6.title{
     font-weight: lighter;
 }
 .carousel-img {
-    height: 450px; 
+    height: 500px; 
     object-fit: cover; 
 }
 

@@ -3,6 +3,6 @@
 class OrderController extends Controller{
 
     public function index(){
-        $this->view('myorder/index');
+        $this->view('order/index');
     }
 }
