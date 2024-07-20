@@ -46,7 +46,7 @@ Router::get("/about/privacy-policy", function(){
 // Router::get('/product/{id}', invokeClass(ProductController::class, "index"));
 Router::get('/order', invokeClass(OrderController::class, "index"));
 Router::get('/carts', invokeClass(CartController::class, "index"));
-// Router::get('/checkout', invokeClass(CheckoutController::class, "index"));
+Router::get('/checkout', invokeClass(CheckoutController::class, "index"));
 
 
 

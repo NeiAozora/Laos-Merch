@@ -46,7 +46,7 @@ require_once "views/partials/navbar.php";
         </div>
         <!-- checkout -->
         <div class="col-sm-4 col-md-4 col-12 mt-5 d-flex justify-content-center">
-            <div class="card d-flex flex-column justify-content-between" style="width:18rem; height:100%">
+            <div class="card d-flex flex-column justify-content-between" style="width:18rem;">
                 <h5 class="mt-2 d-flex justify-content-center">Atur Pilihanmu</h5>
                 <div class="ms-2">
                     <p>Warna :</p>

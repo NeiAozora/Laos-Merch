@@ -26,7 +26,7 @@ require_once VIEWS . '/partials/navbar.php';
                                         <p>warna begini</p>
                                     </div>
                                     <div class="me-3">
-                                        <h6 class="title-detail">Ukuran</h6>
+                                        <h6 class="title-detail">Ukuran:</h6>
                                         <p>ukuran segini</p>
                                     </div>
                                 </div>
@@ -55,17 +55,18 @@ require_once VIEWS . '/partials/navbar.php';
                         </div>
                     </div>
                 </div>
+                
             </div>
 
             <div class="col-lg-4 col-md-10 col-sm-12">
-                <div class="card d-flex flex-column justify-content-between" style="height: 100%;">
+                <div class="card d-flex flex-column justify-content-between">
                     <h5 class="mt-2 text-center">Total Belanja</h5>
                     <div class="ms-2">
                         <h4>Total:</h4>
                         <h5>Rp. sekian sekian</h5>
                     </div>
                     <div class="mt-auto text-center mb-3">
-                        <button class="btn btn-success mt-2" style="width: 12rem;">Beli Sekarang</button>
+                        <button class="btn btn-success mt-2" style="width: 12rem;">Beli</button>
                     </div>
                 </div>
             </div>

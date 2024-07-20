@@ -32,14 +32,14 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 w-100 d-flex flex-column align-items-center">
                     <div class="search-bar-container">
                         <form class="d-flex search-bar" role="search">
-                            <input class="form-control me-2" type="search" placeholder="Mau cari apa?" aria-label="Search" autofocus>
+                            <input class="form-control me-2" type="search" placeholder="Cari Merchandise..." aria-label="Search" autofocus>
                             <button class="btn btn-success" type="submit"><i class="fas fa-search"></i></button>
                         </form>
                     </div>
                 </ul>
                 <div class="d-inline-flex gap-1">
                     <div class="dropdown">
-                        <button class="btn btn-dark me-2 dropdown-toggle" type="button" id="cartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-warning active me-2 dropdown-toggle" type="button" id="cartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-cart-shopping"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cartDropdown" >
@@ -47,12 +47,12 @@
                         </ul>
                     </div>
                     <div class="dropdown">
-                        <button class="btn btn-warning active active dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-warning active dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-user"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" >
-                            <li><a class="dropdown-item" href="#" class="decoration-none">Profil Saya</a></li>
-                            <li><a class="dropdown-item" href="#" class="decoration-none">Pesanan Saya</a></li>
+                            <li><a class="dropdown-item decoration-none" href="#">Profil Saya</a></li>
+                            <li><a class="dropdown-item decoration-none" href="#">Pesanan Saya</a></li>
                         </ul>
                     </div>
                 </div>

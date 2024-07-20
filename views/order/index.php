@@ -6,7 +6,7 @@ require_once VIEWS . "/partials/navbar.php";
   
   <section class="content">
       <div class="container mt-3">
-        <h5>Pesananku</h5>   
+        <h4>Pesananku</h4>   
         <div class="mb-3">
             <a href="" class="btn laos-outline-button active me-2">Semua</a>
             <a href="" class="btn laos-outline-button me-2">Diproses</a>
@@ -22,11 +22,11 @@ require_once VIEWS . "/partials/navbar.php";
                         <div class="product-name ms-3">
                             <h4>Kaos Bilek</h4>
                             <div style="display: flex;">
-                                <div class="" style="margin-right: 20px;">
+                                <div class="me20">
                                     <h6 class="title-detail" >Warna:</h6>
                                     <p>warna ini</p>
                                 </div>
-                                <div style="margin-right: 20px;">
+                                <div class="me20">
                                     <h6 class="title-detail">Ukuran:</h6>
                                     <p>ukuran segini</p>
                                 </div>

@@ -39,7 +39,7 @@ html, body {
     border: none;
 }
 .btn-success:hover{
-    background-color: lime;
+    background-color: green;
     color: white;
 }
 .laos-button:active{
@@ -60,15 +60,20 @@ html, body {
     background-color: limegreen;
     color: white;
 }
+.btn-warning:active{
+    background-color: gold;
+    color: limegreen;
+}
 .btn-warning.active{
     background-color: gold;
-    color: white;
+    color: limegreen;
 }
 .btn-warning:hover{
     background-color: gold;
     color: black;
 }
 /* end button */
+
 
 .decoration-none{
     text-decoration: none; 
@@ -77,6 +82,38 @@ html, body {
 .me20{
     margin-right: 20px;
 }
+.cursor-pointer{
+    cursor: pointer;
+    user-select: none;
+}
+h6.title{
+    padding-top: 3px;
+    font-family: nunito;
+    font-weight: bold;
+}
+h6.card-body .d-flex {
+    margin-bottom: 0;
+}
+h6.card-body .d-flex .me-3 {
+    margin-bottom: 10px;
+}
+.position-top-right {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+
+
+/* dropdown */
+.dropdown-item:hover{
+    background-color:limegreen;
+    color: white;
+}
+.dropdown-item:active{
+    background-color:lime;
+}
+/* end dropdown */
 
 /* 404 */
 .notfound {
@@ -95,21 +132,8 @@ h3.notfound{
 }
 /* 404 end */
 
-.cursor-pointer{
-    cursor: pointer;
-    user-select: none;
-}
 
-h6.title{
-    padding-top: 3px;
-    font-family: nunito;
-    font-weight: bold;
-}
-.footer-list{
-    margin: 0;
-    font-family: sans-serif;
-    font-weight: lighter;
-}
+/* img setting */
 .carousel-img {
     height: 500px; 
     object-fit: cover; 
@@ -123,16 +147,25 @@ h6.title{
         width: 100px;
     }
 }
+/* end img */
 
+/* footer */
+.thin-font{
+    margin-bottom: 0;
+    font-family: nunito;
+    font-weight: 300;
+}
 .footer {
     background-color: #f8f9fa;
     padding-top: 20px;
     flex-shrink: 0;
     box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.5);
 }
+/* end footer */
 
 /* detailproduk */
 .title-detail{
     color: limegreen;
     margin-bottom: 0;
+    font-family: nunito;
 }
