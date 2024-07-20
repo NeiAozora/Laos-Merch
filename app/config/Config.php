@@ -1,7 +1,7 @@
 <?php
 
 // Define a constant for WEB_DOMAIN_MODE
-define('WEB_DOMAIN_MODE', true); // Set this to true or false as needed
+define('WEB_DOMAIN_MODE', false); // Set this to true or false as needed
 
 $host = $_SERVER['HTTP_HOST'];
 

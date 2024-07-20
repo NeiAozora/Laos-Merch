@@ -16,7 +16,7 @@
 
 <nav class="navbar navbar-light navbar-expand-lg shadow-lg fixed-top" style="background-color: #fff;">
     <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center" href="#">
+        <a class="navbar-brand d-flex align-items-center" href="<?= BASEURL?>">
             <img src="<?= BASEURL ?>public/assets/LogoLaos.png" alt="ini foto" class="me-2" width="30" height="30">
             <h6 class="title mb-0">LAOS Merch</h6>
         </a>
@@ -30,7 +30,7 @@
             </div>
             <div class="offcanvas-body">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 w-100 d-flex flex-column align-items-center">
-                    <div class="search-bar-container mt-1">
+                    <div class="search-bar-container">
                         <form class="d-flex search-bar" role="search">
                             <input class="form-control me-2" type="search" placeholder="Mau cari apa?" aria-label="Search" autofocus>
                             <button class="btn btn-success" type="submit"><i class="fas fa-search"></i></button>

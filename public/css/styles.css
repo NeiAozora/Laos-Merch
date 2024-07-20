@@ -8,6 +8,12 @@ html, body {
 .content {
     flex: 1;
     padding-top: 80px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.main{
+    flex: 1;
 }
 /* end main */
 
@@ -95,8 +101,8 @@ h3.notfound{
 }
 
 h6.title{
-    padding-top: 5px;
-    font-family: sans-serif;
+    padding-top: 3px;
+    font-family: nunito;
     font-weight: bold;
 }
 .footer-list{

@@ -39,7 +39,7 @@ require_once VIEWS . '/partials/navbar.php';
                                 <a href="#" class="decoration-none"><i class="fa-solid fa-trash" style="color: red;"></i></a>
                             </div>
                             <div class="d-flex justify-content-end my-2">
-                                <div class="col-4">
+                                <div class="col-5">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text cursor-pointer" id="decrement">-</span>

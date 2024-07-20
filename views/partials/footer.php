@@ -1,6 +1,6 @@
 
 <!-- footer -->
-<footer class="footer mt-5">
+<footer class="footer mt-5 bottom">
     <div class="container bottom_border">
         <div class="row">
             <div class="col-sm-4 col-md-3 col-6 mt-2">
@@ -22,8 +22,7 @@
                 <div class="d-flex">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_dana_blue.svg" alt="ini dana" class="payment-method-icon col-2 col-md-3">
                 <img src="<?= BASEURL ?>public/assets/ovo.png" alt="ini ovo" class="payment-method-icon col-2 col-md-3">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="ini kartu" class="payment-method-icon col-2 col-md-3">
-                </div>
+            </div>
                 
             </div>
             <div class="col-sm-4 col-md-3 col-6 mt-2">
@@ -119,7 +118,7 @@ window.addEventListener('resize', updateDropdownMenuClass);
 
 </script>
 
-<!-- checkbox cart -->
+<!-- select all checkbox cart -->
 <script>
     document.getElementById('selectAll').addEventListener('change', function(){
         const checkboxes = document.querySelectorAll('.checkbox-item');
@@ -140,9 +139,8 @@ window.addEventListener('resize', updateDropdownMenuClass);
     });
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-
-<script src="https://kit.fontawesome.com/36f40da328.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://kit.fontawesome.com/36f40da328.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
     integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
     crossorigin="anonymous"></script>
