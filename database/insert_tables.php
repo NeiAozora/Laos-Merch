@@ -38,7 +38,7 @@ VALUES
 -- Insert Users
 INSERT INTO users (id_firebase, username, first_name, last_name, email, wa_number, id_role, is_active)
 VALUES
-    ('ljiO9mSdnocXG1veOvRfW3g84wX2', 'noxindocraft', 'Ahmad', 'Fauzan', 'noxindocraft@gmail.com', '+6283119624458', 1, TRUE),
+    ('ljiO9mSdnocXG1veOvRfW3g84wX2', 'noxindocraft', 'Ahmad', 'Fauzan', 'noxindocraft@gmail.com', '+6283119624458', 1, TRUE);
 
 -- Insert Categories
 INSERT INTO categories (category_name, category_description)
@@ -47,10 +47,10 @@ VALUES
     ('Accessories', 'Various accessories for electronic devices.');
 
 -- Insert Products
-INSERT INTO products (id_category, product_name, description, weight, dimensions, date_added, last_updated, discontinued)
+INSERT INTO products (id_category, product_name, description, weight, dimensions, discontinued)
 VALUES
-    (1, 'Mechanical Keyboard', 'A high-quality mechanical keyboard with backlighting.', '1.5 kg', '45x15x5 cm', NOW(), NOW(), FALSE),
-    (2, 'Gaming Mouse', 'A precision gaming mouse with adjustable DPI.', '0.2 kg', '10x6x4 cm', NOW(), NOW(), FALSE);
+    (1, 'Mechanical Keyboard', 'A high-quality mechanical keyboard with backlighting.', '1.5 kg', '45x15x5 cm', FALSE),
+    (2, 'Gaming Mouse', 'A precision gaming mouse with adjustable DPI.', '0.2 kg', '10x6x4 cm', FALSE);
 
 -- Insert Product Images
 INSERT INTO product_images (id_product, image_url)
@@ -75,7 +75,7 @@ VALUES
     (2, 60.00, 75);   -- Gaming Mouse, Advanced
 
 -- Insert Variation Options
-INSERT INTO variation_options (id_variation_type, id_combination, option_name, image_url)
+INSERT INTO variation_options (id_variation_type, id_combination, option_name)
 VALUES
     (1, 1, 'RGB Backlight'),
     (1, 2, 'Single Color'),
@@ -101,22 +101,20 @@ VALUES
     (2, 3);  -- Gaming Mouse tagged as Discounted
 
 -- Insert Reviews
-INSERT INTO reviews (id_variation_combination, id_user, rating, comment, date_posted)
+INSERT INTO reviews (id_variation_combination, id_user, rating, comment)
 VALUES
-    (1, 1, 5, 'Excellent keyboard with great features!', NOW()),
-    (2, 2, 4, 'Good quality, but a bit pricey.', NOW());
+    (1, 1, 5, 'Excellent keyboard with great features!');
 
 -- Insert Review Images
 INSERT INTO review_images (id_review, image_url)
 VALUES
-    (1, 'http://example.com/images/review1.png'),
-    (2, 'http://example.com/images/review2.png');
+    (1, 'http://example.com/images/review1.png');
+
 
 -- Insert Cart Items
-INSERT INTO cart_items (id_user, id_combination, quantity, date_added, last_updated)
+INSERT INTO cart_items (id_user, id_combination, quantity)
 VALUES
-    (1, 1, 2, NOW(), NOW()),
-    (2, 3, 1, NOW(), NOW());
+    (1, 1, 2);
 
 -- Insert Discount Types
 INSERT INTO discount_types (type_name)
@@ -139,8 +137,7 @@ VALUES
 -- Insert Shipping Addresses
 INSERT INTO shipping_addresses (id_user, recipient_name, street_address, city, state, postal_code, country, phone_number, extra_note, is_temporary)
 VALUES
-    (1, 'Alice Johnson', '123 Main St', 'Springfield', 'IL', '62701', 'USA', '123-456-7890', 'Leave at front door', FALSE),
-    (2, 'Bob Smith', '456 Oak St', 'Metropolis', 'NY', '10001', 'USA', '987-654-3210', NULL, TRUE);
+    (1, 'Alice Johnson', '123 Main St', 'Springfield', 'IL', '62701', 'USA', '123-456-7890', 'Leave at front door', FALSE);
 
 -- Insert Order Statuses
 INSERT INTO order_statuses (status_name)
@@ -151,16 +148,14 @@ VALUES
     ('Cancelled');
 
 -- Insert Orders
-INSERT INTO orders (id_user, order_date, total_price, id_status, id_shipping_address)
+INSERT INTO orders (id_user, total_price, id_status, id_shipping_address)
 VALUES
-    (1, NOW(), 120.00, 1, 1),
-    (2, NOW(), 60.00, 2, 2);
+    (1, 120.00, 1, 1);
 
 -- Insert Order Items
 INSERT INTO order_items (id_order, quantity, id_variation_combination)
 VALUES
-    (1, 1, 1),  -- Order 1: Mechanical Keyboard, Basic
-    (2, 1, 3);  -- Order 2: Gaming Mouse, Standard
+    (1, 1, 1);  -- Order 1: Mechanical Keyboard, Basic
 
 -- Insert Carriers
 INSERT INTO carriers (carrier_name, wa_number, email, website)
@@ -169,19 +164,14 @@ VALUES
     ('Quick Delivery', '098-765-4321', 'info@quickdelivery.com', 'http://quickdelivery.com');
 
 -- Insert Shipments
-INSERT INTO shipments (id_order, id_carrier, shipping_method, tracking_number, shipment_date, expected_delivery_date, actual_delivery_date, status)
+INSERT INTO shipments (id_order, id_carrier, shipping_method, tracking_number, expected_delivery_date, status)
 VALUES
-    (1, 1, 'Standard Shipping', 'TRACK12345', NOW(), DATE_ADD(NOW(), INTERVAL 5 DAY), NULL, 'Shipped'),
-    (2, 2, 'Express Shipping', 'TRACK67890', NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY), NULL, 'Shipped');
+    (1, 1, 'Standard Shipping', 'TRACK12345', DATE_ADD(NOW(), INTERVAL 5 DAY), 'Shipped');
 
 -- Insert Shipment Statuses
-INSERT INTO shipment_statuses (id_shipment, status_date, status_description)
+INSERT INTO shipment_statuses (id_shipment, status_description)
 VALUES
-    (1, NOW(), 'Package is out for delivery.'),
-    (2, NOW(), 'Package has been dispatched.');
-
-
-
+    (1, 'Package is out for delivery.');
 
 ";
 
