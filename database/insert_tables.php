@@ -153,9 +153,9 @@ VALUES
     (1, 120.00, 1, 1);
 
 -- Insert Order Items
-INSERT INTO order_items (id_order, quantity, id_variation_combination)
+INSERT INTO order_items (id_order, quantity, id_variation_combination, id_discount)
 VALUES
-    (1, 1, 1);  -- Order 1: Mechanical Keyboard, Basic
+    (1, 1, 1, NULL);  -- Order 1: Mechanical Keyboard, with the discount
 
 -- Insert Carriers
 INSERT INTO carriers (carrier_name, wa_number, email, website)
