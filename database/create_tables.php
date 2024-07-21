@@ -152,10 +152,10 @@ CREATE TABLE roles (
     FOREIGN KEY (id_discount_type) REFERENCES discount_types(id_discount_type) ON UPDATE CASCADE ON DELETE CASCADE
   );
   
-  CREATE TABLE discount_variation_options (
+  CREATE TABLE discount_products (
     id_discount BIGINT,
-    id_variation_option BIGINT NOT NULL,
-    FOREIGN KEY (id_variation_option) REFERENCES variation_options(id_option) ON UPDATE CASCADE ON DELETE CASCADE,
+    id_product BIGINT NOT NULL,
+    FOREIGN KEY (id_product) REFERENCES products(id_product) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (id_discount) REFERENCES discounts(id_discount) ON UPDATE CASCADE ON DELETE CASCADE
   );
   

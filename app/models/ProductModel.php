@@ -46,7 +46,9 @@ class ProductModel {
     // Read all products or filter by criteria with pagination
     public function getProducts($criteria = []) {
         $query = '
-            SELECT p.*, c.category_name, vi.image_url AS product_image, vc.price, vc.stock, v.option_name, t.tag_name
+            SELECT p.*, c.category_name, vi.image_url AS product_image, 
+            GROUP_CONCAT ( DISTINCT v.price ORDER BY v.id_product  SEPARATOR ", ")  as "prices" 
+            , vc.stock, t.tag_name
             FROM products p
             LEFT JOIN categories c ON p.id_category = c.id_category
             LEFT JOIN product_images vi ON p.id_product = vi.id_product

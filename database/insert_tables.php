@@ -129,10 +129,10 @@ VALUES
     (2, 20.00, NOW(), DATE_ADD(NOW(), INTERVAL 1 MONTH));  -- $20 discount
 
 -- Insert Discount Variation Options
-INSERT INTO discount_variation_options (id_discount, id_variation_option)
+INSERT INTO discount_products (id_discount, id_product)
 VALUES
-    (1, 1),  -- 10% discount on RGB Backlight option
-    (2, 3);  -- $20 discount on Basic Mouse option
+    (1, 1),  -- 10% discount 
+
 
 -- Insert Shipping Addresses
 INSERT INTO shipping_addresses (id_user, recipient_name, street_address, city, state, postal_code, country, phone_number, extra_note, is_temporary)

@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS order_items;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS order_statuses;
 DROP TABLE IF EXISTS shipping_addresses;
-DROP TABLE IF EXISTS discount_variation_options;
+DROP TABLE IF EXISTS discount_products;
 DROP TABLE IF EXISTS discounts;
 DROP TABLE IF EXISTS discount_types;
 DROP TABLE IF EXISTS cart_items;
