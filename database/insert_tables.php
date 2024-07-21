@@ -36,10 +36,9 @@ VALUES
     (2, 3);  -- Customer can MANAGE_ORDERS
 
 -- Insert Users
-INSERT INTO users (id_firebase, user_name, email, wa_number, id_role, is_active)
+INSERT INTO users (id_firebase, username, first_name, last_name, email, wa_number, id_role, is_active)
 VALUES
-    ('firebase_id_1', 'Alice Johnson', 'alice@example.com', '1234567890', 1, TRUE),
-    ('firebase_id_2', 'Bob Smith', 'bob@example.com', '0987654321', 2, TRUE);
+    ('ljiO9mSdnocXG1veOvRfW3g84wX2', 'noxindocraft', 'Ahmad', 'Fauzan', 'noxindocraft@gmail.com', '+6283119624458', 1, TRUE),
 
 -- Insert Categories
 INSERT INTO categories (category_name, category_description)
@@ -56,8 +55,8 @@ VALUES
 -- Insert Product Images
 INSERT INTO product_images (id_product, image_url)
 VALUES
-    (1, 'http://example.com/images/keyboard_main.png'),
-    (2, 'http://example.com/images/mouse_main.png');
+    (1, 'https://cdn.arstechnica.net/wp-content/uploads/2023/10/listing-3-800x379.jpg'),
+    (2, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcMDYIesAAqGgI2aG6o0CM7Mg-EDXgYW4zEA&s');
 
 -- Insert Variation Types
 INSERT INTO variation_types (id_product, name)
@@ -78,14 +77,14 @@ VALUES
 -- Insert Variation Options
 INSERT INTO variation_options (id_variation_type, id_combination, option_name, image_url)
 VALUES
-    (1, 1, 'RGB Backlight', 'http://example.com/images/rgb_backlight.png'),
-    (1, 2, 'Single Color', 'http://example.com/images/single_color.png'),
-    (2, 1, 'Black', 'http://example.com/images/black.png'),
-    (2, 2, 'White', 'http://example.com/images/white.png'),
-    (3, 1, 'Basic', 'http://example.com/images/basic.png'),
-    (3, 2, 'Ergonomic', 'http://example.com/images/ergonomic.png'),
-    (4, 1, 'Red', 'http://example.com/images/red.png'),
-    (4, 2, 'Blue', 'http://example.com/images/blue.png');
+    (1, 1, 'RGB Backlight'),
+    (1, 2, 'Single Color'),
+    (2, 1, 'Black'),
+    (2, 2, 'White'),
+    (3, 1, 'Basic'),
+    (3, 2, 'Ergonomic'),
+    (4, 1, 'Red'),
+    (4, 2, 'Blue');
 
 -- Insert Tags
 INSERT INTO tags (tag_name)

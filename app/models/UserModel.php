@@ -33,10 +33,10 @@ class UserModel
     }
 
     // Get a single user by id
-    public function getUserByFireBaseId($id_user)
+    public function getUserByFireBaseId($firebase_id)
     {
-        $this->db->query('SELECT * FROM users WHERE id_user = :id_user');
-        $this->db->bind(':id_user', $id_user);
+        $this->db->query('SELECT * FROM users WHERE firebase_id = :firebase_id');
+        $this->db->bind(':firebase_id', $firebase_id);
 
         return $this->db->single();
     }

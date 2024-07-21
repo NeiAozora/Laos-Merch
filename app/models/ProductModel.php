@@ -1,6 +1,5 @@
 <?php
 
-
 class ProductModel {
     private $db;
 
@@ -10,7 +9,10 @@ class ProductModel {
 
     // Create a new product
     public function createProduct($product) {
-        $this->db->query('INSERT INTO products (product_name, description, id_category, weight, dimensions, image_url, discontinued) VALUES (:product_name, :description, :id_category, :weight, :dimensions, :image_url, :discontinued)');
+        $this->db->query('
+            INSERT INTO products (product_name, description, id_category, weight, dimensions, discontinued)
+            VALUES (:product_name, :description, :id_category, :weight, :dimensions, :discontinued)
+        ');
         
         // Bind values
         $this->db->bind(':product_name', $product['product_name']);
@@ -18,7 +20,6 @@ class ProductModel {
         $this->db->bind(':id_category', $product['id_category']);
         $this->db->bind(':weight', $product['weight']);
         $this->db->bind(':dimensions', $product['dimensions']);
-        $this->db->bind(':image_url', $product['image_url']);
         $this->db->bind(':discontinued', $product['discontinued']);
 
         // Execute
@@ -28,12 +29,14 @@ class ProductModel {
     // Read a single product by ID
     public function getProduct($id_product) {
         $this->db->query('
-            SELECT p.*, v.id_variation, v.variation_name, v.price, d.discount_value, dt.type_name
+            SELECT p.*, c.category_name, vi.image_url AS product_image, vc.price, vc.stock, v.option_name, t.tag_name
             FROM products p
-            LEFT JOIN variations v ON p.id_product = v.id_product
-            LEFT JOIN discount_variations dpv ON v.id_variation = dpv.id_variation
-            LEFT JOIN discounts d ON dpv.id_discount = d.id_discount
-            LEFT JOIN discount_types dt ON d.id_discount_type = dt.id_discount_type
+            LEFT JOIN categories c ON p.id_category = c.id_category
+            LEFT JOIN product_images vi ON p.id_product = vi.id_product
+            LEFT JOIN variation_combinations vc ON p.id_product = vc.id_product
+            LEFT JOIN variation_options v ON vc.id_combination = v.id_combination
+            LEFT JOIN product_tags pt ON p.id_product = pt.id_product
+            LEFT JOIN tags t ON pt.id_tag = t.id_tag
             WHERE p.id_product = :id_product
         ');
         $this->db->bind(':id_product', $id_product);
@@ -43,12 +46,14 @@ class ProductModel {
     // Read all products or filter by criteria with pagination
     public function getProducts($criteria = []) {
         $query = '
-            SELECT p.*, v.id_variation, v.variation_name, v.price, d.discount_value, dt.type_name
+            SELECT p.*, c.category_name, vi.image_url AS product_image, vc.price, vc.stock, v.option_name, t.tag_name
             FROM products p
-            LEFT JOIN variations v ON p.id_product = v.id_product
-            LEFT JOIN discount_variations dpv ON v.id_variation = dpv.id_variation
-            LEFT JOIN discounts d ON dpv.id_discount = d.id_discount
-            LEFT JOIN discount_types dt ON d.id_discount_type = dt.id_discount_type
+            LEFT JOIN categories c ON p.id_category = c.id_category
+            LEFT JOIN product_images vi ON p.id_product = vi.id_product
+            LEFT JOIN variation_combinations vc ON p.id_product = vc.id_product
+            LEFT JOIN variation_options v ON vc.id_combination = v.id_combination
+            LEFT JOIN product_tags pt ON p.id_product = pt.id_product
+            LEFT JOIN tags t ON pt.id_tag = t.id_tag
             WHERE 1=1
         ';
 
@@ -56,8 +61,11 @@ class ProductModel {
         if (!empty($criteria['name'])) {
             $query .= ' AND p.product_name LIKE :name';
         }
-        if (isset($criteria['category_id'])) {
-            $query .= ' AND p.id_category = :category_id';
+        if (isset($criteria['category_name'])) {
+            $query .= ' AND c.category_name = :category_name';
+        }
+        if (isset($criteria['tag'])) {
+            $query .= ' AND t.tag_name = :tag_name';
         }
         if (isset($criteria['discontinued'])) {
             $query .= ' AND p.discontinued = :discontinued';
@@ -74,8 +82,11 @@ class ProductModel {
         if (!empty($criteria['name'])) {
             $this->db->bind(':name', '%' . $criteria['name'] . '%');
         }
-        if (isset($criteria['category_id'])) {
-            $this->db->bind(':category_id', $criteria['category_id']);
+        if (isset($criteria['category_name'])) {
+            $this->db->bind(':category_name', $criteria['category_name']);
+        }
+        if (isset($criteria['tag'])) {
+            $this->db->bind(':tag_name', $criteria['tag']);
         }
         if (isset($criteria['discontinued'])) {
             $this->db->bind(':discontinued', $criteria['discontinued']);
@@ -90,7 +101,12 @@ class ProductModel {
 
     // Update product details
     public function updateProduct($id_product, $product) {
-        $this->db->query('UPDATE products SET product_name = :product_name, description = :description, id_category = :id_category, weight = :weight, dimensions = :dimensions, image_url = :image_url, discontinued = :discontinued WHERE id_product = :id_product');
+        $this->db->query('
+            UPDATE products
+            SET product_name = :product_name, description = :description, id_category = :id_category, 
+                weight = :weight, dimensions = :dimensions, discontinued = :discontinued
+            WHERE id_product = :id_product
+        ');
         
         // Bind values
         $this->db->bind(':product_name', $product['product_name']);
@@ -98,7 +114,6 @@ class ProductModel {
         $this->db->bind(':id_category', $product['id_category']);
         $this->db->bind(':weight', $product['weight']);
         $this->db->bind(':dimensions', $product['dimensions']);
-        $this->db->bind(':image_url', $product['image_url']);
         $this->db->bind(':discontinued', $product['discontinued']);
         $this->db->bind(':id_product', $id_product);
 
@@ -108,7 +123,9 @@ class ProductModel {
 
     // Delete a product
     public function deleteProduct($id_product) {
-        $this->db->query('DELETE FROM products WHERE id_product = :id_product');
+        $this->db->query('
+            DELETE FROM products WHERE id_product = :id_product
+        ');
         $this->db->bind(':id_product', $id_product);
         return $this->db->execute();
     }
