@@ -131,7 +131,7 @@ VALUES
 -- Insert Discount Variation Options
 INSERT INTO discount_products (id_discount, id_product)
 VALUES
-    (1, 1),  -- 10% discount 
+    (1, 1);  -- 10% discount 
 
 
 -- Insert Shipping Addresses
