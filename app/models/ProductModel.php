@@ -28,10 +28,10 @@ class ProductModel {
     // Read a single product by ID
     public function getProduct($id_product) {
         $this->db->query('
-            SELECT p.*, v.variation_id, v.variation_name, v.price, d.discount_value, dt.type_name
+            SELECT p.*, v.id_variation, v.variation_name, v.price, d.discount_value, dt.type_name
             FROM products p
-            LEFT JOIN variations v ON p.id_product = v.product_id
-            LEFT JOIN discount_variations dpv ON v.variation_id = dpv.id_variation
+            LEFT JOIN variations v ON p.id_product = v.id_product
+            LEFT JOIN discount_variations dpv ON v.id_variation = dpv.id_variation
             LEFT JOIN discounts d ON dpv.id_discount = d.id_discount
             LEFT JOIN discount_types dt ON d.id_discount_type = dt.id_discount_type
             WHERE p.id_product = :id_product
@@ -43,10 +43,10 @@ class ProductModel {
     // Read all products or filter by criteria with pagination
     public function getProducts($criteria = []) {
         $query = '
-            SELECT p.*, v.variation_id, v.variation_name, v.price, d.discount_value, dt.type_name
+            SELECT p.*, v.id_variation, v.variation_name, v.price, d.discount_value, dt.type_name
             FROM products p
-            LEFT JOIN variations v ON p.id_product = v.product_id
-            LEFT JOIN discount_variations dpv ON v.variation_id = dpv.id_variation
+            LEFT JOIN variations v ON p.id_product = v.id_product
+            LEFT JOIN discount_variations dpv ON v.id_variation = dpv.id_variation
             LEFT JOIN discounts d ON dpv.id_discount = d.id_discount
             LEFT JOIN discount_types dt ON d.id_discount_type = dt.id_discount_type
             WHERE 1=1
@@ -87,7 +87,6 @@ class ProductModel {
 
         return $this->db->resultSet();
     }
-
 
     // Update product details
     public function updateProduct($id_product, $product) {

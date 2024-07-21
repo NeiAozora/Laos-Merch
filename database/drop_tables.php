@@ -9,66 +9,81 @@ require_once dirname(dirname(__FILE__)) . "/app/core/Database.php";
 
 $query = 
 "
+-- Drop Review Images Table
+DROP TABLE IF EXISTS review_images;
 
--- Shipment status table
-DROP TABLE IF EXISTS shipment_status;
-
--- Shipments table
-DROP TABLE IF EXISTS shipments;
-
--- Carriers table
-DROP TABLE IF EXISTS carriers;
-
--- Order items table
-DROP TABLE IF EXISTS order_items;
-
--- Orders table
-DROP TABLE IF EXISTS orders;
-
--- Order statuses table
-DROP TABLE IF EXISTS order_statuses;
-
--- Shipping addresses table
-DROP TABLE IF EXISTS shipping_addresses;
-
--- Discount types table
-DROP TABLE IF EXISTS discount_type;
-
--- Junction table for discounts and product variations
-DROP TABLE IF EXISTS discount_variation;
-
--- Discounts table
-DROP TABLE IF EXISTS discounts;
-
--- Reviews table
+-- Drop Reviews Table
 DROP TABLE IF EXISTS reviews;
 
--- Junction table for products and tags
+-- Drop Product Tags Table
 DROP TABLE IF EXISTS product_tags;
 
--- Tags table
+-- Drop Tags Table
 DROP TABLE IF EXISTS tags;
 
--- Product variations table
-DROP TABLE IF EXISTS variation;
+-- Drop Variation Options Table
+DROP TABLE IF EXISTS variation_options;
 
--- Products table
+-- Drop Variation Combinations Table
+DROP TABLE IF EXISTS variation_combinations;
+
+-- Drop Variation Types Table
+DROP TABLE IF EXISTS variation_types;
+
+-- Drop Product Images Table
+DROP TABLE IF EXISTS product_images;
+
+-- Drop Products Table
 DROP TABLE IF EXISTS products;
 
--- Categories table
+-- Drop Categories Table
 DROP TABLE IF EXISTS categories;
 
--- Users table
+-- Drop Users Table
 DROP TABLE IF EXISTS users;
 
--- Junction table for roles and permissions
+-- Drop Role Permissions Table
 DROP TABLE IF EXISTS role_permissions;
 
--- Permissions table
+-- Drop Permissions Table
 DROP TABLE IF EXISTS permissions;
 
--- Roles table
+-- Drop Roles Table
 DROP TABLE IF EXISTS roles;
+
+-- Drop Cart Items Table
+DROP TABLE IF EXISTS cart_items;
+
+-- Drop Discount Variation Options Table
+DROP TABLE IF EXISTS discount_variation_options;
+
+-- Drop Discounts Table
+DROP TABLE IF EXISTS discounts;
+
+-- Drop Discount Types Table
+DROP TABLE IF EXISTS discount_types;
+
+-- Drop Shipping Addresses Table
+DROP TABLE IF EXISTS shipping_addresses;
+
+-- Drop Order Items Table
+DROP TABLE IF EXISTS order_items;
+
+-- Drop Orders Table
+DROP TABLE IF EXISTS orders;
+
+-- Drop Shipment Statuses Table
+DROP TABLE IF EXISTS shipment_statuses;
+
+-- Drop Shipments Table
+DROP TABLE IF EXISTS shipments;
+
+-- Drop Carriers Table
+DROP TABLE IF EXISTS carriers;
+
+-- Drop Order Statuses Table
+DROP TABLE IF EXISTS order_statuses;
+
 
 
 ";
