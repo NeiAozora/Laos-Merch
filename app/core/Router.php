@@ -60,10 +60,11 @@ class Router {
     }
 
     public function dispatch(): void {
+
         $this->currentMethod = $_SERVER['REQUEST_METHOD'];
         $this->currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-        if (!WEB_DOMAIN_MODE) {  // KOMENTARKAN BLOK KODE INI JIKA MENDEPLOY DI CLOUD
+        if (!WEB_DOMAIN_MODE) {
             $this->currentPath = str_replace("/Laos-Merch/public", "", $this->currentPath);
             $this->currentPath = str_replace("/Laos-Merch", "", $this->currentPath);
         }

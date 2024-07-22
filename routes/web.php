@@ -7,7 +7,7 @@ Router::get('/auth-process', invokeClass(LoginController::class, "processAuth"))
 // Homepage
 Router::get('/', invokeClass(IndexController::class, "index"));
 // Product
-Router::get('/product/{idProduct}', invokeClass(ProductController::class, "getProduct"));
+Router::get('/product/{id}', invokeClass(ProductController::class, "index"));
 // UserProfile
 Router::get('/user/{firebaseId}/profile', function() {
     
@@ -41,8 +41,7 @@ Router::get("/about/privacy-policy", function(){
     view("/about/privacy-policy/index");
 });
 
-// Router::get('/login', invokeClass(LoginController::class, "index"));
-// Router::get('/product/{id}', invokeClass(ProductController::class, "index"));
+Router::get('/login', invokeClass(LoginController::class, "index"));
 Router::get('/order', invokeClass(OrderController::class, "index"));
 Router::get('/cart', invokeClass(CartController::class, "index"));
 Router::get('/checkout', invokeClass(CheckoutController::class, "index"));

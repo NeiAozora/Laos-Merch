@@ -41,6 +41,7 @@ html, body {
 .btn-success:hover{
     background-color: green;
     color: white;
+    transition: .3s;
 }
 .laos-button:active{
     background-color: limegreen;
@@ -65,12 +66,14 @@ html, body {
     color: limegreen;
 }
 .btn-warning.active{
-    background-color: gold;
+    border-color: gold;
+    background-color: transparent;
     color: limegreen;
 }
 .btn-warning:hover{
     background-color: gold;
     color: black;
+    transition: .3s;
 }
 /* end button */
 
@@ -184,12 +187,64 @@ h3.notfound{
   vertical-align: top;
 }
 
-svg path,
-svg rect {
+svg.star path,
+svg.star rect {
   fill: #FF6700;
 }
 
+
+
 /* End loading-animation */
+
+/* Drop Down Animation */
+@media (min-width: 768px) {
+    .animate {
+      animation-duration: 0.3s;
+      -webkit-animation-duration: 0.3s;
+      animation-fill-mode: both;
+      -webkit-animation-fill-mode: both;
+    }
+  }
+  
+  @keyframes slideIn {
+    0% {
+      transform: translateY(1rem);
+      opacity: 0;
+    }
+  
+    100% {
+      transform: translateY(0rem);
+      opacity: 1;
+    }
+  
+    0% {
+      transform: translateY(1rem);
+      opacity: 0;
+    }
+  }
+  
+  @-webkit-keyframes slideIn {
+    0% {
+      -webkit-transform: transform;
+      -webkit-opacity: 0;
+    }
+  
+    100% {
+      -webkit-transform: translateY(0);
+      -webkit-opacity: 1;
+    }
+  
+    0% {
+      -webkit-transform: translateY(1rem);
+      -webkit-opacity: 0;
+    }
+  }
+  
+  .slideIn {
+    -webkit-animation-name: slideIn;
+    animation-name: slideIn;
+  }
+/* END Down Animation */
 
 
 

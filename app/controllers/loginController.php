@@ -9,7 +9,7 @@ class LoginController extends Controller{
     
     public function __construct()
     {
-        $userModel = new UserModel();
+        $this->userModel = new UserModel();
     }
 
     public function index(){
@@ -49,10 +49,7 @@ class LoginController extends Controller{
                 // Set session variables
                 $_SESSION['user'] = [
                     'fr' => $verifiedIdToken,
-                    'uid' => $firebaseId,
-                    'email' => $email,
-                    'name' => $name,
-                    'picture' => $picture
+                    'uid' => $firebaseId
                 ];
     
                 echo json_encode(['status' => 'success']);

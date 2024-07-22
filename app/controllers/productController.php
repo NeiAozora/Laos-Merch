@@ -39,14 +39,14 @@ class ProductController extends Controller {
         if (array_key_exists("search", $_GET)){
             $searchValue = $_GET["search"];
             $criteria["name"] = $searchValue;
-            $criteria["category_name"] = $searchValue;
-            $criteria["tag"] = $searchValue;
+            // $criteria["category_name"] = $searchValue;
+            // $criteria["tag"] = $searchValue;
         }
     
-        $products = $this->productModel->getProducts($criteria);
+        $products = $this->productModel->getProducts($criteria, true);
     
         // Get total number of products
-        $totalProducts = $this->productModel->getTotalProducts($criteria);
+        $totalProducts = $this->productModel->getTotalProducts($criteria, true);
         $totalPages = ceil($totalProducts / $limit);
         $currentPage = $page ?? 1;
     

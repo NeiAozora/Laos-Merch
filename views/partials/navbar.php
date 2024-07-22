@@ -33,29 +33,36 @@
                     <div class="search-bar-container">
                         <form class="d-flex search-bar" role="search" id="search-form" method="get" action="">
                             <input class="form-control me-2" name="search" type="search" placeholder="Cari Merchandise..." aria-label="Search" autofocus>
-                            <button class="btn btn-success" type="submit"><i class="fas fa-search"></i></button>
+                            <button class="btn btn-success btn-search" type="submit"><i class="fas fa-search"></i></button>
                         </form>
                     </div>
                 </ul>
                 <div class="d-inline-flex gap-1">
-                    <div class="dropdown">
-                        <button class="btn btn-warning active me-2 dropdown-toggle" type="button" id="cartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-cart-shopping"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cartDropdown" >
-                            <li class="dropdown-item"><a href="<?= BASEURL?>carts" class="decoration-none">Keranjang Saya</a></li>
-                        </ul>
-                    </div>
-                    <div class="dropdown">
-                        <button class="btn btn-warning active dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-user"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" >
-                            <li><a class="dropdown-item decoration-none" href="#">Profil Saya</a></li>
-                            <li><a class="dropdown-item decoration-none" href="#">Pesanan Saya</a></li>
-                        </ul>
-                    </div>
+                    <?php if (AuthHelpers::isLoggedIn()): ?>
+                        <div class="dropdown">
+                            <button class="btn btn-warning active me-2 dropdown-toggle" type="button" id="cartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end animate slideIn" aria-labelledby="cartDropdown">
+                                <li class="dropdown-item"><a href="<?= BASEURL?>cart" class="decoration-none">Keranjang Saya</a></li>
+                            </ul>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-warning active dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-user"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end animate slideIn" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item decoration-none" href="#">Profil Saya</a></li>
+                                <li><a class="dropdown-item decoration-none" href="#">Pesanan Saya</a></li>
+                            </ul>
+                        </div>
+                    <?php else: ?>
+                        <a href="<?= BASEURL?>login" class="btn btn-warning active">
+                            <i class="fa-solid fa-sign-in-alt"></i> Login
+                        </a>
+                    <?php endif; ?>
                 </div>
+
             </div>
         </div>
     </div>

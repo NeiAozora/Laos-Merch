@@ -51,7 +51,7 @@ require_once "views/partials/navbar.php";
     
   
 <!-- card -->
-    <h1 class="d-flex justify-content-center mt-5">Official Merchandise</h1>
+    <h1 class="d-flex justify-content-center mt-5" id="official-merch-heading">Official Merchandise</h1>
     <div class="container">
         <div class="row justify-content-center" id="products-container">
 

@@ -11,10 +11,10 @@ class UserModel
     }
 
     // Create a new user
-    public function createUser($firebase_uid, $user_name, $email, $wa_number, $id_role)
+    public function createUser($id_firebase, $user_name, $email, $wa_number, $id_role)
     {
-        $this->db->query('INSERT INTO users (firebase_uid, user_name, email, wa_number, id_role) VALUES (:firebase_uid, :user_name, :email, :wa_number, :id_role)');
-        $this->db->bind(':firebase_uid', $firebase_uid);
+        $this->db->query('INSERT INTO users (id_firebase, user_name, email, wa_number, id_role) VALUES (:id_firebase, :user_name, :email, :wa_number, :id_role)');
+        $this->db->bind(':id_firebase', $id_firebase);
         $this->db->bind(':user_name', $user_name);
         $this->db->bind(':email', $email);
         $this->db->bind(':wa_number', $wa_number);
@@ -33,10 +33,10 @@ class UserModel
     }
 
     // Get a single user by id
-    public function getUserByFireBaseId($firebase_id)
+    public function getUserByFireBaseId($id_firebase)
     {
-        $this->db->query('SELECT * FROM users WHERE firebase_id = :firebase_id');
-        $this->db->bind(':firebase_id', $firebase_id);
+        $this->db->query('SELECT * FROM users WHERE id_firebase = :id_firebase');
+        $this->db->bind(':id_firebase', $id_firebase);
 
         return $this->db->single();
     }
@@ -50,11 +50,11 @@ class UserModel
     }
 
     // Update a user
-    public function updateUser($id_user, $firebase_uid, $user_name, $email, $wa_number, $id_role, $is_active)
+    public function updateUser($id_user, $id_firebase, $user_name, $email, $wa_number, $id_role, $is_active)
     {
-        $this->db->query('UPDATE users SET firebase_uid = :firebase_uid, user_name = :user_name, email = :email, wa_number = :wa_number, id_role = :id_role, is_active = :is_active WHERE id_user = :id_user');
+        $this->db->query('UPDATE users SET id_firebase = :id_firebase, user_name = :user_name, email = :email, wa_number = :wa_number, id_role = :id_role, is_active = :is_active WHERE id_user = :id_user');
         $this->db->bind(':id_user', $id_user);
-        $this->db->bind(':firebase_uid', $firebase_uid);
+        $this->db->bind(':id_firebase', $id_firebase);
         $this->db->bind(':user_name', $user_name);
         $this->db->bind(':email', $email);
         $this->db->bind(':wa_number', $wa_number);
