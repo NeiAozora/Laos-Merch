@@ -63,15 +63,13 @@ class Router {
         $this->currentMethod = $_SERVER['REQUEST_METHOD'];
         $this->currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-
-        if(!WEB_DOMAIN_MODE){  // KOMENTARKAN BLOK KODE INI JIKA MENDEPLOY DI CLOUD
+        if (!WEB_DOMAIN_MODE) {  // KOMENTARKAN BLOK KODE INI JIKA MENDEPLOY DI CLOUD
             $this->currentPath = str_replace("/Laos-Merch/public", "", $this->currentPath);
             $this->currentPath = str_replace("/Laos-Merch", "", $this->currentPath);
         }
 
         $publicDir = ROOT . '/public';
         $filePath = $publicDir . $this->currentPath;
-
 
         if (file_exists($filePath) && is_file($filePath)) {
             $this->serveStaticFile($filePath);
@@ -80,36 +78,38 @@ class Router {
             throw new Exception("Target file '$filePath' tidak ada: " . $this->currentPath);
         }
 
-
-        // Terapkan middleware global
+        // Apply global middlewares
         foreach ($this->globalMiddlewares as $middleware) {
             call_user_func($middleware);
         }
 
         try {
-            $routeFound = false;
-            foreach ($this->routes[$this->currentMethod] as $path => $route) {
-                $pathRegex = preg_replace('/\{\w+\}/', '(\w+)', $path);
-                if (preg_match('#^' . $pathRegex . '$#', $this->currentPath, $matches)) {
-                    $routeFound = true;
-                    array_shift($matches); // Remove the full match
-                    $params = $matches;
+            if (isset($this->routes[$this->currentMethod])) {
+                $routeFound = false;
+                foreach ($this->routes[$this->currentMethod] as $path => $route) {
+                    $pathRegex = preg_replace('/\{\w+\}/', '(\w+)', $path);
+                    if (preg_match('#^' . $pathRegex . '$#', $this->currentPath, $matches)) {
+                        $routeFound = true;
+                        array_shift($matches); // Remove the full match
+                        $params = $matches;
 
-                    foreach ($route['middlewares'] as $middleware) {
-                        call_user_func($middleware);
+                        foreach ($route['middlewares'] as $middleware) {
+                            call_user_func($middleware);
+                        }
+                        call_user_func_array($route['callback'], $params);
+                        break;
                     }
-                    call_user_func_array($route['callback'], $params);
-                    break;
                 }
-            }
-            if (!$routeFound) {
+                if (!$routeFound) {
+                    $this->handleNotFound();
+                }
+            } else {
                 $this->handleNotFound();
             }
         } catch (Exception $e) {
             $this->handleException($e);
         }
     }
-
 
     private function serveStaticFile(string $filePath): void {
         $fileInfo = pathinfo($filePath);

@@ -9,8 +9,9 @@ class IndexController extends Controller{
     }
 
     public function index(){
-        var_dump($this->productModel->getProducts());
-        // $this->view('homepage/index');
+
+
+        $this->view('homepage/index');
     }
 
 }

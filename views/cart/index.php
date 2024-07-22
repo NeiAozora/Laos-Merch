@@ -75,6 +75,26 @@ require_once VIEWS . '/partials/navbar.php';
 </section>
 
 
+<!-- select all checkbox cart -->
+<script>
+    document.getElementById('selectAll').addEventListener('change', function(){
+        const checkboxes = document.querySelectorAll('.checkbox-item');
+        checkboxes.forEach(checkbox=>{checkbox.checked = this.checked});
+    });
+</script>
+<!-- button plus minus -->
+<script>
+    document.getElementById('decrement').addEventListener('click', function() {
+      let quantity = parseInt(document.getElementById('quantity').value);
+      if (quantity > 1) {document.getElementById('quantity').value = quantity - 1;}
+    });
+
+    document.getElementById('increment').addEventListener('click', function() {
+      let quantity = parseInt(document.getElementById('quantity').value);
+      document.getElementById('quantity').value = quantity + 1;
+    });
+</script>
+
 <?php
 require_once VIEWS . '/partials/footer.php';
 ?>

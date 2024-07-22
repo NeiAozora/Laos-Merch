@@ -1,14 +1,13 @@
 <?php
 
-
-// Router::
-// Sisi Customer
+// API
+Router::get("/api/products", invokeClass(ProductController::class, "list"));
 
 Router::get('/auth-process', invokeClass(LoginController::class, "processAuth"));
 // Homepage
-Router::get('/', invokeClass(IndexController::class, "index"))
-->addMiddleware(invokeClass(AuthMiddleware::class, "checkLoginSession"));
-
+Router::get('/', invokeClass(IndexController::class, "index"));
+// Product
+Router::get('/product/{idProduct}', invokeClass(ProductController::class, "getProduct"));
 // UserProfile
 Router::get('/user/{firebaseId}/profile', function() {
     
@@ -45,7 +44,7 @@ Router::get("/about/privacy-policy", function(){
 // Router::get('/login', invokeClass(LoginController::class, "index"));
 // Router::get('/product/{id}', invokeClass(ProductController::class, "index"));
 Router::get('/order', invokeClass(OrderController::class, "index"));
-Router::get('/carts', invokeClass(CartController::class, "index"));
+Router::get('/cart', invokeClass(CartController::class, "index"));
 Router::get('/checkout', invokeClass(CheckoutController::class, "index"));
 
 

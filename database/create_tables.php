@@ -115,6 +115,7 @@ CREATE TABLE roles (
     id_user BIGINT,
     rating INT CHECK (rating BETWEEN 1 AND 5),
     comment TEXT,
+    anonymity BOOLEAN DEFAULT FALSE,
     date_posted TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_variation_combination) REFERENCES variation_combinations(id_combination) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (id_user) REFERENCES users(id_user) ON UPDATE CASCADE ON DELETE CASCADE

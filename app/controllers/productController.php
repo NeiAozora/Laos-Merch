@@ -15,41 +15,48 @@ class ProductController extends Controller {
     // Display product details (assuming by ID)
     public function getProduct($id) {
         $product = $this->productModel->getProduct($id);
-        $this->view('productdetail/index', ['product' => $product]);
+        $this->view('product/index', ['product' => $product]);
     }
 
     // Display the list of products with search and pagination
     public function list() {
-        // Get search query and pagination parameters from URL
-        $search = isset($_GET['search']) ? $_GET['search'] : '';
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $itemsPerPage = 8; // Number of items per page
-
-        // Calculate offset for pagination
-        $offset = ($page - 1) * $itemsPerPage;
-
-        // Prepare search criteria
+        $offset = 0;
+        $limit = 8;
+    
+        if(array_key_exists("page", $_GET)){
+            if(is_numeric($_GET["page"])){
+                $page = (int) $_GET["page"];
+                $offset = ($page - 1) * $limit;
+            }
+        }
+    
         $criteria = [
-            'name' => $search
+            "discontinued" => false,
+            "limit" => $limit,
+            "offset" => $offset
         ];
-
-        // Get total number of products for pagination
-        $totalProducts = count($this->productModel->getProducts($criteria));
-
-        // Get paginated products
-        $criteria['limit'] = $itemsPerPage;
-        $criteria['offset'] = $offset;
+    
+        if (array_key_exists("search", $_GET)){
+            $searchValue = $_GET["search"];
+            $criteria["name"] = $searchValue;
+            $criteria["category_name"] = $searchValue;
+            $criteria["tag"] = $searchValue;
+        }
+    
         $products = $this->productModel->getProducts($criteria);
+    
+        // Get total number of products
+        $totalProducts = $this->productModel->getTotalProducts($criteria);
+        $totalPages = ceil($totalProducts / $limit);
+        $currentPage = $page ?? 1;
+    
+        header('Content-Type: application/json');
 
-        // Calculate total pages
-        $totalPages = ceil($totalProducts / $itemsPerPage);
-
-        // Pass data to the view
-        return [
-            'products' => $products,
-            'search' => $search,
-            'currentPage' => $page,
-            'totalPages' => $totalPages
-        ];
+        echo json_encode([
+            "total_pages" => $totalPages,
+            "current_page" => $currentPage,
+            "products" => $products
+        ]);
     }
+    
 }

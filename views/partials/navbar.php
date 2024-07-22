@@ -31,8 +31,8 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 w-100 d-flex flex-column align-items-center">
                     <div class="search-bar-container">
-                        <form class="d-flex search-bar" role="search">
-                            <input class="form-control me-2" type="search" placeholder="Cari Merchandise..." aria-label="Search" autofocus>
+                        <form class="d-flex search-bar" role="search" id="search-form" method="get" action="">
+                            <input class="form-control me-2" name="search" type="search" placeholder="Cari Merchandise..." aria-label="Search" autofocus>
                             <button class="btn btn-success" type="submit"><i class="fas fa-search"></i></button>
                         </form>
                     </div>
@@ -60,3 +60,9 @@
         </div>
     </div>
 </nav>
+
+<script>
+    var baseUrl = "<?= BASEURL ?>";
+    let formSearch = document.getElementById("search-form");
+    formSearch.setAttribute("action", "<?= BASEURL ?>")
+</script>
