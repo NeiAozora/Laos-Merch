@@ -58,7 +58,7 @@
                         </div>
                     <?php else: ?>
                         <a href="<?= BASEURL?>login" class="btn btn-warning active">
-                            <i class="fa-solid fa-sign-in-alt"></i> Login
+                            <i class="fa-solid fa-sign-in-alt"> Login</i> 
                         </a>
                     <?php endif; ?>
                 </div>

@@ -42,13 +42,13 @@ require_once VIEWS . "/partials/navbar.php";
                 <hr>
                     <div class="col-sm-4 col-md-4 col-12">
                         <h5 class="title-detail ">Status:</h5>
-                        <p class="alert alert-secondary mt-1" role="alert" style="max-width:fit-content;">
+                        <p class="alert alert-success mt-1" role="alert" style="max-width:fit-content;">
                            Selesai
                         </p>
                     </div>      
                     <div class="col-sm-4 col-md-4 col-12">
-                        <a type="button" class="btn btn-warning me-2" href="https://wa.me/6285606689642" target="_blank">Hubungi Admin</a>
-                        <button type="button" class="btn laos-button active">Pesanan Selesai</button>
+                        <a href="<?= BASEURL?>order/detail" class="btn btn-secondary me-2">Detail Pesanan</a>
+                        <a href="<?= BASEURL?>" class="btn btn-success">Pesanan Selesai</a>
                     </div>
                 </div>
             </div>
