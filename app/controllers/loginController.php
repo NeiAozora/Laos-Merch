@@ -63,5 +63,20 @@ class LoginController extends Controller{
             echo json_encode(['status' => 'error', 'message' => 'ID token is missing']);
         }
     }
+
+    public function logout(){
+        session_start();
+        session_unset();
+        session_destroy();
+
+        if(!array_key_exists("to", $_GET)){
+            jsRedirect(BASEURL);
+        }
+
+        $targetUrl = $_GET["to"];
+        jsRedirect($targetUrl);
+
+
+    }
     
 }

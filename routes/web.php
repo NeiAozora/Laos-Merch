@@ -2,12 +2,16 @@
 
 // API
 Router::get("/api/products", invokeClass(ProductController::class, "list"));
+Router::get("/api/reviews", invokeClass(ReviewController::class, "getReviews"));
+
+
 
 Router::get('/auth-process', invokeClass(LoginController::class, "processAuth"));
+Router::get('/logout', invokeClass(LoginController::class, "logout"));
 // Homepage
 Router::get('/', invokeClass(IndexController::class, "index"));
 // Product
-Router::get('/product/{id}', invokeClass(ProductController::class, "index"));
+Router::get('/product/{id}', invokeClass(ProductController::class, "getProduct"));
 // UserProfile
 Router::get('/user/{firebaseId}/profile', function() {
     

@@ -37,6 +37,7 @@ CREATE TABLE roles (
     username VARCHAR(255) NOT NULL UNIQUE,
     first_name VARCHAR(128) NOT NULL,
     last_name VARCHAR(128) NOT NULL,
+    profile_picture VARCHAR(255) DEFAULT '',
     email VARCHAR(255) UNIQUE NOT NULL,
     wa_number VARCHAR(16) UNIQUE NOT NULL,
     date_joined TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

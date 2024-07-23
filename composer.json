@@ -1,6 +1,7 @@
 {
     "require": {
         "filp/whoops": "^2.15",
-        "kreait/firebase-php": "^7.13"
+        "kreait/firebase-php": "^7.13",
+        "kint-php/kint": "^5.1"
     }
 }

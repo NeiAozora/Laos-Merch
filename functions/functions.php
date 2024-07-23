@@ -2,10 +2,7 @@
 
 function dd(...$data)
 {
-    foreach($data as $d){
-        var_dump($d);
-    }
-    die;
+    d($data);
 }
 
 function view($view, $data = [])

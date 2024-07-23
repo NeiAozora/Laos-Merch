@@ -82,7 +82,10 @@ require_once "views/partials/navbar.php";
       
       <div class="d-flex justify-content-center mt-5">
           <h3>Ulasan Terbaru</h3>
-        </div>
+    </div>
+    <div class="container mt-5" id="reviews-container">
+
+    </div>
         
 </section>
 

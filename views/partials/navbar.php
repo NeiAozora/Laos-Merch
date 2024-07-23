@@ -54,12 +54,11 @@
                             <ul class="dropdown-menu dropdown-menu-end animate slideIn" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item decoration-none" href="#">Profil Saya</a></li>
                                 <li><a class="dropdown-item decoration-none" href="#">Pesanan Saya</a></li>
+                                <li><a class="dropdown-item decoration-none" id="logout" href="#">Logout</a></li>
                             </ul>
                         </div>
                     <?php else: ?>
-                        <a href="<?= BASEURL?>login" class="btn btn-warning active">
-                            <i class="fa-solid fa-sign-in-alt"></i> Login
-                        </a>
+                        <button class="btn btn-success"><a style="text-decoration: none; color: inherit" href="<?= BASEURL ?>login">Login</a></button>
                     <?php endif; ?>
                 </div>
 
@@ -67,9 +66,21 @@
         </div>
     </div>
 </nav>
+<script type="module" src="<?= BASEURL ?>public/js/fbase.js"></script>
+<script src="<?= BASEURL ?>public/js/fbaseAuth.js" type="module"></script>
 
 <script>
     var baseUrl = "<?= BASEURL ?>";
     let formSearch = document.getElementById("search-form");
     formSearch.setAttribute("action", "<?= BASEURL ?>")
+
+    function escapeHtml(unsafe) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 </script>

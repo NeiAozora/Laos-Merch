@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'f9537825ce493d045cdb21f2a5771fdf2ddf5dce',
+        'reference' => '9154f2018e1030a3898fff9720409382a38fb438',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'f9537825ce493d045cdb21f2a5771fdf2ddf5dce',
+            'reference' => '9154f2018e1030a3898fff9720409382a38fb438',
             'dev_requirement' => false,
         ),
         'beste/clock' => array(
@@ -188,6 +188,15 @@
             'install_path' => __DIR__ . '/../guzzlehttp/psr7',
             'aliases' => array(),
             'reference' => '45b30f99ac27b5ca93cb4831afe16285f57b8221',
+            'dev_requirement' => false,
+        ),
+        'kint-php/kint' => array(
+            'pretty_version' => '5.1.1',
+            'version' => '5.1.1.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../kint-php/kint',
+            'aliases' => array(),
+            'reference' => '8c5ec370c3382ceae0b88e91f9bbb00e6bb4f93b',
             'dev_requirement' => false,
         ),
         'kreait/firebase-php' => array(

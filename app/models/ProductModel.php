@@ -56,7 +56,7 @@ class ProductModel {
             GROUP BY p.id_product
             WHERE p.id_product = :id_product
         ');
-        $this->db->bind(':id_product', $id_product);
+        $this->db->bind(':id_product', $id_product, PDO::PARAM_INT);
         return $this->db->single();
     }
 

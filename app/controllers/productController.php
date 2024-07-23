@@ -2,20 +2,20 @@
 
 class ProductController extends Controller {
     private $productModel;
+    private $reviewModel;
 
     public function __construct() {
         $this->productModel = new ProductModel();
+        $this->reviewModel = new ReviewModel();
     }
 
-    public function index(){
-        var_dump($this->productModel->getProducts());
-        // $this->view('productlist/index', $this->list());
-    }
 
     // Display product details (assuming by ID)
     public function getProduct($id) {
         $product = $this->productModel->getProduct($id);
-        $this->view('product/index', ['product' => $product]);
+        $reviews = $this->reviewModel->getReviewsByProductId($id);
+        var_dump($reviews);
+        $this->view('product/index', ['product' => $product, 'reviews' => $reviews]);
     }
 
     // Display the list of products with search and pagination

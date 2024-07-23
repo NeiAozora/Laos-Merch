@@ -101,9 +101,9 @@ VALUES
     (2, 3);  -- Gaming Mouse tagged as Discounted
 
 -- Insert Reviews
-INSERT INTO reviews (id_variation_combination, id_user, rating, comment)
+INSERT INTO reviews (id_variation_combination, id_user, rating, comment, anonymity)
 VALUES
-    (1, 1, 5, 'Excellent keyboard with great features!');
+    (1, 1, 5, 'Excellent keyboard with great features!', FALSE);
 
 -- Insert Review Images
 INSERT INTO review_images (id_review, image_url)

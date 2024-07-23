@@ -160,4 +160,76 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initial fetch
     fetchProducts(currentPage, searchQuery);
+
+
+
+    let reviewsContainer = document.getElementById("reviews-container");
+
+    function fetchReviews(){
+        fetch(`api/reviews`)
+        .then(response => response.json())
+        .then(data => {
+            updateReviews(data.reviews);
+        })
+        .catch(error => console.error('Error fetching products:', error));
+    }
+
+    function updateReviews(reviews){
+        let profilePicture = reviews.profile_picture ?? "https://via.placeholder.com/60";
+
+        reviews.forEach(review => {
+            let reviewImages = ''; // Ensure reviewImages is initialized
+
+            // Create review images HTML
+            review.images.forEach(image => {
+                reviewImages += `
+                <div class="review-product-image">
+                    <img src="${image.image_url}" alt="Product Image">
+                </div>
+                `;
+            });
+
+            // Escape HTML special characters in the comment
+            let comment = escapeHtml(review.comment);
+
+            let stars = '';
+            stars += ('&#9733;'.repeat(review.rating));
+            stars += ('&#9734;'.repeat(5 - review.rating));
+
+
+
+            // LMAO
+            let variation_name = '';
+
+            review.variations.forEach(variation => {
+                if (variation.variation_type_name === review.variation_type_name) {
+                    variation_name = variation.variation_name;
+                }
+            });
+
+
+            // Create review HTML
+            let reviewHtml = `
+                <div class="review-card">
+                    <div class="review-image">
+                        <img src="${profilePicture}" alt="User Image">
+                    </div>
+                    <div class="review-details">
+                        <h5>Bobon <span class="review-rating">${stars}</span></h5>
+                        <div class="review-date">${review.date_posted}</div>
+                        <div class="review-product"><span style="font-weight: bold;">Barang</span>: ${review.product_name}<br><span style="font-weight: bold;">${review.variation_type_name}</span>: ${variation_name}</div>
+                        <div class="review-text">${comment}</div>
+                    </div>
+                    ${reviewImages}
+                </div>
+            `;
+
+            // Insert the review HTML into the container
+            reviewsContainer.insertAdjacentHTML("beforeend", reviewHtml);
+
+        })
+    }
+
+    fetchReviews();
+
 });
