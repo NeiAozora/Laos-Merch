@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-sm-4 col-md-3 col-6 mt-2">
                 <h5 >Layanan Pelanggan</h5>
-                <p class="thin-font"><a href="" style="text-decoration: none; color: inherit;">Bantuan</a></p>
+                <p class="thin-font"><a href="<?= BASEURL?>service/help-center" style="text-decoration: none; color: inherit;">Bantuan</a></p>
                 <p class="thin-font"><a href="" style="text-decoration: none; color: inherit;">Metode Pembayaran</a></p>
                 <p class="thin-font"><a href="" style="text-decoration: none; color: inherit;">Pengembalian Barang & Dana</a></p>
                 <p class="thin-font"><a href="" style="text-decoration: none; color: inherit;">Lacak Pesanan Pembeli</a></p>
@@ -15,7 +15,7 @@
                 <h5>Jelajahi</h5>
                 <p class="thin-font"><a href="" style="text-decoration: none; color: inherit;">Tentang Kami</a></p>
                 <p class="thin-font"><a href="" style="text-decoration: none; color: inherit;">Kebijakan LAOS Merch</a></p>
-                <p class="thin-font"><a href="" style="text-decoration: none; color: inherit;">Kebijakan Privasi</a></p>
+                <p class="thin-font"><a href="<?= BASEURL?>about/privacy-policy" style="text-decoration: none; color: inherit;">Kebijakan Privasi</a></p>
             </div>
             <div class="col-sm-4 col-md-3 col-6 mt-2">
                 <h5 class="footer-heading">Metode Pembayaran</h5>
