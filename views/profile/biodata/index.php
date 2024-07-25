@@ -5,8 +5,8 @@ require_once VIEWS . "partials/navbar.php";
 
 
 <section class="content">
-<div class="container mt-5">
-        <div class="profile-header d-flex justify-content-between align-items-center mb-2">
+<div class="container mt-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
             <div class="d-flex align-items-center">
                 <h4 class="me-2 ms-1"><i class="fa-solid fa-user"></i></h4>
                 <h4 class="ml-3">Profile</h4>
