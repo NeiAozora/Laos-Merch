@@ -1,7 +1,7 @@
 <?php
 
 class DiscountModel extends Model {
-    protected $table = '';
-    protected $primaryKey = '';
+    protected $table = 'discounts';
+    protected $primaryKey = 'id_discount';
 }
 

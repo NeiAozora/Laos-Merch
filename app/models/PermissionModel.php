@@ -1,7 +1,7 @@
 <?php
 
 class PermissionModel extends Model {
-    protected $table = '';
-    protected $primaryKey = '';
+    protected $table = 'permissions';
+    protected $primaryKey = 'id_permission';
 }
 
