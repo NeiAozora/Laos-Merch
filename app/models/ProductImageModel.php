@@ -1,7 +1,7 @@
 <?php
 
 class ProductImageModel extends Model {
-    protected $table = '';
-    protected $primaryKey = '';
+    protected $table = 'product_images';
+    protected $primaryKey = 'id_product_image';
 }
 

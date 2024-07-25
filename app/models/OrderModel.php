@@ -1,7 +1,7 @@
 <?php
 
 class OrderModel extends Model {
-    protected $table = '';
-    protected $primaryKey = '';
+    protected $table = 'orders';
+    protected $primaryKey = 'id_order';
 }
 

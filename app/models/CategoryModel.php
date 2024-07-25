@@ -1,7 +1,7 @@
 <?php
 
 class CategoryModel extends Model {
-    protected $table = '';
-    protected $primaryKey = '';
+    protected $table = 'categories';
+    protected $primaryKey = 'id_category';
 }
 

@@ -1,7 +1,7 @@
 <?php
 
 class VariationOptionModel extends Model {
-    protected $table = '';
-    protected $primaryKey = '';
+    protected $table = 'variation_options';
+    protected $primaryKey = 'id_option';
 }
 

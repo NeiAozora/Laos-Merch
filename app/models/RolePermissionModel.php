@@ -1,7 +1,7 @@
 <?php
 
 class RolePermissionModel extends Model {
-    protected $table = '';
-    protected $primaryKey = '';
+    protected $table = 'role_permissions';
+    protected $primaryKey = 'id_role_permission';
 }
 

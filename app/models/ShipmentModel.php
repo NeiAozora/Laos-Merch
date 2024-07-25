@@ -1,7 +1,7 @@
 <?php
 
 class ShipmentModel extends Model {
-    protected $table = '';
-    protected $primaryKey = '';
+    protected $table = 'shipments';
+    protected $primaryKey = 'id_shipment';
 }
 
