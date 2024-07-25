@@ -81,7 +81,15 @@ require_once VIEWS . '/partials/navbar.php';
         const checkboxes = document.querySelectorAll('.checkbox-item');
         checkboxes.forEach(checkbox=>{checkbox.checked = this.checked});
     });
+    const checkboxes = document.querySelectorAll('.checkbox-item');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+                document.getElementById('selectAll').checked = allChecked;
+            });
+        });
 </script>
+
 <!-- button plus minus -->
 <script>
     document.getElementById('decrement').addEventListener('click', function() {
