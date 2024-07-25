@@ -1,7 +1,10 @@
 <?php
 
-class ProductModel {
-    private $db;
+class ProductModel extends Model {
+    protected $db;
+    protected $table = "products";
+    protected $primaryKey = 
+
 
     public function __construct() {
         $this->db = new Database();
@@ -40,13 +43,13 @@ class ProductModel {
             p.discontinued,
             c.category_name,
             GROUP_CONCAT(DISTINCT t.tag_name ORDER BY t.tag_name SEPARATOR ", ") AS tags,
-            AVG(vc.price) AS avg_price,  -- Example of AVG(), adjust as necessary
-            MIN(v.option_name) AS min_option,  -- Minimum option name; adjust if needed
+            vc.price,
+            MIN(v.option_name) 
             COALESCE(MAX(d.discount_value), 0) AS discount_value,  -- Maximum discount value, default 0 if none
-            MIN(vi.image_url) AS product_image
+            MIN(pi.image_url) AS product_image
             FROM products p
             LEFT JOIN categories c ON p.id_category = c.id_category
-            LEFT JOIN product_images vi ON p.id_product = vi.id_product
+            LEFT JOIN product_images pi ON p.id_product = pi.id_product
             LEFT JOIN variation_combinations vc ON p.id_product = vc.id_product
             LEFT JOIN variation_options v ON vc.id_combination = v.id_combination
             LEFT JOIN product_tags pt ON p.id_product = pt.id_product
@@ -77,10 +80,10 @@ class ProductModel {
                 MIN(v.option_name) AS min_option,
                 COALESCE(d.discount_value, 0) AS discount_value,
                 -- Subquery to get the first image URL for each product
-                (SELECT vi.image_url
-                 FROM product_images vi
-                 WHERE vi.id_product = p.id_product
-                 ORDER BY vi.id_product_image
+                (SELECT pi.image_url
+                 FROM product_images pi
+                 WHERE pi.id_product = p.id_product
+                 ORDER BY pi.id_product_image
                  LIMIT 1) AS product_image,
                 -- Calculate average rating for each product
                 COALESCE(AVG(r.rating), 0) AS avg_rating
