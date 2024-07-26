@@ -63,26 +63,32 @@ class AuthHelpers
         $user = $userModel->getUserByFirebaseId($firebaseId);
 
         return $user !== null;
-
-        return false;
     }
 
     public static function getLoggedInUserData(): ?array {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
-
-        if (!isset($_SESSION['fr'])) {
+        // d($_SESSION);
+        // die;
+        if (!isset($_SESSION['user'])) {
             return null;
         }
 
-        $idToken = $_SESSION['fr'];
-        $verifiedIdToken = self::verifyFBAcessIdToken($idToken);
+        if (!isset($_SESSION['user']['fr'])) {
+            return null;
+        }
 
+        $idToken = $_SESSION['user']['fr'];
+        $verifiedIdToken = self::verifyFBAcessIdToken($idToken);
+        if (is_null($verifiedIdToken)){
+            echo '<script>alert("session invalid")</script>';
+        }
+        
         if ($verifiedIdToken) {
             $firebaseId = $verifiedIdToken->claims()->get('sub');
             $email = $verifiedIdToken->claims()->get('email');
-            $name = $verifiedIdToken->claims()->get('name');
+            $username = $verifiedIdToken->claims()->get('name');
             $picture = $verifiedIdToken->claims()->get('picture');
 
             $userModel = new UserModel();
@@ -91,14 +97,19 @@ class AuthHelpers
             if ($user === null) {
                 return null;
             }
-
+            $firstName = $user["first_name"];
+            $lastName = $user["last_name"];
             // Return user data
             return [
+                'id' => $user["id_user"],
                 'fr' => $idToken,
                 'uid' => $firebaseId,
                 'email' => $email,
-                'name' => $name,
-                'picture' => $picture
+                'username' => $username,
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'wa_number' => $user['wa_number'],
+                'picture' => $user["profile_picture"]
             ];
         }
 

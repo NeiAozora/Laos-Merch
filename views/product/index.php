@@ -1,6 +1,6 @@
 <?php
-require_once "views/partials/head.php";
-require_once "views/partials/navbar.php";
+requireView("partials/head.php");
+requireView("partials/navbar.php");
 ?>
 
 <section class="content mt-5">
@@ -123,5 +123,5 @@ require_once "views/partials/navbar.php";
 
 
 <?php
-require_once "views/partials/footer.php";
+requireView("partials/footer.php");
 ?>

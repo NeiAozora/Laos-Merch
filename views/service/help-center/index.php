@@ -1,6 +1,6 @@
 <?php
-require_once VIEWS . "partials/head.php";
-require_once VIEWS . "partials/navbar.php";
+requireView("partials/head.php");
+requireView("partials/navbar.php");
 ?> 
 
 <section class="content">
@@ -51,4 +51,4 @@ require_once VIEWS . "partials/navbar.php";
 </section>
 
 <?php
-require_once VIEWS . "partials/footer.php";
+requireView("partials/footer.php");

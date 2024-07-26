@@ -3,6 +3,7 @@
 function dd(...$data)
 {
     d($data);
+    die;
 }
 
 function view($view, $data = [])
@@ -12,6 +13,15 @@ function view($view, $data = [])
 
     // Include the view file
     require_once 'views/' . $view . '.php';
+}
+
+function requireView($view){
+    try {
+        require_once VIEWS . $view;
+    } catch (\Throwable $th) {
+        throw $th;
+        die;
+    }
 }
 
 function invokeClass($className, $methodName) : callable

@@ -11,6 +11,19 @@ require_once "helper.php";
 $query = 
 
 "
+
+CREATE TABLE carousels (
+  id_carousel INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  image_url VARCHAR(255) NOT NULL,
+  link VARCHAR(255),
+  title VARCHAR(255),
+  subtitle VARCHAR(255),
+  button_text VARCHAR(255),
+  button_link VARCHAR(255),
+  FOREIGN KEY (carousel_id) REFERENCES carousel(id)
+);
+
 CREATE TABLE roles (
     id_role BIGINT PRIMARY KEY AUTO_INCREMENT,
     role_name VARCHAR(100) UNIQUE NOT NULL,
@@ -169,8 +182,6 @@ CREATE TABLE roles (
     city VARCHAR(255),
     state VARCHAR(255),
     postal_code VARCHAR(50),
-    country VARCHAR(255),
-    phone_number VARCHAR(50),
     extra_note TEXT,
     is_temporary BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (id_user) REFERENCES users(id_user) ON UPDATE CASCADE ON DELETE CASCADE

@@ -25,6 +25,7 @@ class LoginController extends Controller{
     
             // Verify the Firebase ID token
             $verifiedIdToken = AuthHelpers::verifyFBAcessIdToken($idToken);
+
             if ($verifiedIdToken) {
                 $firebaseId = $verifiedIdToken->claims()->get("sub");
                 $email = $verifiedIdToken->claims()->get('email');
@@ -42,13 +43,14 @@ class LoginController extends Controller{
                         '',    // Placeholder for last_name
                         $email,
                         '',    // Placeholder for wa_number
-                        null   // Placeholder for id_role
+                        null,   // Placeholder for id_role
+                        $picture
                     );
                 }
     
                 // Set session variables
                 $_SESSION['user'] = [
-                    'fr' => $verifiedIdToken,
+                    'fr' => $idToken,
                     'uid' => $firebaseId
                 ];
     

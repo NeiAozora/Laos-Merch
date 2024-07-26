@@ -12,8 +12,10 @@ class ProductController extends Controller {
 
     // Display product details (assuming by ID)
     public function getProduct($id) {
-        $product = $this->productModel->getProduct($id);
+        $product = $this->productModel->get($id);
+        // $product
         $reviews = $this->reviewModel->getReviewsByProductId($id);
+        
         var_dump($reviews);
         $this->view('product/index', ['product' => $product, 'reviews' => $reviews]);
     }

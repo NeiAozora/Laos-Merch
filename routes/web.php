@@ -13,10 +13,7 @@ Router::get('/', invokeClass(IndexController::class, "index"));
 // Product
 Router::get('/product/{id}', invokeClass(ProductController::class, "getProduct"));
 // UserProfile
-Router::get('/user/{firebaseId}/profile', function() {
-    
-    view("/404/index");
-});
+Router::get('/user/{firebaseId}/profile', invokeClass(ProfileController::class, "profileSettings"));
 // UserSettings
 Router::get('/user/{firebaseId}/settings', function() {
     view("/404/index");

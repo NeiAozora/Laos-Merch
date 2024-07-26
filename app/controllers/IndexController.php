@@ -9,8 +9,8 @@ class IndexController extends Controller{
     }
 
     public function index(){
-
-        $this->view('homepage/index');
+        
+        $this->view('homepage/index', ["carousel_items" => []]);
     }
 
 }

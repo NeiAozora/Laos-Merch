@@ -1,7 +1,7 @@
 <?php
 
-require_once "views/partials/head.php";
-require_once "views/partials/navbar.php";
+requireView("partials/head.php");
+requireView("partials/navbar.php");
 
 ?>
 
@@ -19,33 +19,35 @@ require_once "views/partials/navbar.php";
 </style>
 
 <!-- carousel -->
-    <div id="carouselAutoplaying" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <a href=""><img src="<?= BASEURL ?>public/assets/OldTrafford.jpg" class="d-block w-100 carousel-img" alt="..."></a>
+<div id="carouselAutoplaying" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <?php foreach($carousel_items as $index => $item): ?>
+            <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                <a href="<?= $item['link'] ?>">
+                    <img src="<?= $item['image_url'] ?>" class="d-block w-100 carousel-img" alt="...">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5><?= $item['title'] ?></h5>
+                        <p><?= $item['subtitle'] ?></p>
+                        <a href="<?= $item['button_link'] ?>" class="btn btn-success"><?= $item['button_text'] ?></a>
+                    </div>
+                </a>
             </div>
-            <div class="carousel-item">
-                <a href=""><img src="<?= BASEURL ?>public/assets/OldTrafford.jpg" class="d-block w-100 carousel-img" alt="..."></a>
-            </div>
-            <div class="carousel-item">
-                <a href=""><img src="<?= BASEURL ?>public/assets/OldTrafford.jpg" class="d-block w-100 carousel-img" alt="..."></a>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselAutoplaying" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselAutoplaying" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-        <ol class="carousel-indicators">
-            <li data-bs-target="#carouselAutoplaying" data-bs-slide-to="0" class="active"></li>
-            <li data-bs-target="#carouselAutoplaying" data-bs-slide-to="1"></li>
-            <li data-bs-target="#carouselAutoplaying" data-bs-slide-to="2"></li>
-        </ol>
+        <?php endforeach; ?>
     </div>
-
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselAutoplaying" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselAutoplaying" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+    <ol class="carousel-indicators">
+        <?php foreach($carousel_items as $index => $item): ?>
+            <li data-bs-target="#carouselAutoplaying" data-bs-slide-to="<?= $index ?>" class="<?= $index === 0 ? 'active' : '' ?>"></li>
+        <?php endforeach; ?>
+    </ol>
+</div>
 
 
     
@@ -98,5 +100,5 @@ require_once "views/partials/navbar.php";
 
 
 <?php
-require_once "views/partials/footer.php";
+requireView("partials/footer.php");
 ?>

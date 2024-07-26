@@ -1,5 +1,5 @@
 <?php
-require_once "views/partials/head.php";
+requireView("partials/head.php");
 ?>
 
 <section class="content" style="justify-content: center; align-items: center; height: 100%;">
