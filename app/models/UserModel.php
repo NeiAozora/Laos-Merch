@@ -11,14 +11,16 @@ class UserModel
     }
 
     // Create a new user
-    public function createUser($id_firebase, $user_name, $email, $wa_number, $id_role)
+    public function createUser($id_firebase, $user_name, $email, $wa_number, $profile_picture )
     {
-        $this->db->query('INSERT INTO users (id_firebase, user_name, email, wa_number, id_role) VALUES (:id_firebase, :user_name, :email, :wa_number, :id_role)');
+        $this->db->query('INSERT INTO users (id_firebase, user_name, email, wa_number, id_role, profile_picture ) VALUES (:id_firebase, :user_name, :email, :wa_number, :id_role, :profile_picture )');
         $this->db->bind(':id_firebase', $id_firebase);
         $this->db->bind(':user_name', $user_name);
         $this->db->bind(':email', $email);
         $this->db->bind(':wa_number', $wa_number);
-        $this->db->bind(':id_role', $id_role);
+        $this->db->bind(':profile_picture ', $profile_picture );
+        $this->db->bind(':profile_picture ', $profile_picture );
+
 
         return $this->db->execute();
     }

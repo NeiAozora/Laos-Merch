@@ -3,7 +3,7 @@
 class ProductModel extends Model {
     protected $db;
     protected $table = "products";
-    protected $primaryKey = "";
+    protected $primaryKey = "id_product";
 
     public function __construct() {
         $this->db = new Database();
