@@ -13,11 +13,35 @@ class ProductController extends Controller {
     // Display product details (assuming by ID)
     public function getProduct($id) {
         $product = $this->productModel->get($id);
-        // $product
-        $reviews = $this->reviewModel->getReviewsByProductId($id);
-        
-        var_dump($reviews);
-        $this->view('product/index', ['product' => $product, 'reviews' => $reviews]);
+        $productVariations = [];
+        $VTs = VariationTypeModel::new()->get(["id_product", $id]);
+        $productCombinations = VariationCombinationModel::new()->get(["id_product", $id]);
+        for ($a = 0; $a < count($VTs); $a++)
+        {
+            $VOs = VariationOptionModel::new()->get(["id_variation_type", $VTs[$a]["id_variation_type"]]);
+            $productVariations[$a] = $VTs[$a];
+            for($b = 0; $b < count($VOs); $b++)
+            {
+                
+                $productVariations[$a]["variation_options"][$b] = $VOs[$b];
+                
+            }
+            // $productVariationOption = VariationOptionModel::new()->get(["id_variation_type", $productVariationType["id_variation_type"]]);
+
+        }
+
+        $reviews = ReviewModel::new()->getReviewsByProductId($id);
+        $discount = DiscountProductModel::new()->getDiscountByProductId($id);
+       
+        $data = [
+            'product' => $product,
+            'productVariations' => $productVariations,
+            'productCombination' => $productCombinations,
+            'reviews' => $reviews,
+            'discount' => $discount
+        ];
+
+        $this->view('product/index', $data);
     }
 
     // Display the list of products with search and pagination

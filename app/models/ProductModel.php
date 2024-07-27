@@ -4,6 +4,8 @@ class ProductModel extends Model {
     protected $db;
     protected $table = "products";
     protected $primaryKey = "id_product";
+    use StaticInstantiator;
+
 
     public function __construct() {
         $this->db = new Database();

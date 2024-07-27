@@ -17,7 +17,9 @@ const userGoogleSignIn = async () => {
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        const response = fetch(baseUrl + "auth-process?fr=" + user.accessToken + "&br=" + user.uid, {
+        let url = baseUrl + "auth-process?fr=" + user.accessToken + "&br=" + user.uid;
+        // window.location = url;
+        const response = fetch(url, {
             method: 'GET'
         }).then((result) => {
         if(result.status == 200){

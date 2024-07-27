@@ -1,9 +1,14 @@
 <?php
 
 
-class UserModel 
+class UserModel extends Model
 {
-    private $db;
+    protected $db;
+    protected $table = "users";
+    protected $primaryKey = "id_user";
+    use StaticInstantiator;
+
+
 
     public function __construct()
     {

@@ -13,6 +13,7 @@ abstract class Model
         $this->db = new Database;
     }
 
+
     public function getAll()
     {
         $this->db->query("SELECT * FROM $this->table");

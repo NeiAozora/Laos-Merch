@@ -21,7 +21,7 @@ class LoginController extends Controller{
         $idToken = $_GET["fr"] ?? null;
         
         if ($idToken) {
-            session_start();
+
     
             // Verify the Firebase ID token
             $verifiedIdToken = AuthHelpers::verifyFBAcessIdToken($idToken);
@@ -67,7 +67,7 @@ class LoginController extends Controller{
     }
 
     public function logout(){
-        session_start();
+
         session_unset();
         session_destroy();
 

@@ -18,4 +18,13 @@ class ReviewController {
         echo json_encode(["reviews" => $reviews]);
 
     }
+
+    public function getReviewsByProductId($id){
+        $reviews = $this->reviewModel->getReviewsByProductId($id);
+
+        header('Content-Type: application/json');
+
+        echo json_encode(["reviews" => $reviews]);
+
+    }
 }

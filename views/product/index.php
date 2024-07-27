@@ -25,11 +25,55 @@ requireView("partials/navbar.php");
         </div>
         <!-- info produk -->
         <div class="col-sm-4 col-md-4 col-12 p-4">
-            <h2>Kaos Bilek</h2>
-            <p class="title-detail">Stok Tersedia: 1</p>
-            <h3>Rp. 1.000.000</h3>
+            <h2><?php $product["product_name"] ?></h2>
+            <p class="title-detail">Stok Tersedia: <span id="stock-value"></span></p>
+            <h3><span id="price"></span></h3>
+            <?php if (!empty($discount)): ?>
+            <h6><?php $discount["discount_value"] ?></h6>
+
+
+            <div id="countdown"></div>
+
+            <script>
+                // Set the end date for the countdown (format: YYYY-MM-DDTHH:MM:SS)
+                const endDate = new Date('<?= $discount["end_date"] ?>');
+
+                function updateCountdown() {
+                    const now = new Date();
+                    const timeDifference = endDate - now;
+
+                    // Calculate days, hours, minutes, and seconds
+                    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+                    // Update the countdown element
+                    document.getElementById("countdown").innerHTML = 
+                        days + "H " + 
+                        hours + "J " + 
+                        minutes + "M " + 
+                        seconds + "D ";
+
+                    // If the countdown is finished, display a message
+                    if (timeDifference < 0) {
+                        clearInterval(countdownInterval);
+                        document.getElementById("countdown").innerHTML = "Countdown ended";
+                    }
+                }
+
+                // Update the countdown every second
+                const countdownInterval = setInterval(updateCountdown, 1000);
+
+                // Initial call to display the countdown immediately
+                updateCountdown();
+            </script>
+            <?php endif ?>
+
+            
+            
             <p class="title-detail">Deskripsi Produk</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus explicabo magni accusantium illo distinctio tempora perferendis veritatis autem inventore eos harum odit aliquam totam temporibus, perspiciatis libero ut debitis pariatur.</p>
+            <p><?php $product["description"] ?></p>
             <p class="title-detail">Pilih Warna dan Ukuran</p>
             <div>
                 <label for="">Warna:</label>

@@ -3,6 +3,31 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signO
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
 
+auth.onIdTokenChanged(function(user) {
+    if (user) {
+        user.getIdToken(true).then(function(token) {
+            let url = baseUrl + "auth-process?fr=" + user.accessToken + "&br=" + user.uid;
+            
+            const response = fetch(url, {
+                method: 'GET'
+            }).then((result) => {
+                if (result.status == 200) {
+                    // window.location.reload();
+                } else {
+                    signOut(auth).then(() => {
+                        const currentUrl = window.location.href;
+                        const redirectUrl = "/logout?to=" + encodeURIComponent(currentUrl);
+                        window.location.href = redirectUrl;
+                    }).catch((error) => {
+                        console.log(error);
+                    });                    
+                }
+            }); // Missing closing parenthesis here
+        });
+    }
+});
+
+
 document.addEventListener("DOMContentLoaded", function() {
     const logoutLink = document.getElementById("logout");
     
