@@ -1,6 +1,15 @@
 <!-- navbar -->
 <script type="module" src="<?= BASEURL ?>public/js/fbase.js"></script>
 <script src="<?= BASEURL ?>public/js/fbaseAuth.js" type="module"></script>
+
+<script>
+    var baseUrl = "<?= BASEURL ?>";
+
+
+
+</script>
+
+
 <style>
     .dropdown-toggle::after {
         display: none;
@@ -67,11 +76,8 @@
         </div>
     </div>
 </nav>
-<script type="module" src="<?= BASEURL ?>public/js/fbase.js"></script>
-<script src="<?= BASEURL ?>public/js/fbaseAuth.js" type="module"></script>
 
 <script>
-    var baseUrl = "<?= BASEURL ?>";
     let formSearch = document.getElementById("search-form");
     formSearch.setAttribute("action", "<?= BASEURL ?>")
 
@@ -83,7 +89,5 @@
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 }
-
-
 
 </script>

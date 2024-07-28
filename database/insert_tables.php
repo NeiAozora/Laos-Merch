@@ -66,10 +66,10 @@ VALUES
 -- Insert Variation Types
 INSERT INTO variation_types (id_product, name)
 VALUES
-    (1, 'Keyboard Type'),
-    (1, 'Keyboard Color'),
-    (2, 'Mouse Type'),
-    (2, 'Mouse Color');
+    (1, 'Keyboard Type'), -- id 1
+    (1, 'Keyboard Color'), -- id 2
+    (2, 'Mouse Type'), -- id 3
+    (2, 'Mouse Color'); -- id 4
 
 -- Insert Variation Combinations
 INSERT INTO variation_combinations (id_product, price, stock)

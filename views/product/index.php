@@ -84,8 +84,8 @@ requireView("partials/navbar.php");
                                 <button 
                                     class="btn laos-outline-button <?= $index === 0 ? 'active' : '' ?>" 
                                     data-option-id="<?= $option['id_option'] ?>" 
-                                    onclick="chooseVariation('<?= $option['id_option'] ?>', <?= $variation['id_variation_type'] ?>, '<?= $option['option_name'] ?>')"
-                                >
+                                    data-option-id-combination="<?= $option['id_combination'] ?>" 
+                                    onclick="chooseVariation('<?= $option['id_option'] ?>', <?= $variation['id_variation_type'] ?>)">
                                     <?= $option["option_name"] ?>
                                 </button>
                             <?php endforeach; ?>
@@ -106,7 +106,8 @@ requireView("partials/navbar.php");
                         }
                         ?>
                 ];
-                const discount = { discount_value: <?= $discount["discount_value"] ?? false ?> }; // Set to null or false if no discount
+                const discount = { discount_value: <?= isset($discount["discount_value"]) ? json_encode($discount["discount_value"]) : 'null' ?> }; // Set to null if no discount
+
 
                 let selectedOptions = {};
 
@@ -127,6 +128,7 @@ requireView("partials/navbar.php");
                     document.querySelectorAll(`.variation-group[data-variation-type="${variationTypeId}"] .btn`).forEach(btn => {
                         btn.classList.toggle('active', btn.getAttribute('data-option-id') === optionId);
                     });
+
                     updateDisplayedValues();
                 }
 
@@ -134,6 +136,11 @@ requireView("partials/navbar.php");
                     const selectedCombination = productCombination.find(comb => {
                         return Object.values(selectedOptions).includes(String(comb.id_combination));
                     });
+
+                    if (!selectedCombination) {
+                        console.log("Kombinasi tidak valid");
+                        window.location = "<?= BASEURL ?>error?code=400&message=Bad%20Request&detailMessage=Produk%20memiliki%20kombinasi%20yang%20tidak%20valid.%20Segera%20hubungi%20admin.";
+                    }
 
                     if (selectedCombination) {
                         const fullPrice = selectedCombination.price;
@@ -144,8 +151,9 @@ requireView("partials/navbar.php");
                             document.getElementById('price').textContent = `Rp ${discountedPrice.toFixed(2)}`;
                             document.getElementById('full-price').textContent = `Rp ${fullPrice.toFixed(2)}`;
                         } else {
-                            document.getElementById('price').textContent = ''; // Clear discounted price
-                            document.getElementById('full-price').textContent = `Rp ${fullPrice.toFixed(2)}`;
+
+                            document.getElementById('price').textContent = 'Rp ${fullPrice.toFixed(2)}'; // Clear discounted price
+                            // document.getElementById('full-price').textContent = `Rp ${fullPrice.toFixed(2)}`;
                         }
 
                         document.getElementById('stock-value').textContent = selectedCombination.stock;
@@ -154,26 +162,15 @@ requireView("partials/navbar.php");
 
             </script>
 
-            <!-- <div>
-                <label for="">Warna:</label>
-                <div>
-                    <a href="" class="btn laos-outline-button active">Hitam</a>
-                </div>
-                <label for="">Ukuran:</label>
-                <div>
-                    <a href="" class="btn laos-outline-button active">L</a>
-                    <a href="" class="btn laos-outline-button">XL</a>
-                    <a href="" class="btn laos-outline-button">XXL</a>
-                </div>
-            </div> -->
         </div>
         <!-- checkout -->
         <div class="col-sm-4 col-md-4 col-12 mt-5 d-flex justify-content-center">
             <div class="card d-flex flex-column justify-content-between" style="width:18rem;">
                 <h5 class="mt-2 d-flex justify-content-center">Atur Pilihanmu</h5>
                 <div class="ms-2">
-                    <p>Warna :</p>
-                    <p>Ukuran :</p>
+                    <?php foreach($productVariations as $variation): ?>
+                    l<p><?= $variation["name"] ?> : <span id="variation-type-<?= $variation['id_variation_type'] ?>" ></span></p>
+                    <?php endforeach; ?>
                     <p>Jumlah :</p>
                     <p>Subtotal :</p>
                 </div>

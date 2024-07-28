@@ -51,7 +51,7 @@ class AuthHelpers
             $userModel = new UserModel();
             $user = $userModel->getUserByFirebaseId($firebaseId);
 
-            return $user !== null;
+            return $user !== false;
         }
 
         // the new approach
@@ -63,7 +63,7 @@ class AuthHelpers
         $userModel = new UserModel();
         $user = $userModel->getUserByFirebaseId($firebaseId);
 
-        return $user !== null;
+        return $user !== false;
     }
 
 

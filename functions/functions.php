@@ -24,6 +24,19 @@ function requireView($view){
     }
 }
 
+
+function isNullOrFalse($value){
+    if(is_null($value)){
+        return true;
+    }
+
+    if($value === false){
+        return true;
+    }
+
+    return false;
+}
+
 function invokeClass($className, $methodName) : callable
 {
     if (!class_exists($className)){

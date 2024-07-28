@@ -57,7 +57,17 @@ Router::get('/order/detail', invokeClass(OrderDetailController::class, "index"))
 Router::get("/service/help-center", invokeClass(HelpCenterController::class, "index"));
 
 
+Router::get("/notfound",function() {
+    view("/404/index");
+});
+Router::get("/error",function() {
+    
+    if (!isset($_GET["code"]) && !isset($_GET["message"]) && !isset($_GET["detailMessage"])){
+        jsRedirect("/notfound");
+    }
 
+    view("/customerror/index", ['errorCode' => $_GET['code'], 'errorMessage' => $_GET['message'], 'detailMessage' => ($_GET["detailMessage"])]);
+});
 // Custom 404 Not Found handler
 Router::notFound(function() {
     view("/404/index");
