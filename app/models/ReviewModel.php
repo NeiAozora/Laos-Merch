@@ -1,6 +1,11 @@
 <?php
-class ReviewModel {
-    private $db;
+class ReviewModel extends Model{
+    protected $db;
+    protected $table = "reviews";
+    protected $primaryKey = "id_review";
+
+    use StaticInstantiator;
+
 
     public function __construct() {
         $this->db = new Database();
@@ -28,9 +33,9 @@ class ReviewModel {
         LEFT JOIN review_images ri ON r.id_review = ri.id_review
         LEFT JOIN users u ON r.id_user = u.id_user
         LEFT JOIN variation_combinations vc ON r.id_variation_combination = vc.id_combination
-        LEFT JOIN products p ON vc.id_product = p.id_product
         LEFT JOIN variation_options vo ON vc.id_combination = vo.id_combination
         LEFT JOIN variation_types vt ON vo.id_variation_type = vt.id_variation_type
+        LEFT JOIN products p ON vt.id_product = p.id_product
         WHERE vo.option_name IS NOT NULL
         AND vo.id_option = (
             SELECT MIN(id_option)
@@ -38,7 +43,7 @@ class ReviewModel {
             WHERE id_variation_type = vt.id_variation_type
             AND id_combination = vc.id_combination
         )
- 
+        AND vc.id_combination = vo.id_combination
         ";
 
         if (!is_null($limit)) {
@@ -83,18 +88,19 @@ class ReviewModel {
 
     public function getReviewsByProductId(int $idProduct) {
         $this->db->query("
-            SELECT r.*, u.username, CONCAT(u.first_name, ' ', u.last_name) as full_name, u.profile_picture, 
-                   ri.id_review_image, ri.image_url, 
-                   p.product_name, vc.id_combination,
-                   vo.option_name as variation_name,
-                   vt.name AS variation_type_name
+        SELECT r.*, u.username, CONCAT(u.first_name, ' ', u.last_name) as full_name, u.profile_picture, 
+                    ri.id_review_image, ri.image_url, 
+                    p.product_name, vc.id_combination,
+                    vo.option_name as variation_name,
+                    vt.name AS variation_type_name
             FROM reviews r
             LEFT JOIN review_images ri ON r.id_review = ri.id_review
             LEFT JOIN users u ON r.id_user = u.id_user
             LEFT JOIN variation_combinations vc ON r.id_variation_combination = vc.id_combination
-            LEFT JOIN products p ON vc.id_product = p.id_product
             LEFT JOIN variation_options vo ON vc.id_combination = vo.id_combination
             LEFT JOIN variation_types vt ON vo.id_variation_type = vt.id_variation_type
+            LEFT JOIN products p ON vt.id_product = p.id_product
+
             WHERE vo.option_name IS NOT NULL
             AND vo.id_option = (
                 SELECT MIN(id_option)
@@ -102,7 +108,8 @@ class ReviewModel {
                 WHERE id_variation_type = vt.id_variation_type
                 AND id_combination = vc.id_combination
             )
-     
+
+            AND vc.id_combination = vo.id_combination
             AND p.id_product = :id_product
         ");
         $this->db->bind(':id_product', $idProduct, PDO::PARAM_INT);
@@ -168,6 +175,7 @@ private function groupResults(array $results) {
                 'image_url' => $result['image_url']
             ];
         }
+
     }
     // Flatten the images array to remove the associative array structure
     foreach ($reviews as &$review) {

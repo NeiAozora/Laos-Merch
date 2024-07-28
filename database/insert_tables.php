@@ -10,6 +10,11 @@ require_once "helper.php";
 
 $query = 
 "
+-- Insert Carousels
+INSERT INTO carousels (name, image_url, link, title, subtitle, button_text, button_link)
+VALUES
+    ('Summer Sale', 'https://example.com/summer_sale.jpg', 'https://example.com/summer_sale', 'Summer Sale', 'Up to 50% off!', 'Shop Now', 'https://example.com/shop');
+
 -- Insert Roles
 INSERT INTO roles (role_name, role_description)
 VALUES
@@ -110,7 +115,6 @@ INSERT INTO review_images (id_review, image_url)
 VALUES
     (1, 'http://example.com/images/review1.png');
 
-
 -- Insert Cart Items
 INSERT INTO cart_items (id_user, id_combination, quantity)
 VALUES
@@ -128,16 +132,15 @@ VALUES
     (1, 10.00, NOW(), DATE_ADD(NOW(), INTERVAL 1 MONTH)),  -- 10% discount
     (2, 20.00, NOW(), DATE_ADD(NOW(), INTERVAL 1 MONTH));  -- $20 discount
 
--- Insert Discount Variation Options
+-- Insert Discount Products
 INSERT INTO discount_products (id_discount, id_product)
 VALUES
-    (1, 1);  -- 10% discount 
-
+    (1, 1);  -- 10% discount for Mechanical Keyboard
 
 -- Insert Shipping Addresses
-INSERT INTO shipping_addresses (id_user, recipient_name, street_address, city, state, postal_code, country, phone_number, extra_note, is_temporary)
+INSERT INTO shipping_addresses (id_user, recipient_name, street_address, city, state, postal_code, extra_note, is_temporary)
 VALUES
-    (1, 'Alice Johnson', '123 Main St', 'Springfield', 'IL', '62701', 'USA', '123-456-7890', 'Leave at front door', FALSE);
+    (1, 'Alice Johnson', '123 Main St', 'Springfield', 'IL', '62701', 'Leave at front door', FALSE);
 
 -- Insert Order Statuses
 INSERT INTO order_statuses (status_name)
@@ -155,7 +158,7 @@ VALUES
 -- Insert Order Items
 INSERT INTO order_items (id_order, quantity, id_variation_combination, id_discount)
 VALUES
-    (1, 1, 1, NULL);  -- Order 1: Mechanical Keyboard, with the discount
+    (1, 1, 1, 1);  -- Order 1: Mechanical Keyboard with 10% discount
 
 -- Insert Carriers
 INSERT INTO carriers (carrier_name, wa_number, email, website)
@@ -172,6 +175,7 @@ VALUES
 INSERT INTO shipment_statuses (id_shipment, status_description)
 VALUES
     (1, 'Package is out for delivery.');
+
 
 ";
 

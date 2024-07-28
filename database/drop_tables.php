@@ -9,6 +9,7 @@ require_once dirname(dirname(__FILE__)) . "/app/core/Database.php";
 
 $query = 
 "
+-- Drop tables that have foreign key dependencies first
 DROP TABLE IF EXISTS shipment_statuses;
 DROP TABLE IF EXISTS shipments;
 DROP TABLE IF EXISTS carriers;
@@ -34,6 +35,8 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS role_permissions;
 DROP TABLE IF EXISTS permissions;
 DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS carousels;
+
 
 
 ";

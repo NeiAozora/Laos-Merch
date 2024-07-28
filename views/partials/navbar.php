@@ -1,5 +1,6 @@
 <!-- navbar -->
-
+<script type="module" src="<?= BASEURL ?>public/js/fbase.js"></script>
+<script src="<?= BASEURL ?>public/js/fbaseAuth.js" type="module"></script>
 <style>
     .dropdown-toggle::after {
         display: none;
@@ -82,5 +83,7 @@
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 }
+
+
 
 </script>

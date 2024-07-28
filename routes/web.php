@@ -1,5 +1,12 @@
 <?php
 
+Router::getInstance()->addGlobalMiddleware(function(){
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+});
+
+
 // API
 Router::get("/api/products", invokeClass(ProductController::class, "list"));
 Router::get("/api/reviews", invokeClass(ReviewController::class, "getReviews"));

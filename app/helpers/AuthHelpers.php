@@ -28,32 +28,33 @@ class AuthHelpers
         }
     }
 
+
     public static function isLoggedIn(): bool {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
-
+        
         if (!array_key_exists("user", $_SESSION)) {
             return false;
         }
 
         // the approach below may cause a slow down
-        // if (!array_key_exists("fr", $_SESSION["user"])) {
-        //     return false;
-        // }
+        if (!array_key_exists("fr", $_SESSION["user"])) {
+            return false;
+        }
 
-        // $idToken = $_SESSION["user"]['fr'];
-        // $verifiedIdToken = self::verifyFBAcessIdToken($idToken);
+        $idToken = $_SESSION["user"]['fr'];
+        $verifiedIdToken = self::verifyFBAcessIdToken($idToken);
 
-        // if ($verifiedIdToken) {
-        //     $firebaseId = $verifiedIdToken->claims()->get('sub');
-        //     $userModel = new UserModel();
-        //     $user = $userModel->getUserByFirebaseId($firebaseId);
+        if ($verifiedIdToken) {
+            $firebaseId = $verifiedIdToken->claims()->get('sub');
+            $userModel = new UserModel();
+            $user = $userModel->getUserByFirebaseId($firebaseId);
 
-        //     return $user !== null;
-        // }
+            return $user !== null;
+        }
 
-
+        // the new approach
         if (!array_key_exists("uid", $_SESSION["user"])) {
             return false;
         }
@@ -65,12 +66,9 @@ class AuthHelpers
         return $user !== null;
     }
 
+
     public static function getLoggedInUserData(): ?array {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-        // d($_SESSION);
-        // die;
+        
         if (!isset($_SESSION['user'])) {
             return null;
         }
@@ -81,10 +79,16 @@ class AuthHelpers
 
         $idToken = $_SESSION['user']['fr'];
         $verifiedIdToken = self::verifyFBAcessIdToken($idToken);
+
         if (is_null($verifiedIdToken)){
-            echo '<script>alert("session invalid")</script>';
+            echo '
+            var baseUrl = "' .BASEURL . '";
+            
+            <script type="module" src="' . BASEURL . 'public/js/fbaseSessionPatch.js"></script>
+            ';
         }
         
+
         if ($verifiedIdToken) {
             $firebaseId = $verifiedIdToken->claims()->get('sub');
             $email = $verifiedIdToken->claims()->get('email');

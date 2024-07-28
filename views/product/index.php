@@ -25,13 +25,136 @@ requireView("partials/navbar.php");
         </div>
         <!-- info produk -->
         <div class="col-sm-4 col-md-4 col-12 p-4">
-            <h2>Kaos Bilek</h2>
-            <p class="title-detail">Stok Tersedia: 1</p>
-            <h3>Rp. 1.000.000</h3>
+        <h2><?= $product["product_name"] ?></h2>
+        <p class="title-detail">Stok Tersedia: <span id="stock-value"></span></p>
+        <h3><span id="price"></span></h3>
+        <h6><span id="full-price" style="text-decoration: line-through;"></span></h6>
+            <?php if (!empty($discount)): ?>
+
+
+            <p class="title-detail">Diskon Berakhir Dalam:</p> <div id="countdown"></div>
+
+            <script>
+                // Set the end date for the countdown (format: YYYY-MM-DDTHH:MM:SS)
+                const endDate = new Date('<?= $discount["end_date"] ?>');
+
+                function updateCountdown() {
+                    const now = new Date();
+                    const timeDifference = endDate - now;
+
+                    // Calculate days, hours, minutes, and seconds
+                    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+                    // Update the countdown element
+                    document.getElementById("countdown").innerHTML = 
+                        days + "Hari " + 
+                        hours + "Jam " + 
+                        minutes + "Menit " + 
+                        seconds + "Detik ";
+
+                    // If the countdown is finished, display a message
+                    if (timeDifference < 0) {
+                        clearInterval(countdownInterval);
+                        document.getElementById("countdown").innerHTML = "Countdown ended";
+                    }
+                }
+
+                // Update the countdown every second
+                const countdownInterval = setInterval(updateCountdown, 1000);
+
+                // Initial call to display the countdown immediately
+                updateCountdown();
+            </script>
+            <?php endif ?>
+
+            
+            
             <p class="title-detail">Deskripsi Produk</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus explicabo magni accusantium illo distinctio tempora perferendis veritatis autem inventore eos harum odit aliquam totam temporibus, perspiciatis libero ut debitis pariatur.</p>
-            <p class="title-detail">Pilih Warna dan Ukuran</p>
-            <div>
+            <p><?= $product["description"] ?></p>
+            <p class="title-detail">Pilih Variasi Anda</p>
+            <div id="variations-container">
+                <?php foreach($productVariations as $variation): ?>
+                    <div class="variation-group" data-variation-type="<?= $variation['id_variation_type'] ?>">
+                        <label for="variation-type-<?= $variation['id_variation_type'] ?>" id="<?= $variation['id_variation_type'] ?>"><?= $variation["name"] ?></label>
+                        <div>
+                            <?php foreach($variation["variation_options"] as $index => $option): ?>
+                                <button 
+                                    class="btn laos-outline-button <?= $index === 0 ? 'active' : '' ?>" 
+                                    data-option-id="<?= $option['id_option'] ?>" 
+                                    onclick="chooseVariation('<?= $option['id_option'] ?>', <?= $variation['id_variation_type'] ?>, '<?= $option['option_name'] ?>')"
+                                >
+                                    <?= $option["option_name"] ?>
+                                </button>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+
+            <script>
+                const productCombination = [
+                    <?php
+                        // Loop through your PHP data and create array entries
+                        foreach($productCombinations as $productCombination) {
+                            echo '{ id_combination: ' . intval($productCombination['id_combination']) . ', '
+                                . 'id_product: ' . intval($productCombination['id_product']) . ', '
+                                . 'price: ' . number_format($productCombination['price'], 2, '.', '') . ', '
+                                . 'stock: ' . intval($productCombination['stock']) . ' },';
+                        }
+                        ?>
+                ];
+                const discount = { discount_value: <?= $discount["discount_value"] ?? false ?> }; // Set to null or false if no discount
+
+                let selectedOptions = {};
+
+                document.addEventListener('DOMContentLoaded', () => {
+                    document.querySelectorAll('.variation-group').forEach(group => {
+                        const firstOption = group.querySelector('.btn');
+                        if (firstOption) {
+                            const variationTypeId = group.getAttribute('data-variation-type');
+                            firstOption.classList.add('active');
+                            selectedOptions[variationTypeId] = firstOption.getAttribute('data-option-id');
+                        }
+                    });
+                    updateDisplayedValues();
+                });
+
+                function chooseVariation(optionId, variationTypeId) {
+                    selectedOptions[variationTypeId] = optionId;
+                    document.querySelectorAll(`.variation-group[data-variation-type="${variationTypeId}"] .btn`).forEach(btn => {
+                        btn.classList.toggle('active', btn.getAttribute('data-option-id') === optionId);
+                    });
+                    updateDisplayedValues();
+                }
+
+                function updateDisplayedValues() {
+                    const selectedCombination = productCombination.find(comb => {
+                        return Object.values(selectedOptions).includes(String(comb.id_combination));
+                    });
+
+                    if (selectedCombination) {
+                        const fullPrice = selectedCombination.price;
+                        const hasDiscount = discount && discount.discount_value > 0;
+
+                        if (hasDiscount) {
+                            const discountedPrice = fullPrice - discount.discount_value;
+                            document.getElementById('price').textContent = `Rp ${discountedPrice.toFixed(2)}`;
+                            document.getElementById('full-price').textContent = `Rp ${fullPrice.toFixed(2)}`;
+                        } else {
+                            document.getElementById('price').textContent = ''; // Clear discounted price
+                            document.getElementById('full-price').textContent = `Rp ${fullPrice.toFixed(2)}`;
+                        }
+
+                        document.getElementById('stock-value').textContent = selectedCombination.stock;
+                    }
+                }
+
+            </script>
+
+            <!-- <div>
                 <label for="">Warna:</label>
                 <div>
                     <a href="" class="btn laos-outline-button active">Hitam</a>
@@ -42,7 +165,7 @@ requireView("partials/navbar.php");
                     <a href="" class="btn laos-outline-button">XL</a>
                     <a href="" class="btn laos-outline-button">XXL</a>
                 </div>
-            </div>
+            </div> -->
         </div>
         <!-- checkout -->
         <div class="col-sm-4 col-md-4 col-12 mt-5 d-flex justify-content-center">

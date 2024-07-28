@@ -20,8 +20,7 @@ CREATE TABLE carousels (
   title VARCHAR(255),
   subtitle VARCHAR(255),
   button_text VARCHAR(255),
-  button_link VARCHAR(255),
-  FOREIGN KEY (carousel_id) REFERENCES carousel(id)
+  button_link VARCHAR(255)
 );
 
 CREATE TABLE roles (
