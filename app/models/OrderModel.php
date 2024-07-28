@@ -1,9 +1,25 @@
 <?php
 
 class OrderModel extends Model {
+    protected $db;
     protected $table = 'orders';
     protected $primaryKey = 'id_order';
-    use StaticInstantiator;
 
+    public function __construct() {
+        $this->db = new Database();
+    }
+
+    //add
+    
+
+    //get
+
+
+    //update
+
+
+    //delete    
+
+    
 }
 
