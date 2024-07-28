@@ -145,6 +145,9 @@ requireView("partials/navbar.php");
                     if (selectedCombination) {
                         const fullPrice = selectedCombination.price;
                         const hasDiscount = discount && discount.discount_value > 0;
+                        console.log(selectedCombination);
+
+                        let checkOutLabelVariationType = document.getElementById("");
 
                         if (hasDiscount) {
                             const discountedPrice = fullPrice - discount.discount_value;
@@ -169,7 +172,7 @@ requireView("partials/navbar.php");
                 <h5 class="mt-2 d-flex justify-content-center">Atur Pilihanmu</h5>
                 <div class="ms-2">
                     <?php foreach($productVariations as $variation): ?>
-                    l<p><?= $variation["name"] ?> : <span id="variation-type-<?= $variation['id_variation_type'] ?>" ></span></p>
+                    <p><?= $variation["name"] ?> : <span id="variation-type-<?= $variation['id_variation_type'] ?>" ></span></p>
                     <?php endforeach; ?>
                     <p>Jumlah :</p>
                     <p>Subtotal :</p>

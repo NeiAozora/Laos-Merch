@@ -25,7 +25,7 @@ class LoginController extends Controller{
     
             // Verify the Firebase ID token
             $verifiedIdToken = AuthHelpers::verifyFBAcessIdToken($idToken);
-
+            
             if ($verifiedIdToken) {
                 $firebaseId = $verifiedIdToken->claims()->get("sub");
                 $email = $verifiedIdToken->claims()->get('email');
@@ -34,18 +34,12 @@ class LoginController extends Controller{
                 
                 // Check if user exists by Firebase ID
                 $user = $this->userModel->getUserByFirebaseId($firebaseId);
-                if (is_null($user)) {
+  
+                if (isNullOrFalse($user)) {
                     // User does not exist, create a new user
-                    $this->userModel->createUser(
-                        $firebaseId,
-                        $name, // Assuming name is used as username
-                        '',    // Placeholder for first_name
-                        '',    // Placeholder for last_name
-                        $email,
-                        '',    // Placeholder for wa_number
-                        null,   // Placeholder for id_role
-                        $picture
+                    $result = $this->userModel->createUser($firebaseId,$name, '',    '',    $email,'',   2,   $picture
                     );
+
                 }
     
                 // Set session variables

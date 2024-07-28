@@ -6,8 +6,9 @@ const provider = new GoogleAuthProvider();
 auth.onIdTokenChanged(function(user) {
     if (user) {
         user.getIdToken(true).then(function(token) {
-            let url = baseUrl + "auth-process?fr=" + user.accessToken + "&br=" + user.uid;
             
+            let url = baseUrl + "auth-process?fr=" + user.accessToken + "&br=" + user.uid;
+            // window.location = url;
             const response = fetch(url, {
                 method: 'GET'
             }).then((result) => {

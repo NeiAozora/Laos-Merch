@@ -45,7 +45,7 @@ class AuthHelpers
 
         $idToken = $_SESSION["user"]['fr'];
         $verifiedIdToken = self::verifyFBAcessIdToken($idToken);
-
+        
         if ($verifiedIdToken) {
             $firebaseId = $verifiedIdToken->claims()->get('sub');
             $userModel = new UserModel();

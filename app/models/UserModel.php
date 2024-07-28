@@ -16,19 +16,22 @@ class UserModel extends Model
     }
 
     // Create a new user
-    public function createUser($id_firebase, $user_name, $email, $wa_number, $profile_picture )
+    public function createUser($id_firebase, $username, $first_name, $last_name, $email, $wa_number, $id_role, $profile_picture)
     {
-        $this->db->query('INSERT INTO users (id_firebase, user_name, email, wa_number, id_role, profile_picture ) VALUES (:id_firebase, :user_name, :email, :wa_number, :id_role, :profile_picture )');
-        $this->db->bind(':id_firebase', $id_firebase);
-        $this->db->bind(':user_name', $user_name);
+        $this->db->query('INSERT INTO users (id_firebase, username, first_name, last_name, email, wa_number, id_role, profile_picture) VALUES 
+                          (:id_firebase, :username, :first_name, :last_name, :email, :wa_number, :id_role, :profile_picture)');
+        $this->db->bind(':id_firebase', $id_firebase, PDO::PARAM_STR);
+        $this->db->bind(':username', $username);
+        $this->db->bind(':first_name', $first_name);
+        $this->db->bind(':last_name', $last_name);
         $this->db->bind(':email', $email);
         $this->db->bind(':wa_number', $wa_number);
-        $this->db->bind(':profile_picture ', $profile_picture );
-        $this->db->bind(':profile_picture ', $profile_picture );
-
-
-        return $this->db->execute();
+        $this->db->bind(':id_role', $id_role, PDO::PARAM_INT);
+        $this->db->bind(':profile_picture', $profile_picture);
+    
+        return $this->db->resultSet();
     }
+    
 
     // Get a single user by id
     public function getUserById($id_user)
@@ -57,19 +60,21 @@ class UserModel extends Model
     }
 
     // Update a user
-    public function updateUser($id_user, $id_firebase, $user_name, $email, $wa_number, $id_role, $is_active)
+    public function updateUser($id_user, $username, $first_name, $last_name, $email, $wa_number, $id_role, $profile_picture)
     {
-        $this->db->query('UPDATE users SET id_firebase = :id_firebase, user_name = :user_name, email = :email, wa_number = :wa_number, id_role = :id_role, is_active = :is_active WHERE id_user = :id_user');
-        $this->db->bind(':id_user', $id_user);
-        $this->db->bind(':id_firebase', $id_firebase);
-        $this->db->bind(':user_name', $user_name);
+        $this->db->query('UPDATE users SET username = :username, first_name = :first_name, last_name = :last_name, email = :email, wa_number = :wa_number, id_role = :id_role, profile_picture = :profile_picture WHERE id_user = :id_user');
+        $this->db->bind(':id_user', $id_user, PDO::PARAM_INT);
+        $this->db->bind(':username', $username);
+        $this->db->bind(':first_name', $first_name);
+        $this->db->bind(':last_name', $last_name);
         $this->db->bind(':email', $email);
         $this->db->bind(':wa_number', $wa_number);
-        $this->db->bind(':id_role', $id_role);
-        $this->db->bind(':is_active', $is_active);
+        $this->db->bind(':id_role', $id_role, PDO::PARAM_INT); // Assuming id_role is an integer
+        $this->db->bind(':profile_picture', $profile_picture);
 
-        return $this->db->execute();
+        return $this->db->resultSet();
     }
+
 
     // Delete a user
     public function deleteUser($id_user)
