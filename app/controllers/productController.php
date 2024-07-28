@@ -36,11 +36,12 @@ class ProductController extends Controller {
         $data = [
             'product' => $product,
             'productVariations' => $productVariations,
-            'productCombination' => $productCombinations,
+            'productCombinations' => $productCombinations,
             'reviews' => $reviews,
             'discount' => $discount
         ];
-
+        // d($data);
+        // die;
         $this->view('product/index', $data);
     }
 
