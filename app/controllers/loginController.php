@@ -45,7 +45,8 @@ class LoginController extends Controller{
                 // Set session variables
                 $_SESSION['user'] = [
                     'fr' => $idToken,
-                    'uid' => $firebaseId
+                    'uid' => $firebaseId,
+                    'id_user' => $user['id_user']
                 ];
     
                 echo json_encode(['status' => 'success']);

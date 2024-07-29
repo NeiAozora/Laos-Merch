@@ -40,7 +40,7 @@ class CartItemModel extends Model{
         $this->db->query('
             SELECT ci.*, p.product_name, p.description, p.weight, p.dimensions, vc.price
             FROM cart_items ci
-            JOIN variation_combination vc ON ci.id_combination = vc.id_combination
+            JOIN variation_combinations vc ON ci.id_combination = vc.id_combination
             JOIN products p ON vc.id_product = p.id_product
             WHERE ci.id_user = :id_user
         ');
@@ -55,7 +55,7 @@ class CartItemModel extends Model{
         $this->db->query('
             SELECT SUM(vc.price * ci.quantity) as total
             FROM cart_items ci
-            JOIN variation_combination vc ON ci.id_combination = vc.id_combination
+            JOIN variation_combinations vc ON ci.id_combination = vc.id_combination
             WHERE ci.id_user = :id_user
         ');
         $this->db->bind(':id_user', $id_user, PDO::PARAM_INT);
