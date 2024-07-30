@@ -1,6 +1,6 @@
 <?php
 
-class CartController extends COntroller{
+class CartController extends Controller{
     private $cartItemModel;
 
     public function __construct()
@@ -21,18 +21,18 @@ class CartController extends COntroller{
             ]);
         } else {
             // Redirect atau tampilkan halaman error jika ID pengguna tidak ditemukan
-            view('404/index', ['message' => 'User not logged in']);
+            view('404/index');
         }
     }
 
     public function addItem($id_combination, $quantity)
     {
-        $id_user = $_SESSIOn['id_user'] ?? null;
+        $id_user = $_SESSIOn['user']['id_user'] ?? null;
         if($id_user){
             $this->cartItemModel->createCartItem($id_user, $id_combination, $quantity);
             jsRedirect('/cart');
         }else{
-            view('404/index', ['message' => 'User not logged in']);
+            view('404/index');
         }
     }
 
