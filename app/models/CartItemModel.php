@@ -1,75 +1,91 @@
 <?php
 
-class CartItemModel extends Model {
+class CartItemModel extends Model{
     protected $db;
-    protected $table = 'cart_items';
-    protected $primaryKey = 'id_cart_item';
+    protected $table = "cart_items";
+    protected $primaryKey = "id_cart_item";
+    use StaticInstantiator;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = new Database();
     }
 
-    //add cart item
-    public function addCartItem($cart){
-        $date = date('Y-m-d H:i:s');
+    // tambah cart item
+    public function addCartItem($id_user, $id_combination, $quantity)
+    {
         $this->db->query('
-            INSERT INTO cart_items (id_cart_item, id_user, id_combination, quantity, date_added, last_updated)
-            VALUES (:id_cart_item, :id_user, :id_combination, :quantity, :date_added, :last_updated)
+            INSERT INTO cart_items (id_user, id_combination, quantity) 
+            VALUES (:id_user, :id_combination, :quantity) 
         ');
+        $this->db->bind(':id_user', $id_user, PDO::PARAM_INT);
+        $this->db->bind(':id_combination', $id_combination, PDO::PARAM_INT);
+        $this->db->bind(':quantity', $quantity, PDO::PARAM_INT);
         
-        // Bind values
-        $this->db->bind(':id_cart_item', $cart['id_cart_item']);
-        $this->db->bind(':id_user', $cart['id_user']);
-        $this->db->bind(':id_combination', $cart['id_combination']);
-        $this->db->bind(':quantity', $cart['quantity']);
-        $this->db->bind(':date_added', $cart[$date]);
-        $this->db->bind(':last_updated', $cart[$date]);
-
-        // Execute
         return $this->db->execute();
     }
 
-    //read cart item
-    public function getCartItem($id_cart_item){
-        $this->db->query('
-            SELECT c.id_cart_item, u.first_name || || u.last_name, vc.price, c.quantity, c.date_added, c.last_updated
-            from cart_items c
-            JOIN users u on c.id_user = u.id_user
-            JOIN variation_combinations vc on c.id_combination = vc.id_combination
-            GROUP BY c.id_cart_item
-            WHERE c.id_cart_item = :id_cart_item
-        ');
+    // get cart item per item by id
+    public function getCartItemById($id_cart_item)
+    {
+        $this->db->query('SELECT * FROM cart_items WHERE id_cart_item = :id_cart_item');
         $this->db->bind(':id_cart_item', $id_cart_item, PDO::PARAM_INT);
+
         return $this->db->single();
     }
 
-    //update cart item
-    public function updateCartItem($cart, $id_cart_item){
-        $date = date('Y-m-d H:i:s');
+    // Get all cart items by user id
+    public function getCartItemsByUserId($id_user)
+    {
         $this->db->query('
-            UPDATE cart_items SET id_user = :id_user, id_combination = :id_combination, quantity = :quantity, date_added = :date_added, last_updated = :last_updated
-            WHERE id_cart_item = :id_cart_item
+            SELECT ci.*, p.product_name, p.description, p.weight, p.dimensions, vc.price
+            FROM cart_items ci
+            JOIN variation_combinations vc ON ci.id_combination = vc.id_combination
+            JOIN products p ON vc.id_product = p.id_product
+            WHERE ci.id_user = :id_user
         ');
+        $this->db->bind(':id_user', $id_user, PDO::PARAM_INT);
         
-        // Bind values
-        $this->db->bind(':id_user', $cart['id_user']);
-        $this->db->bind(':id_combination', $cart['id_combination']);
-        $this->db->bind(':quantity', $cart['quantity']);
-        $this->db->bind(':date_added', $cart[$date]);
-        $this->db->bind(':last_updated', $cart[$date]);
-        $this->db->bind(':id_cart_item', $id_cart_item);
+        return $this->db->resultSet();
+    }
 
-        // Execute
+
+    // Get product variation combination
+    public function getCombination($id_combination)
+{
+    $query ="
+            SELECT vc.id_combination, vc.id_product, vc.price, vc.stock, p.product_name, p.description 
+            FROM variation_combinations vc 
+            JOIN products p ON vc.id_product = p.id_product 
+            WHERE vc.id_combination = :id_combination
+    ";
+
+    $this->db->query($query);
+    $this->db->bind('id_combination', $id_combination);
+    return $this->db->single();
+}
+
+
+    // perbarui cart item
+    public function updateCartItem($id_cart_item, $quantity)
+    {
+        $this->db->query('
+            UPDATE cart_items SET quantity = :quantity, last_updated = NOW() WHERE id_cart_item = :id_cart_item
+        ');
+        $this->db->bind(':id_cart_item', $id_cart_item, PDO::PARAM_INT);
+        $this->db->bind(':quantity', $quantity, PDO::PARAM_INT);
+        
         return $this->db->execute();
     }
 
-    //delete cart item
-    public function removeCartItem($id_cart_item) {
+    // hapus cart item
+    public function removeCartItem($id_cart_item)
+    {
         $this->db->query('
-            DELETE FROM cart_items WHERE id_cart_items = :id_cart_items
+            DELETE FROM cart_items WHERE id_cart_item = :id_cart_item
         ');
-        $this->db->bind(':id_cart_item', $id_cart_item);
+        $this->db->bind(':id_cart_item', $id_cart_item, PDO::PARAM_INT);
+        
         return $this->db->execute();
     }
 }
-

@@ -51,6 +51,18 @@ Router::get('/purchase/order', function() {
     view("/404/index");
 });
 
+// Keranjang
+Router::get('/cart', invokeClass(CartController::class, "index"));
+Router::post('/cart/add', invokeClass(CartController::class, 'add'));
+// Router::post('/cart/remove', function() {
+//     $id_cart_item = $_POST['id_cart_item'];
+//     invokeClass(CartController::class, 'removeItem', [$id_cart_item]);
+// });
+// Router::post('/cart/update', function() {
+//     $id_cart_item = $_POST['id_cart_item'];
+//     $quantity = $_POST['quantity'];
+//     invokeClass(CartController::class, 'updateQuantity', [$id_cart_item, $quantity]);
+// });
 
 
 
@@ -60,7 +72,7 @@ Router::get("/about/privacy-policy", function(){
 
 Router::get('/login', invokeClass(LoginController::class, "index"));
 Router::get('/order', invokeClass(OrderController::class, "index"));
-Router::get('/cart', invokeClass(CartController::class, "index"));
+
 Router::get('/checkout', invokeClass(CheckoutController::class, "index"));
 Router::get('/order/detail', invokeClass(OrderDetailController::class, "index"));
 Router::get("/service/help-center", invokeClass(HelpCenterController::class, "index"));
