@@ -11,7 +11,7 @@ class ProfileController extends Controller
         }
         $userData = AuthHelpers::getLoggedInUserData();
         if (is_null($userData)){
-            jsRedirect("/login");
+            jsRedirect("Laos-Merch/login");
             // throw new ValueError('Userdata of the logged in person are null');
         }
         $this->view("profile/biodata/index" , ["isEditMode"=> $editMode, 'userData' => $userData]);

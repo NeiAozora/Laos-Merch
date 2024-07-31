@@ -48,6 +48,7 @@ class UserModel extends Model
 
         return $this->db->single();
     }
+    
 
     // Get all users
     public function getAllUsers()

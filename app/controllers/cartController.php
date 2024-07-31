@@ -32,7 +32,7 @@ class CartController extends Controller
 
     public function add()
     {
-        $id_user = $_SESSION['user']['uid'] ?? null;
+        $id_user = $_SESSION['user']['id_user'] ?? null;
         if ($id_user) {
             $id_combination = $_POST['id_combination'];
             $quantity = $_POST['quantity'];

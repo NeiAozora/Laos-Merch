@@ -12,8 +12,7 @@ requireView("partials/navbar.php");
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center mt-5">
                     <li class="page-item disabled">
-                        <a class="page-link" style="text-decoration: none; color: inherit;">
-                            << /a>
+                        <a class="page-link" style="text-decoration: none; color: inherit;"><</a>
                     </li>
                     <li class="page-item"><a class="page-link" href="#" style="text-decoration: none; color: inherit;"><img src="" alt="tampak depan"></a></li>
                     <li class="page-item"><a class="page-link" href="#" style="text-decoration: none; color: inherit;"><img src="" alt="tampak samping"></a></li>
