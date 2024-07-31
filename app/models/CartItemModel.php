@@ -12,11 +12,11 @@ class CartItemModel extends Model{
     }
 
     // tambah cart item
-    public function createCartItem($id_user, $id_combination, $quantity)
+    public function addCartItem($id_user, $id_combination, $quantity)
     {
         $this->db->query('
-            INSERT INTO cart_items (id_user, id_combination, quantity, date_added, last_updated) 
-            VALUES (:id_user, :id_combination, :quantity, NOW(), NOW())
+            INSERT INTO cart_items (id_user, id_combination, quantity) 
+            VALUES (:id_user, :id_combination, :quantity) 
         ');
         $this->db->bind(':id_user', $id_user, PDO::PARAM_INT);
         $this->db->bind(':id_combination', $id_combination, PDO::PARAM_INT);
@@ -25,7 +25,7 @@ class CartItemModel extends Model{
         return $this->db->execute();
     }
 
-    // get single cart by id
+    // get cart item per item by id
     public function getCartItemById($id_cart_item)
     {
         $this->db->query('SELECT * FROM cart_items WHERE id_cart_item = :id_cart_item');
@@ -34,7 +34,7 @@ class CartItemModel extends Model{
         return $this->db->single();
     }
 
-    // Get all cart items for a specific user
+    // Get all cart items by user id
     public function getCartItemsByUserId($id_user)
     {
         $this->db->query('
@@ -49,21 +49,24 @@ class CartItemModel extends Model{
         return $this->db->resultSet();
     }
 
-    // Get total cost for a user's cart
-    public function getTotalCostByUserId($id_user)
-    {
-        $this->db->query('
-            SELECT SUM(vc.price * ci.quantity) as total
-            FROM cart_items ci
-            JOIN variation_combinations vc ON ci.id_combination = vc.id_combination
-            WHERE ci.id_user = :id_user
-        ');
-        $this->db->bind(':id_user', $id_user, PDO::PARAM_INT);
-        
-        return $this->db->single()['total'];
-    }
 
-    // Update cart item
+    // Get product variation combination
+    public function getCombination($id_combination)
+{
+    $query ="
+            SELECT vc.id_combination, vc.id_product, vc.price, vc.stock, p.product_name, p.description 
+            FROM variation_combinations vc 
+            JOIN products p ON vc.id_product = p.id_product 
+            WHERE vc.id_combination = :id_combination
+    ";
+
+    $this->db->query($query);
+    $this->db->bind('id_combination', $id_combination);
+    return $this->db->single();
+}
+
+
+    // perbarui cart item
     public function updateCartItem($id_cart_item, $quantity)
     {
         $this->db->query('

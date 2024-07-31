@@ -10,14 +10,20 @@ class CartController extends Controller{
 
     public function index(){
         // Ambil ID pengguna dari sesi atau parameter lainnya
-        $id_user = $_SESSION['user']['id_user'] ?? null;
+        $id_user = $_SESSION['user']['uid'] ?? null;
 
         if ($id_user) {
             $cartItems = $this->cartItemModel->getCartItemsByUserId($id_user);
-            $totalCost = $this->cartItemModel->getTotalCostByUserId($id_user);
+            $cartDetails = [];
+
+            foreach($cartItems as $item){
+                $combination = $this->cartItemModel->getCombination($item['id_combination']);
+                $cartDetails[] = array_merge($item, $combination);
+            }
+            
             view('cart/index', [
                 'cartItems' => $cartItems,
-                'totalCost' => $totalCost
+                'totalCost' => array_sum(array_column($cartDetails, 'total_price'))
             ]);
         } else {
             // Redirect atau tampilkan halaman error jika ID pengguna tidak ditemukan
@@ -25,13 +31,16 @@ class CartController extends Controller{
         }
     }
 
-    public function addItem($id_combination, $quantity)
+    public function add($id_combination, $quantity)
     {
-        $id_user = $_SESSIOn['user']['id_user'] ?? null;
+        $id_user = $_SESSIOn['user']['uid'] ?? null;
         if($id_user){
-            $this->cartItemModel->createCartItem($id_user, $id_combination, $quantity);
-            jsRedirect('/cart');
-        }else{
+            $id_combination = $_POST['id_combination'];
+            $quantity = $_POST['quantity'];
+
+            $this->cartItemModel->addCartItem($id_user, $id_combination, $quantity);
+            header('location:'.BASEURL.'cart');
+        } else{
             view('404/index');
         }
     }

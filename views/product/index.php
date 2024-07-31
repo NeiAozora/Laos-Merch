@@ -178,9 +178,27 @@ requireView("partials/navbar.php");
                     <p>Subtotal :</p>
                 </div>
                 <div class="mt-auto text-center">
-                    <button class="btn laos-button mb-2 mt-3" style="width:12rem;">Masukkan Keranjang</button>
-                    <button class="btn laos-outline-button mb-3" style="width:12rem;">Beli Langsung</button>
+                    <form method="POST" action="<?= BASEURL?>cart/add" id="add-cart">
+                        <input type="hidden" name="quantity" id="cart-quantity" value="1">
+                        <input type="hidden" name="id_combination" id="combination-id" value="">
+                        <button class="btn btn-success mb-2 mt-3" style="width:12rem;">Masukkan Keranjang</button>
+                    </form>
+                        <button class="btn laos-outline-button mb-3" style="width:12rem;">Beli Langsung</button>
                 </div>
+
+                <!-- aksi untuk keranjang -->
+                 <script>
+                    document.querySelector('#add-cart').addEventListener('submit', function(event){
+                        event.preventDefault();
+
+                        let selectedCombination = productCombination.find(comb => {
+                            return Object.values(selectedOptions).includes(string(comb.id_combination));
+                        });
+                        document.getElementById('combination-id').value = selectedCombination.id_combination;
+
+                        event.target.submit();
+                    });
+                 </script>
             </div>
         </div>
     </div>
@@ -243,6 +261,7 @@ requireView("partials/navbar.php");
     
         
 </section>
+
 
 
 <?php
