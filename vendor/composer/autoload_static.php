@@ -12,8 +12,13 @@ class ComposerStaticInit573c0a765223a49f6e3cf404932c757a
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
         '1232758e40b1d31bb295b6907de02c63' => __DIR__ . '/..' . '/beste/clock/src/Clock.php',
+        '9c67151ae59aff4788964ce8eb2a0f43' => __DIR__ . '/..' . '/clue/stream-filter/src/functions_include.php',
+        '8cff32064859f4559445b89279f3199c' => __DIR__ . '/..' . '/php-http/message/src/filters.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        'a4ecaeafb8cfb009ad0e052c90355e98' => __DIR__ . '/..' . '/beberlei/assert/lib/Assert/functions.php',
         '06b8a576aaa70a8517a94b7ff6b37e5c' => __DIR__ . '/..' . '/beste/json/src/Json.php',
+        '60799491728b879e74601d83e38b2cad' => __DIR__ . '/..' . '/illuminate/collections/helpers.php',
         'b067bc7112e384b61c701452d53a14a8' => __DIR__ . '/..' . '/mtdowling/jmespath.php/src/JmesPath.php',
         '3917c79c5052b270641b5a200963dbc2' => __DIR__ . '/..' . '/kint-php/kint/init.php',
     );
@@ -25,7 +30,9 @@ class ComposerStaticInit573c0a765223a49f6e3cf404932c757a
         ),
         'S' => 
         array (
+            'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Component\\OptionsResolver\\' => 34,
         ),
         'R' => 
         array (
@@ -35,15 +42,18 @@ class ComposerStaticInit573c0a765223a49f6e3cf404932c757a
         ),
         'P' => 
         array (
+            'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Http\\Client\\' => 16,
+            'Psr\\Container\\' => 14,
             'Psr\\Clock\\' => 10,
             'Psr\\Cache\\' => 10,
         ),
         'M' => 
         array (
             'Monolog\\' => 8,
+            'MailerSend\\' => 11,
         ),
         'L' => 
         array (
@@ -58,6 +68,19 @@ class ComposerStaticInit573c0a765223a49f6e3cf404932c757a
         'J' => 
         array (
             'JmesPath\\' => 9,
+        ),
+        'I' => 
+        array (
+            'Illuminate\\Support\\' => 19,
+            'Illuminate\\Contracts\\' => 21,
+        ),
+        'H' => 
+        array (
+            'Http\\Promise\\' => 13,
+            'Http\\Message\\' => 13,
+            'Http\\Discovery\\' => 15,
+            'Http\\Client\\Common\\' => 19,
+            'Http\\Client\\' => 12,
         ),
         'G' => 
         array (
@@ -93,11 +116,19 @@ class ComposerStaticInit573c0a765223a49f6e3cf404932c757a
             'Firebase\\JWT\\' => 13,
             'Fig\\Http\\Message\\' => 17,
         ),
+        'C' => 
+        array (
+            'Clue\\StreamFilter\\' => 18,
+        ),
         'B' => 
         array (
             'Brick\\Math\\' => 11,
             'Beste\\Clock\\' => 12,
             'Beste\\Cache\\' => 12,
+        ),
+        'A' => 
+        array (
+            'Assert\\' => 7,
         ),
     );
 
@@ -106,9 +137,17 @@ class ComposerStaticInit573c0a765223a49f6e3cf404932c757a
         array (
             0 => __DIR__ . '/..' . '/filp/whoops/src/Whoops',
         ),
+        'Symfony\\Polyfill\\Php80\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
+        ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Component\\OptionsResolver\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/options-resolver',
         ),
         'Rize\\' => 
         array (
@@ -121,6 +160,10 @@ class ComposerStaticInit573c0a765223a49f6e3cf404932c757a
         'Ramsey\\Collection\\' => 
         array (
             0 => __DIR__ . '/..' . '/ramsey/collection/src',
+        ),
+        'Psr\\SimpleCache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/simple-cache/src',
         ),
         'Psr\\Log\\' => 
         array (
@@ -135,6 +178,10 @@ class ComposerStaticInit573c0a765223a49f6e3cf404932c757a
         array (
             0 => __DIR__ . '/..' . '/psr/http-client/src',
         ),
+        'Psr\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
         'Psr\\Clock\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/clock/src',
@@ -146,6 +193,10 @@ class ComposerStaticInit573c0a765223a49f6e3cf404932c757a
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
+        'MailerSend\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mailersend/mailersend/src',
         ),
         'Lcobucci\\JWT\\' => 
         array (
@@ -166,6 +217,36 @@ class ComposerStaticInit573c0a765223a49f6e3cf404932c757a
         'JmesPath\\' => 
         array (
             0 => __DIR__ . '/..' . '/mtdowling/jmespath.php/src',
+        ),
+        'Illuminate\\Support\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/illuminate/conditionable',
+            1 => __DIR__ . '/..' . '/illuminate/macroable',
+            2 => __DIR__ . '/..' . '/illuminate/collections',
+        ),
+        'Illuminate\\Contracts\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/illuminate/contracts',
+        ),
+        'Http\\Promise\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/promise/src',
+        ),
+        'Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/message/src',
+        ),
+        'Http\\Discovery\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/discovery/src',
+        ),
+        'Http\\Client\\Common\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/client-common/src',
+        ),
+        'Http\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/httplug/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
@@ -279,6 +360,10 @@ class ComposerStaticInit573c0a765223a49f6e3cf404932c757a
         array (
             0 => __DIR__ . '/..' . '/fig/http-message-util/src',
         ),
+        'Clue\\StreamFilter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/clue/stream-filter/src',
+        ),
         'Brick\\Math\\' => 
         array (
             0 => __DIR__ . '/..' . '/brick/math/src',
@@ -291,9 +376,14 @@ class ComposerStaticInit573c0a765223a49f6e3cf404932c757a
         array (
             0 => __DIR__ . '/..' . '/beste/in-memory-cache/src',
         ),
+        'Assert\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/beberlei/assert/lib/Assert',
+        ),
     );
 
     public static $classMap = array (
+        'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'GPBMetadata\\GrpcGcp' => __DIR__ . '/..' . '/google/grpc-gcp/src/generated/GPBMetadata/GrpcGcp.php',
         'Grpc\\Gcp\\AffinityConfig' => __DIR__ . '/..' . '/google/grpc-gcp/src/generated/Grpc/Gcp/AffinityConfig.php',
@@ -301,6 +391,10 @@ class ComposerStaticInit573c0a765223a49f6e3cf404932c757a
         'Grpc\\Gcp\\ApiConfig' => __DIR__ . '/..' . '/google/grpc-gcp/src/generated/Grpc/Gcp/ApiConfig.php',
         'Grpc\\Gcp\\ChannelPoolConfig' => __DIR__ . '/..' . '/google/grpc-gcp/src/generated/Grpc/Gcp/ChannelPoolConfig.php',
         'Grpc\\Gcp\\MethodConfig' => __DIR__ . '/..' . '/google/grpc-gcp/src/generated/Grpc/Gcp/MethodConfig.php',
+        'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
+        'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
+        'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
+        'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

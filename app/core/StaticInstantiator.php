@@ -2,6 +2,6 @@
 
 Trait StaticInstantiator{
     public static function new(){
-        return new self;
+        return new static;
     }
 }

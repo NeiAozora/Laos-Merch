@@ -14,6 +14,15 @@ Router::get("/api/reviews", invokeClass(ReviewController::class, "getReviews"));
 
 
 Router::get('/auth-process', invokeClass(LoginController::class, "processAuth"));
+
+Router::get('/register', invokeClass(RegisterController::class, 'index'));
+Router::post('/register', invokeClass(RegisterController::class, 'processRegister'));
+Router::get('/auth-verification', invokeClass(RegisterController::class, 'verificationIndex'));
+Router::post('/auth-verification', invokeClass(RegisterController::class, 'postPageVerification'));
+
+Router::get("/recovery", invokeClass(RecoveryController::class, 'index'));
+Router::post("/recovery", invokeClass(RecoveryController::class, 'process'));
+
 Router::get('/logout', invokeClass(LoginController::class, "logout"));
 // Homepage
 Router::get('/', invokeClass(IndexController::class, "index"));

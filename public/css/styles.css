@@ -205,6 +205,12 @@ svg.star rect {
       animation-fill-mode: both;
       -webkit-animation-fill-mode: both;
     }
+    .animate-1sec {
+        animation-duration: 1s;
+        -webkit-animation-duration: 1s;
+        animation-fill-mode: both;
+        -webkit-animation-fill-mode: both;
+      }
   }
   
   @keyframes slideIn {

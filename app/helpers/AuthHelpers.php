@@ -7,7 +7,7 @@ use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 
 class AuthHelpers 
 {
-    private static function getFirebaseAuth(): Auth {
+    public static function getFirebaseAuth(): Auth {
         static $auth;
         if ($auth === null) {
             $firebase = (new Factory)
@@ -118,5 +118,27 @@ class AuthHelpers
         }
 
         return null;
+    }
+
+    public static function registerUser($email, $password): string|null {
+        $auth = self::getFirebaseAuth();
+    
+        try {
+            $userProperties = [
+                'email' => $email,
+                'emailVerified' => true,
+                'password' => $password,
+                'disabled' => false,
+            ];
+    
+            $createdUser = $auth->createUser($userProperties);
+    
+            // User created successfully, return the user's unique ID
+            return $createdUser->uid;
+        } catch (\Kreait\Firebase\Exception\Auth\AuthError $e) {
+            // Handle error
+            echo 'Error creating user: '.$e->getMessage();
+            return null;
+        }
     }
 }

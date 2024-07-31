@@ -6,7 +6,7 @@ requireView("partials/head.php");
     <div class="container">
         <div class="row d-flex justify-content-center align-items-center" style="min-height: 100vh;">
             <div class="col-sm-16 col-md-6 d-flex justify-content-center align-items-center mb-4 mb-md-0">
-                <div class="text-center mt-2">
+                <div class="text-center mt-2 animate-1sec slideIn">
                     <img src="<?= BASEURL?>public/assets/LogoLaos.png" alt="ini logo" width="35%" height="35%">
                     <h3 class="notfound">LAOS Merch</h3>
                     <p style="font-size: 20px;">Official Merchandise of LAOS</p>
@@ -18,17 +18,35 @@ requireView("partials/head.php");
                         Silahkan Login
                     </div>
                     <div class="card-body">
-                        <form action="" method="POST">
+                        <form id="loginForm">
                             <div class="mb-2">
                                 <label for="email" class="form-label">Email:</label>
-                                <input type="text" class="form-control" name="email" placeholder="Masukkan Email..." required autocomplete="email" autofocus>
+                                <input type="text" class="form-control" id="email" name="email" placeholder="Masukkan Email..." required autocomplete="email" autofocus>
                             </div>
-                            <div class="mb-2">
+                            <div class="mb-3">
                                 <label for="password" class="form-label">Password:</label>
-                                <input type="password" class="form-control" name="password" placeholder="Masukkan Password..." required autocomplete="current-password">
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="password" placeholder="Masukkan Password..." required>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text eye-icon" onclick="togglePasswordVisibility('password', 'togglePasswordIcon')">
+                                            <i class="fas fa-eye p-1" id="togglePasswordIcon"></i>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
+
+                            <!-- Placeholder for success message -->
+                            <?php if(isset($_GET["verificationSuccess"])): ?>
+                            <div class="alert alert-success" role="alert" id="verification">
+                                Verification has been successfully completed.
+                            </div>
+                            <?php endif; ?>
+
+                            <!-- Placeholder for error message -->
+                            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+
                             <div class="text-center">
-                                <a type="submit" href="" class="btn btn-success mt-2 mb-2" style="width: 100%;">Login</a>
+                                <button type="submit" class="btn btn-success mt-2 mb-2" style="width: 100%;">Login</button>
                             </div>
                         </form>
 
@@ -36,8 +54,8 @@ requireView("partials/head.php");
                             <div class="col-12">
                             <hr class="mt-2 mb-4 border-secondary-subtle">
                             <div class="d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-md-end">
-                                <a href="#!" class="link-secondary text-decoration-none">Create new account</a>
-                                <a href="#!" class="link-secondary text-decoration-none">Forgot password</a>
+                                <a href="<?= BASEURL ?>register" class="link-secondary text-decoration-none">Create new account</a>
+                                <a href="<?= BASEURL ?>recovery" class="link-secondary text-decoration-none">Forgot password</a>
                             </div>
                             </div>
                         </div>
@@ -54,9 +72,24 @@ requireView("partials/head.php");
 <script>
     var baseUrl = "<?= BASEURL ?>"
 </script>
+<script>
+    function togglePasswordVisibility(inputId, iconId) {
+        var inputElement = document.getElementById(inputId);
+        var iconElement = document.getElementById(iconId);
 
+        if (inputElement.type === "password") {
+            inputElement.type = "text";
+            iconElement.classList.remove('fa-eye');
+            iconElement.classList.add('fa-eye-slash');
+        } else {
+            inputElement.type = "password";
+            iconElement.classList.remove('fa-eye-slash');
+            iconElement.classList.add('fa-eye');
+        }
+    }
+</script>
 <script type="module" src="<?= BASEURL ?>public/js/fbase.js"></script>
-<script type="module" src="<?= BASEURL ?>public/js/fbaseGoogleSignIn.js"></script>
+<script type="module" src="<?= BASEURL ?>public/js/fbaseSignIn.js"></script>
 
 
 

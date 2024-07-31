@@ -47,6 +47,7 @@ CREATE TABLE roles (
     id_user BIGINT PRIMARY KEY AUTO_INCREMENT,
     id_firebase VARCHAR(255) UNIQUE,
     username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
     first_name VARCHAR(128) NOT NULL,
     last_name VARCHAR(128) NOT NULL,
     profile_picture VARCHAR(255) DEFAULT '',
@@ -57,6 +58,17 @@ CREATE TABLE roles (
     is_active BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (id_role) REFERENCES roles(id_role) ON UPDATE CASCADE ON DELETE RESTRICT
   );
+
+  CREATE TABLE temp_verifications (
+    id_temp_verification INT AUTO_INCREMENT PRIMARY KEY,
+    id_user BIGINT NOT NULL,
+    code VARCHAR(6) NOT NULL,
+    temp_token VARCHAR(255) NOT NULL,
+    access_count INT DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expires_at DATETIME NOT NULL,
+    FOREIGN KEY (id_user) REFERENCES users(id_user) ON UPDATE CASCADE ON DELETE CASCADE
+);
   
   CREATE TABLE categories (
     id_category BIGINT PRIMARY KEY AUTO_INCREMENT,
