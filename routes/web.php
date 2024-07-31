@@ -1,6 +1,6 @@
 <?php
 
-Router::getInstance()->addGlobalMiddleware(function(){
+Router::getInstance()->addGlobalMiddleware(function () {
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
@@ -31,23 +31,23 @@ Router::get('/product/{id}', invokeClass(ProductController::class, "getProduct")
 // UserProfile
 Router::get('/user/{firebaseId}/profile', invokeClass(ProfileController::class, "profileSettings"));
 // UserSettings
-Router::get('/user/{firebaseId}/settings', function() {
+Router::get('/user/{firebaseId}/settings', function () {
     view("/404/index");
 });
 // Keranjang
-Router::get('/carts', function() {
+Router::get('/carts', function () {
     view("404/index");
 });
 // Checkout
-Router::get('/user/{firebaseId}/settings', function() {
+Router::get('/user/{firebaseId}/settings', function () {
     view("/404/index");
 });
 // Riwayat pesanan-pesanan
-Router::get('/purchase', function() {
+Router::get('/purchase', function () {
     view("/404/index");
 });
 // Detail Pesanan
-Router::get('/purchase/order', function() {
+Router::get('/purchase/order', function () {
     view("/404/index");
 });
 
@@ -66,7 +66,7 @@ Router::post('/cart/add', invokeClass(CartController::class, 'add'));
 
 
 
-Router::get("/about/privacy-policy", function(){
+Router::get("/about/privacy-policy", function () {
     view("/about/privacy-policy/index");
 });
 
@@ -78,19 +78,18 @@ Router::get('/order/detail', invokeClass(OrderDetailController::class, "index"))
 Router::get("/service/help-center", invokeClass(HelpCenterController::class, "index"));
 
 
-Router::get("/notfound",function() {
+Router::get("/notfound", function () {
     view("/404/index");
 });
-Router::get("/error",function() {
-    
-    if (!isset($_GET["code"]) && !isset($_GET["message"]) && !isset($_GET["detailMessage"])){
+Router::get("/error", function () {
+
+    if (!isset($_GET["code"]) && !isset($_GET["message"]) && !isset($_GET["detailMessage"])) {
         jsRedirect("/notfound");
     }
 
     view("/customerror/index", ['errorCode' => $_GET['code'], 'errorMessage' => $_GET['message'], 'detailMessage' => ($_GET["detailMessage"])]);
 });
 // Custom 404 Not Found handler
-Router::notFound(function() {
+Router::notFound(function () {
     view("/404/index");
 });
-?>
