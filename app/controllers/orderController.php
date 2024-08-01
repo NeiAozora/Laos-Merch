@@ -7,21 +7,26 @@ class OrderController extends Controller{
         $this->orderModel = new OrderModel();
     }
 
-    public function index() {
-        $id_user = $_SESSION['user']['uid'] ?? null;
+    public function index()
+    {
+        $id_user = $_SESSION['user']['id_user'] ?? null;
 
-        if (!$id_user) {
-            header('Location: ' . BASEURL . 'login');
-            exit();
+        if ($id_user) {
+            $statusMapping = [
+                'Semua' => null,
+                'Diproses' => 'Pending',  
+                'Dikirim' => 'Shipped',   
+                'Selesai' => 'Delivered', 
+                'Dibatalkan' => 'Cancelled'
+            ];
+            $status = isset($_GEt['status']) ? $_GET['status'] : 'Semua';
+            $statusDb = $statusMapping[$status] ?? null;
+            
+            $orders = $this->orderModel->getAllOrders($id_user, $statusDb);
+
+            view('order/index', ['orders' => $orders, 'status' => $status]);
+        } else {
+            view('404/index');
         }
-
-        $orders = $this->orderModel->getAllOrders($id_user);
-
-        $order = null;
-        if (isset($_GET['id_order'])) {
-            $order = $this->orderModel->getOrderById($_GET['id_order'], $id_user);
-        }
-
-        requireView('order/index', ['orders' => $orders, 'order' => $order]);
     }
 }
