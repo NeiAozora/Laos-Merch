@@ -109,7 +109,7 @@ class AuthHelpers
                 'fr' => $idToken,
                 'uid' => $firebaseId,
                 'email' => $email,
-                'username' => $username,
+                'username' => $user["username"],
                 'first_name' => $firstName,
                 'last_name' => $lastName,
                 'wa_number' => $user['wa_number'],

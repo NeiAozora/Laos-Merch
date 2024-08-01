@@ -53,6 +53,7 @@ html, body {
     border: 1px solid limegreen;
 
 }
+
 .laos-outline-button:hover{
     background-color: limegreen;
     color: white;
@@ -75,6 +76,8 @@ html, body {
     color: black;
     transition: .3s;
 }
+
+
 /* end button */
 
 
@@ -152,6 +155,78 @@ h3.notfound{
 }
 /* end img */
 
+
+
+/* products homepage */
+/* Adjust the flex container to manage the spacing and alignment */
+.product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    max-width: 220px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    transition: transform 0.3s ease, z-index 0.3s ease; /* Smooth transition for transform and z-index */
+}
+
+/* Hover state for product cards */
+.product-card:hover {
+    transform: translateY(-20px); /* Move the card up by 20px */
+    z-index: 10; /* Ensure the card appears above others */
+}
+
+/* Adjust card sizing and spacing */
+.product-card-container {
+    flex: 1 0 200px; /* Ensures cards don't exceed 200px in width */
+    max-width: 220px; /* Explicit max-width */
+    padding: 0.7rem; /* Padding between cards */
+}
+
+/* Ensure the card takes the full available height within its container */
+.product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+/* Remaining styles */
+.product-card .card-body {
+    flex-grow: 1;
+}
+
+.product-card .card-text {
+    margin-top: auto;
+}
+
+.discount-label {
+    position: absolute;
+    top: -15px;
+    right: -13px;
+    display: flex;
+    align-items: center;
+}
+
+.svg-image {
+    width: 70px;
+    height: auto;
+}
+
+.overlay-text {
+    font-family: 'Nunito', sans-serif;
+    position: absolute;
+    top: 30%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* end products homepage */
+
 /* footer */
 .thin-font{
     margin-bottom: 0;
@@ -174,6 +249,26 @@ h3.notfound{
     font-family: nunito;
 }
 
+.discount-label-container {
+    position: relative;
+    width: 100%;
+    max-width: 62px; /* Customize as needed */
+}
+.discount-label-svg-image {
+    width: 100%;
+    height: auto;
+}
+.discount-label-overlay-text {
+    font-family: 'Nunito', sans-serif;
+    position: absolute;
+    top: 26%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+}
 
 /* loading-animation */
 

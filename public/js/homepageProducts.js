@@ -84,8 +84,24 @@ document.addEventListener('DOMContentLoaded', function() {
             const avgPrice = parseFloat(product.avg_price);
             const discountValue = parseFloat(product.discount_value);
         
+            // Initialize discountLabel variable
+            let discountLabel = '';
+        
+            // Check if there's a discount and create the discount label
+            if (discountValue > 0) {
+                discountLabel = `
+                <div class="discount-label">
+                    <svg class="svg-image" viewBox="0 0 79 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M78.988 29.9637L65.3345 53.6189L65.334 29.9638L78.988 29.9637Z" fill="#830D0B"/>
+                        <path d="M0 0H79V30H0L11 15L0 0Z" fill="#D7211E"/>
+                    </svg>
+                    <div class="overlay-text">${discountValue.toFixed()}%</div>
+                </div>
+                `;
+            }
+        
             // Calculate discounted price
-            const discountedPrice = (avgPrice - discountValue).toFixed(2);
+            const discountedPrice = (avgPrice * (1 - discountValue / 100)).toFixed(2);
         
             // Create star rating HTML
             let starRatingHTML = '';
@@ -105,26 +121,34 @@ document.addEventListener('DOMContentLoaded', function() {
                 starRatingHTML += unfilledStar;
             }
         
+            // Create the product HTML
             const productHTML = `
-                <div class="col-6 col-md-3 mt-3">
-                    <div class="card animate slideIn" style="text-align: left;">
-                        <a href="${baseUrl}product/${product.id_product}" style="text-decoration: none; color: inherit;">
-                            <img src="${product.product_image}" class="card-img-top" alt="${product.product_name}">
-                            <div class="card-body">
-                                <div class="d-flex flex-row mb-2">
-                                    ${starRatingHTML}
-                                </div>
-                                <p class="card-text">
-                                ${product.product_name}<br>
-                                    <span style="font-weight: bold;">Rp ${discountedPrice}</span>
-                                    ${discountValue > 0 ? `<br><span style="text-decoration: line-through; color: #888;">Rp ${avgPrice.toFixed(2)}</span>` : ''}
-                                </p>
-                            </div>
-                        </a>
+            <div class="col-6 col-md-3 product-card-container">
+            <div class="card product-card animate-1sec slideIn">
+                ${discountLabel}
+                <a href="${baseUrl}product/${product.id_product}" style="text-decoration: none; color: inherit;">
+                    <div class="img-container">
+                        <img src="${product.product_image}" class="card-img-top" alt="${product.product_name}">
                     </div>
-                </div>`;
+                    <div class="card-body">
+                        <div class="d-flex flex-row mb-2">
+                            ${starRatingHTML}
+                        </div>
+                        <p class="card-text">
+                            ${product.product_name}<br>
+                            <span style="font-weight: bold;">Rp ${discountedPrice}</span>
+                            ${discountValue > 0 ? `<br><span style="text-decoration: line-through; color: #888;">Rp ${avgPrice.toFixed(2)}</span>` : ''}
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </div>
+            `;
+        
+            // Insert the product HTML into the container
             productsContainer.insertAdjacentHTML('beforeend', productHTML);
         });
+        
     }
     
     function updatePagination(currentPage, totalPages) {

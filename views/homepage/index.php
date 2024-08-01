@@ -55,7 +55,7 @@ requireView("partials/navbar.php");
 <!-- card -->
     <h1 class="d-flex justify-content-center mt-5" id="official-merch-heading">Official Merchandise</h1>
     <div class="container">
-        <div class="row justify-content-center" id="products-container">
+        <div class="row justify-content-center " id="products-container">
 
         <!-- being looped 8 times per page -->
 

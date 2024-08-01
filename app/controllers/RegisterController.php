@@ -23,6 +23,7 @@ class RegisterController extends Controller
     public function processRegister()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            
             // Sanitize POST data
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
