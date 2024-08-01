@@ -39,13 +39,16 @@ class LoginController extends Controller{
                     // User does not exist, create a new user
                     $result = $this->userModel->createUser($firebaseId,$name, '', '',    '',    $email,'',   2,   $picture
                     );
-
+                    $userId = $result['id_user'];
+                } else {
+                    $userId = $user['id_user']; 
                 }
     
                 // Set session variables
                 $_SESSION['user'] = [
                     'fr' => $idToken,
-                    'uid' => $firebaseId
+                    'uid' => $firebaseId,
+                    'id_user' => $userId
                 ];
     
                 echo json_encode(['status' => 'success']);
@@ -84,11 +87,14 @@ class LoginController extends Controller{
                     echo json_encode(['status' => 'error', 'message' => 'Invalid ID token']);
                     
                 }
+
+                $userId = $user['id_user'];
     
                 // Set session variables
                 $_SESSION['user'] = [
                     'fr' => $idToken,
-                    'uid' => $firebaseId
+                    'uid' => $firebaseId,
+                    'id_user' => $userId
                 ];
     
                 echo json_encode(['status' => 'success']);

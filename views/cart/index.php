@@ -12,23 +12,23 @@ requireView("partials/navbar.php");
                 <label for="selectAll" class="title-detail">Pilih Semua</label>
             </div>
             <div class="col-lg-8 col-md-10 col-sm-12">
-                <?php if (!empty($cartItems)): ?>
-                    <?php foreach ($cartItems as $item): ?>
+                <?php if (!empty($cartItems)) : ?>
+                    <?php foreach ($cartItems as $item) : ?>
                         <div class="card mb-4">
                             <div class="card-body row justify-content-between align-items-center">
                                 <div class="col-lg-6 col-md-6 col-12 d-flex">
                                     <input type="checkbox" class="checkbox-item cursor-pointer me-3">
-                                    <img src="<?= $item['image'] ?>" alt="<?= $item['product_name'] ?>" class="img-fluid">
+                                    <img src="<?= $item['image_url'] ?>" alt="<?= $item['product_name'] ?>" class="img-fluid">
                                     <div class="ms-3">
                                         <h4><?= $item['product_name'] ?></h4>
                                         <div style="display: flex;">
                                             <div class="me-3">
                                                 <h6 class="title-detail">Warna:</h6>
-                                                <p><?= $item['color'] ?></p>
+                                                <p><?= $item['option_name'] ?></p>
                                             </div>
                                             <div class="me-3">
                                                 <h6 class="title-detail">Ukuran:</h6>
-                                                <p><?= $item['size'] ?></p>
+                                                <p><?= $item['dimensions'] ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -62,7 +62,7 @@ requireView("partials/navbar.php");
                             </div>
                         </div>
                     <?php endforeach; ?>
-                <?php else: ?>
+                <?php else : ?>
                     <p>Your cart is empty.</p>
                 <?php endif; ?>
             </div>
@@ -85,9 +85,11 @@ requireView("partials/navbar.php");
 
 <!-- select all checkbox cart -->
 <script>
-    document.getElementById('selectAll').addEventListener('change', function(){
+    document.getElementById('selectAll').addEventListener('change', function() {
         const checkboxes = document.querySelectorAll('.checkbox-item');
-        checkboxes.forEach(checkbox => { checkbox.checked = this.checked });
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked
+        });
     });
     const checkboxes = document.querySelectorAll('.checkbox-item');
     checkboxes.forEach(checkbox => {

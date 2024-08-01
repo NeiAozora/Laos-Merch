@@ -24,11 +24,11 @@ class RegisterController extends Controller
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Sanitize POST data
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
             $firstName = trim($_POST['firstName']);
             $lastName = trim($_POST['lastName']);
-            $email = trim($_POST['email']);
+            $email = trim($_POST['email'], FILTER_SANITIZE_EMAIL);
             $username = trim($_POST['username']);
             $password = trim($_POST['password']);
             $confirmPassword = trim($_POST['confirmPassword']);
@@ -124,13 +124,13 @@ class RegisterController extends Controller
 
         MailHelpers::new()->email->send($emailParams);
 
-        jsRedirect("/auth-verification?ticket=" . $tempToken);
+        jsRedirect("Laos-Merch/auth-verification?ticket=" . $tempToken);
     }
 
     public function verificationIndex()
     {
         if (!isset($_GET["ticket"])) {
-            jsRedirect("/login");
+            jsRedirect("Laos-Merch/login");
             return;
         }
 
@@ -138,7 +138,7 @@ class RegisterController extends Controller
         $tempVerification = $this->tempVerificationModel->getByToken($token);
 
         if (isNullOrFalse($tempVerification)) {
-            jsRedirect("/login");
+            jsRedirect("Laos-Merch/login");
             return;
         }
 
@@ -161,7 +161,7 @@ class RegisterController extends Controller
     {
 
         if (!isset($_POST["token"]) || !isset($_POST["code"])) {
-            jsRedirect("/login");
+            jsRedirect("Laos-Merch/login");
             return;
         }
 
@@ -170,7 +170,7 @@ class RegisterController extends Controller
         $tempVerification = $this->tempVerificationModel->getByToken($token);
 
         if (!$tempVerification) {
-            jsRedirect("/login");
+            jsRedirect("Laos-Merch/login");
             return;
         }
 
@@ -189,7 +189,7 @@ class RegisterController extends Controller
                 $user['id_user'], $uid, $user['username'], $user['password'], $user['first_name'], 
                 $user['last_name'], $user['email'], $user['wa_number'], $user['id_role'], $user['profile_picture']);
 
-            jsRedirect("/login?verificationSuccess=true");
+            jsRedirect("Laos-Merch/login?verificationSuccess=true");
         } else {
             $user = $this->userModel->getUserById($tempVerification["id_user"]);
             $this->view("/auth/verification/index", [
