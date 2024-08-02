@@ -6,7 +6,6 @@ class ProductModel extends Model {
     protected $primaryKey = "id_product";
     use StaticInstantiator;
 
-
     public function __construct() {
         $this->db = new Database();
     }
@@ -34,31 +33,29 @@ class ProductModel extends Model {
     public function getProduct($id_product) {
         $this->db->query('
             SELECT 
-            p.id_product, 
-            p.product_name, 
-            p.description, 
-            p.weight, 
-            p.dimensions, 
-            p.date_added, 
-            p.last_updated, 
-            p.discontinued,
-            c.category_name,
-            GROUP_CONCAT(DISTINCT t.tag_name ORDER BY t.tag_name SEPARATOR ", ") AS tags,
-            vc.price,
-            MIN(v.option_name) 
-            COALESCE(MAX(d.discount_value), 0) AS discount_value,  -- Maximum discount value, default 0 if none
-            MIN(pi.image_url) AS product_image
+                p.id_product, 
+                p.product_name, 
+                p.description, 
+                p.weight, 
+                p.dimensions, 
+                p.date_added, 
+                p.last_updated, 
+                p.discontinued,
+                c.category_name,
+                GROUP_CONCAT(DISTINCT t.tag_name ORDER BY t.tag_name SEPARATOR ", ") AS tags,
+                MIN(vc.price) AS price,
+                COALESCE(MAX(d.discount_value), 0) AS discount_value, -- Maximum discount value, default 0 if none
+                MIN(pi.image_url) AS product_image
             FROM products p
             LEFT JOIN categories c ON p.id_category = c.id_category
             LEFT JOIN product_images pi ON p.id_product = pi.id_product
             LEFT JOIN variation_combinations vc ON p.id_product = vc.id_product
-            LEFT JOIN variation_options v ON vc.id_combination = v.id_combination
             LEFT JOIN product_tags pt ON p.id_product = pt.id_product
             LEFT JOIN tags t ON pt.id_tag = t.id_tag
             LEFT JOIN discount_products dp ON p.id_product = dp.id_product
             LEFT JOIN discounts d ON dp.id_discount = d.id_discount
-            GROUP BY p.id_product
             WHERE p.id_product = :id_product
+            GROUP BY p.id_product
         ');
         $this->db->bind(':id_product', $id_product, PDO::PARAM_INT);
         return $this->db->single();
@@ -77,32 +74,28 @@ class ProductModel extends Model {
                 p.discontinued,
                 c.category_name,
                 GROUP_CONCAT(DISTINCT t.tag_name ORDER BY t.tag_name SEPARATOR ", ") AS tags,
-                AVG(vc.price) AS avg_price,
-                MIN(v.option_name) AS min_option,
-                COALESCE(d.discount_value, 0) AS discount_value,
-                -- Subquery to get the first image URL for each product
+                MIN(vc.price) AS avg_price,
+                COALESCE(MAX(d.discount_value), 0) AS discount_value, -- Maximum discount value, default 0 if none
                 (SELECT pi.image_url
                  FROM product_images pi
                  WHERE pi.id_product = p.id_product
                  ORDER BY pi.id_product_image
                  LIMIT 1) AS product_image,
-                -- Calculate average rating for each product
                 COALESCE(AVG(r.rating), 0) AS avg_rating
             FROM products p
             LEFT JOIN categories c ON p.id_category = c.id_category
             LEFT JOIN variation_combinations vc ON p.id_product = vc.id_product
-            LEFT JOIN variation_options v ON vc.id_combination = v.id_combination
             LEFT JOIN product_tags pt ON p.id_product = pt.id_product
             LEFT JOIN tags t ON pt.id_tag = t.id_tag
             LEFT JOIN (
                 SELECT dp.id_product, d.discount_value
                 FROM discount_products dp
                 JOIN discounts d ON dp.id_discount = d.id_discount
-                WHERE d.end_date > NOW()  -- Ensure discount is not expired
+                WHERE d.end_date > NOW() -- Ensure discount is not expired
                 ORDER BY d.start_date DESC
                 LIMIT 1
             ) AS d ON p.id_product = d.id_product
-            LEFT JOIN reviews r ON vc.id_combination = r.id_variation_combination
+            LEFT JOIN reviews r ON vc.id_combination = r.id_combination
         ';
     
         // Add WHERE conditions
@@ -165,8 +158,6 @@ class ProductModel extends Model {
     
         return $this->db->resultSet();
     }
-    
-    
 
     public function getTotalProducts($criteria = [], $strictAndOperator = false) {
         // Base query
@@ -176,6 +167,8 @@ class ProductModel extends Model {
             LEFT JOIN categories c ON p.id_category = c.id_category
             LEFT JOIN product_tags pt ON p.id_product = pt.id_product
             LEFT JOIN tags t ON pt.id_tag = t.id_tag
+            LEFT JOIN discount_products dp ON p.id_product = dp.id_product
+            LEFT JOIN discounts d ON dp.id_discount = d.id_discount
             WHERE 1=1
         ';
         
@@ -189,6 +182,9 @@ class ProductModel extends Model {
         }
         if (isset($criteria['tag'])) {
             $conditions[] = 'LOWER(t.tag_name) LIKE LOWER(:tag)';
+        }
+        if (isset($criteria['discontinued'])) {
+            $conditions[] = 'p.discontinued = :discontinued';
         }
     
         // Join conditions with AND/OR based on $strictAndOperator
@@ -213,15 +209,13 @@ class ProductModel extends Model {
         if (isset($criteria['tag'])) {
             $this->db->bind(':tag', '%' . $criteria['tag'] . '%');
         }
-        // Only bind discontinued if it's part of the query
-        if (isset($criteria['discontinued']) && strpos($query, 'p.discontinued') !== false) {
+        if (isset($criteria['discontinued'])) {
             $this->db->bind(':discontinued', $criteria['discontinued'], PDO::PARAM_BOOL);
         }
     
         // Execute the query and return result
         return $this->db->single()['total_products'];
     }
-    
 
     // Update product details
     public function updateProduct($id_product, $product) {

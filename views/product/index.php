@@ -125,12 +125,28 @@
                   // Loop through your PHP data and create array entries
                   foreach($productCombinations as $productCombination) {
                       echo '{ id_combination: ' . intval($productCombination['id_combination']) . ', '
+                          
                           . 'id_product: ' . intval($productCombination['id_product']) . ', '
                           . 'price: ' . number_format($productCombination['price'], 2, '.', '') . ', '
                           . 'stock: ' . intval($productCombination['stock']) . ' },';
                   }
                   ?>
                ];
+
+               
+               const productVariations = [
+                <?php 
+                foreach($productVariations as $variation){
+                    foreach($variation['variation_options'] as $variationOptions){
+                        echo json_encode($variationOptions) . ",";
+                    }
+                }
+                ?>
+               ];
+
+
+               
+               
                const discount = { discount_value: <?= isset($discount["discount_value"]) ? json_encode($discount["discount_value"]) : 'null' ?> }; // Set to null if no discount
                
                
@@ -149,6 +165,7 @@
                });
                
                function chooseVariation(optionId, variationTypeId) {
+                    console.log('optionId: ' + optionId, 'variationTypeId: ' + variationTypeId);
                    selectedOptions[variationTypeId] = optionId;
                    document.querySelectorAll(`.variation-group[data-variation-type="${variationTypeId}"] .btn`).forEach(btn => {
                        btn.classList.toggle('active', btn.getAttribute('data-option-id') === optionId);
@@ -161,7 +178,9 @@
                    const selectedCombination = productCombination.find(comb => {
                        return Object.values(selectedOptions).includes(String(comb.id_combination));
                    });
-               
+                   
+                    console.log(selectedOptions);
+
                    if (!selectedCombination) {
                        console.log("Kombinasi tidak valid");
                        window.location = "<?= BASEURL ?>error?code=400&message=Bad%20Request&detailMessage=Produk%20memiliki%20kombinasi%20yang%20tidak%20valid.%20Segera%20hubungi%20admin.";
@@ -170,9 +189,17 @@
                    if (selectedCombination) {
                        const fullPrice = selectedCombination.price;
                        const hasDiscount = discount && discount.discount_value > 0;
-                       console.log(selectedCombination);
-               
-                       let checkOutLabelVariationType = document.getElementById("");
+                       const idVariationType = Object.keys(selectedOptions)[1];
+                       
+
+                       const variationTypes = productVariations.filter(row => row.id_combination == selectedCombination.id_combination);
+
+                    variationTypes.forEach(variationType => {
+                       document.getElementById('variation-type-' + variationType.id_variation_type).textContent = variationType.option_name;
+                        
+                    });
+
+                    //    let checkOutLabelVariationType = document.getElementById("");
                
                        if (hasDiscount) {
                            const discountedPrice = (fullPrice * (1 - discount.discount_value / 100));

@@ -6,7 +6,6 @@
     var baseUrl = "<?= BASEURL ?>";
 
 
-
 </script>
 
 

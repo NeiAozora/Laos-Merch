@@ -79,13 +79,19 @@ class AuthHelpers
 
         $idToken = $_SESSION['user']['fr'];
         $verifiedIdToken = self::verifyFBAcessIdToken($idToken);
-
         if (is_null($verifiedIdToken)){
-            echo '
-            var baseUrl = "' .BASEURL . '";
-            
-            <script type="module" src="' . BASEURL . 'public/js/fbaseSessionPatch.js"></script>
-            ';
+            echo `
+            <script>
+                var baseUrl = "' .BASEURL . '";         
+                var do = function () {
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 5000);
+                }
+
+                do()
+            </script>
+            `;
         }
         
 

@@ -10,10 +10,63 @@ require_once "helper.php";
 
 $query = 
 "
+-- Insert Categories
+INSERT INTO categories (category_name, category_description)
+VALUES
+    ('Electronics', 'Electronic devices and accessories.'),
+    ('Apparel', 'Clothing and accessories.');
+
+-- Insert Products
+INSERT INTO products (id_category, product_name, description, weight, dimensions, discontinued)
+VALUES
+    (1, 'Smartphone', 'Latest model smartphone with advanced features', '150g', '145 x 70 x 7 mm', FALSE),
+    (2, 'T-Shirt', 'Comfortable cotton t-shirt', '200g', 'Medium', FALSE);
+
+-- Insert Variation Types
+INSERT INTO variation_types (id_product, name)
+VALUES
+    (1, 'Color'), -- id 1 for Smartphone
+    (1, 'Storage'), -- id 2 for Smartphone
+    (2, 'Size'); -- id 3 for T-Shirt
+
+-- Insert Variation Options
+INSERT INTO variation_options (id_variation_type, option_name, image_url)
+VALUES
+    (1, 'Black', NULL),   -- Option for Color
+    (1, 'White', NULL),   -- Option for Color
+    (2, '64GB', NULL),    -- Option for Storage
+    (2, '128GB', NULL),   -- Option for Storage
+    (3, 'Medium', NULL),  -- Option for Size
+    (3, 'Large', NULL);   -- Option for Size
+
+-- Insert Variation Combinations
+INSERT INTO variation_combinations (id_product, price, stock)
+VALUES
+    (1, 700.00, 50),  -- Smartphone, Color: Black, Storage: 64GB
+    (1, 800.00, 30),  -- Smartphone, Color: Black, Storage: 128GB
+    (1, 750.00, 20),  -- Smartphone, Color: White, Storage: 64GB
+    (1, 850.00, 10),  -- Smartphone, Color: White, Storage: 128GB
+    (2, 15.00, 100),  -- T-Shirt, Size: Medium
+    (2, 15.00, 80);   -- T-Shirt, Size: Large
+
+-- Insert Combination Details
+INSERT INTO combination_details (id_combination, id_option)
+VALUES
+    (1, 1),  -- Smartphone, Black color
+    (1, 3),  -- Smartphone, 64GB storage
+    (2, 1),  -- Smartphone, Black color
+    (2, 4),  -- Smartphone, 128GB storage
+    (3, 2),  -- Smartphone, White color
+    (3, 3),  -- Smartphone, 64GB storage
+    (4, 2),  -- Smartphone, White color
+    (4, 4),  -- Smartphone, 128GB storage
+    (5, 5),  -- T-Shirt, Medium size
+    (6, 6);  -- T-Shirt, Large size
+
 -- Insert Carousels
 INSERT INTO carousels (name, image_url, link, title, subtitle, button_text, button_link)
 VALUES
-    ('Summer Sale', 'https://example.com/summer_sale.jpg', 'https://example.com/summer_sale', 'Summer Sale', 'Up to 50% off!', 'Shop Now', 'https://example.com/shop');
+    ('Summer Sale', 'https://cdn.discordapp.com/attachments/1036284251865366648/1268922775335338064/image.png?ex=66ae2fed&is=66acde6d&hm=fc02309b77bb557860f2eb2663791037994fa2d2bd104221585f9cf5ef860917&', 'https://example.com/summer_sale', 'LAOS T-Shirt', 'Kaos Open Source', 'Beli Sekarang', 'product/2');
 
 -- Insert Roles
 INSERT INTO roles (role_name, role_description)
@@ -41,55 +94,9 @@ VALUES
     (2, 3);  -- Customer can MANAGE_ORDERS
 
 -- Insert Users
-INSERT INTO users (id_firebase, username, first_name, last_name, email, wa_number, id_role, is_active)
+INSERT INTO users (id_firebase, username, password, first_name, last_name, profile_picture, email, wa_number, id_role, is_active)
 VALUES
-    ('ljiO9mSdnocXG1veOvRfW3g84wX2', 'noxindocraft', 'Ahmad', 'Fauzan', 'noxindocraft@gmail.com', '+6283119624458', 1, TRUE);
-
--- Insert Categories
-INSERT INTO categories (category_name, category_description)
-VALUES
-    ('Electronics', 'Electronic devices and accessories.'),
-    ('Accessories', 'Various accessories for electronic devices.');
-
--- Insert Products
-INSERT INTO products (id_category, product_name, description, weight, dimensions, discontinued)
-VALUES
-    (1, 'Mechanical Keyboard', 'A high-quality mechanical keyboard with backlighting.', '1.5 kg', '45x15x5 cm', FALSE),
-    (2, 'Gaming Mouse', 'A precision gaming mouse with adjustable DPI.', '0.2 kg', '10x6x4 cm', FALSE);
-
--- Insert Product Images
-INSERT INTO product_images (id_product, image_url)
-VALUES
-    (1, 'https://cdn.arstechnica.net/wp-content/uploads/2023/10/listing-3-800x379.jpg'),
-    (2, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcMDYIesAAqGgI2aG6o0CM7Mg-EDXgYW4zEA&s');
-
--- Insert Variation Types
-INSERT INTO variation_types (id_product, name)
-VALUES
-    (1, 'Keyboard Type'), -- id 1
-    (1, 'Keyboard Color'), -- id 2
-    (2, 'Mouse Type'), -- id 3
-    (2, 'Mouse Color'); -- id 4
-
--- Insert Variation Combinations
-INSERT INTO variation_combinations (id_product, price, stock)
-VALUES
-    (1, 120.00, 50),  -- Mechanical Keyboard, Basic
-    (1, 140.00, 30),  -- Mechanical Keyboard, Pro
-    (2, 40.00, 100),  -- Gaming Mouse, Standard
-    (2, 60.00, 75);   -- Gaming Mouse, Advanced
-
--- Insert Variation Options
-INSERT INTO variation_options (id_variation_type, id_combination, option_name)
-VALUES
-    (1, 1, 'RGB Backlight'),
-    (1, 2, 'Single Color'),
-    (2, 1, 'Black'),
-    (2, 2, 'White'),
-    (3, 1, 'Basic'),
-    (3, 2, 'Ergonomic'),
-    (4, 1, 'Red'),
-    (4, 2, 'Blue');
+    ('ljiO9mSdnocXG1veOvRfW3g84wX2', 'noxindocraft', 'password123', 'Ahmad', 'Fauzan', '', 'noxindocraft@gmail.com', '+6283119624458', 1, TRUE);
 
 -- Insert Tags
 INSERT INTO tags (tag_name)
@@ -101,19 +108,24 @@ VALUES
 -- Insert Product Tags
 INSERT INTO product_tags (id_product, id_tag)
 VALUES
-    (1, 1),  -- Mechanical Keyboard tagged as New Arrival
-    (1, 2),  -- Mechanical Keyboard tagged as Best Seller
-    (2, 3);  -- Gaming Mouse tagged as Discounted
+    (1, 1),  -- Smartphone tagged as New Arrival
+    (2, 3);  -- T-Shirt tagged as Discounted
+
+-- Insert Product Images
+INSERT INTO product_images (id_product, image_url)
+VALUES
+    (1, 'https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?cs=srgb&dl=pexels-tracy-le-blanc-67789-607812.jpg&fm=jpg'),
+    (2, 'https://media.discordapp.net/attachments/1036284251865366648/1268921522932944997/image.png?ex=66ae2ec2&is=66acdd42&hm=7167cecf399551eb8ef57385a4587cfd97f96a8a4134624771c7e8b79064198b&=&format=webp&quality=lossless');
 
 -- Insert Reviews
-INSERT INTO reviews (id_variation_combination, id_user, rating, comment, anonymity)
+INSERT INTO reviews (id_combination, id_user, rating, comment, anonymity)
 VALUES
-    (1, 1, 5, 'Excellent keyboard with great features!', FALSE);
+    (1, 1, 5, 'Excellent smartphone with amazing features!', FALSE);
 
 -- Insert Review Images
 INSERT INTO review_images (id_review, image_url)
 VALUES
-    (1, 'http://example.com/images/review1.png');
+    (1, 'https://images.pexels.com/photos/699122/pexels-photo-699122.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
 
 -- Insert Cart Items
 INSERT INTO cart_items (id_user, id_combination, quantity)
@@ -135,7 +147,7 @@ VALUES
 -- Insert Discount Products
 INSERT INTO discount_products (id_discount, id_product)
 VALUES
-    (1, 1);  -- 10% discount for Mechanical Keyboard
+    (1, 1);  -- 10% discount for Smartphone
 
 -- Insert Shipping Addresses
 INSERT INTO shipping_addresses (id_user, recipient_name, street_address, city, state, postal_code, extra_note, is_temporary)
@@ -156,9 +168,9 @@ VALUES
     (1, 120.00, 1, 1);
 
 -- Insert Order Items
-INSERT INTO order_items (id_order, quantity, id_variation_combination, id_discount)
+INSERT INTO order_items (id_order, quantity, id_combination, id_discount)
 VALUES
-    (1, 1, 1, 1);  -- Order 1: Mechanical Keyboard with 10% discount
+    (1, 1, 1, 1);  -- Order 1: Smartphone with 10% discount
 
 -- Insert Carriers
 INSERT INTO carriers (carrier_name, wa_number, email, website)
@@ -167,15 +179,14 @@ VALUES
     ('Quick Delivery', '098-765-4321', 'info@quickdelivery.com', 'http://quickdelivery.com');
 
 -- Insert Shipments
-INSERT INTO shipments (id_order, id_carrier, shipping_method, tracking_number, expected_delivery_date, status)
+INSERT INTO shipments (id_order, id_carrier, shipping_method, tracking_number, shipment_date, expected_delivery_date, status)
 VALUES
-    (1, 1, 'Standard Shipping', 'TRACK12345', DATE_ADD(NOW(), INTERVAL 5 DAY), 'Shipped');
+    (1, 1, 'Standard Shipping', 'TRACK12345', NOW(), DATE_ADD(NOW(), INTERVAL 5 DAY), 'Shipped');
 
 -- Insert Shipment Statuses
-INSERT INTO shipment_statuses (id_shipment, status_description)
+INSERT INTO shipment_statuses (id_shipment, status_date, status_description)
 VALUES
-    (1, 'Package is out for delivery.');
-
+    (1, NOW(), 'Package is out for delivery.');
 
 ";
 
