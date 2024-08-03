@@ -16,29 +16,29 @@ requireView("partials/navbar.php");
         </div>
         <div class="row justify-content-center">
         <?php if (!empty($orders)) : ?>
-            <?php foreach ($orders as $order) : ?>
+            <?php foreach ($orders as $item) : ?>
             <div class="card">
                 <div class="card-body row justify-content-between align-items-center">
                     <div class="col-sm-4 col-md-4 col-12 d-flex align-items-center">
-                        <img src="" alt="ini produk" class="img-fluid">
+                        <img src="<?= $item['product_url']?>" alt="ini produk" class="img-fluid">
                         <!-- Menambahkan nama produk di sebelah kanan gambar -->
                         <div class="product-name ms-3">
                             <h4><?= $item['product_name']?></h4>
                             <div style="display: flex;">
                                 <div class="me20">
-                                    <h6 class="title-detail" >Warna:</h6>
-                                    <p>warna ini</p>
+                                    <h6 class="title-detail" >Variasi Produk:</h6>
+                                    <p><?= $item['option_names']?></p>
                                 </div>
-                                <div class="me20">
+                                <!-- <div class="me20">
                                     <h6 class="title-detail">Ukuran:</h6>
                                     <p>ukuran segini</p>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-4 col-md-4 col-12">                     
                         <h6 class="title-detail mb-1">Jumlah:</h6>
-                        <h5><?= $order['quantity']?></h5>
+                        <h5><?= $item['quantity']?></h5>
                         <h6 class="title-detail">Total:</h6> 
                         <h5>Rp. <?= number_format($order['total_price'], 0, ',', '.')?></h5>
                     </div>
@@ -46,16 +46,16 @@ requireView("partials/navbar.php");
                     <div class="col-sm-4 col-md-4 col-12">
                         <h5 class="title-detail ">Status:</h5>
                         <p class="alert alert-success mt-1" role="alert" style="max-width:fit-content;">
-                           <?= $order['status_name']?>
+                           <?= $item['status_name']?>
                         </p>
                     </div>      
                     <div class="col-sm-4 col-md-4 col-12">
-                        <a href="<?= BASEURL?>order/detail/{$id}" class="btn btn-secondary me-2">Detail Pesanan</a>
+                        <a href="<?= BASEURL?>order/detail/<?= $order['id_order']?>" class="btn btn-secondary me-2">Detail Pesanan</a>
                         <a href="<?= BASEURL?>" class="btn btn-success">Pesanan Selesai</a>
                     </div>
                 </div>
-                <?php endforeach;?>
             </div>
+            <?php endforeach;?>
             <?php else:?>
                 <p>Belum ada pesanan...</p>   
             <?php endif;?>
