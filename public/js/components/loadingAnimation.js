@@ -41,3 +41,20 @@ function injectLoader(idLoadingContainer) {
 function removeLoader(idLoadingContainer) {
   document.getElementById(idLoadingContainer).innerHTML = '';
 }
+
+
+const loaderBarHTML = `
+<div class="loading-bar-container">
+<div class="moving-element"></div>
+</div>
+`
+
+// Function to inject the loader
+function injectBarLoader(idLoadingContainer) {
+  document.getElementById(idLoadingContainer).innerHTML = loaderBarHTML;
+}
+
+// Function to remove the loader
+function removeBarLoader(idLoadingContainer) {
+  document.getElementById(idLoadingContainer).innerHTML = '';
+}

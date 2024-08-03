@@ -5,7 +5,7 @@ define('WEB_DOMAIN_MODE', false); // Set this to true or false as needed
 
 $host = $_SERVER['HTTP_HOST'];
 
-session_save_path("C:\Users\lenovo\AppData\Local\Temp");
+
 
 if (WEB_DOMAIN_MODE) {
     define ('BASEURL', "https://laosmerch.neiaozora.my.id/");

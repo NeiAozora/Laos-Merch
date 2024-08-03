@@ -12,13 +12,19 @@ const provider = new GoogleAuthProvider();
 const signInGoogleButton = document.getElementById("google-signin");
 
 const userGoogleSignIn = async () => {
+  injectBarLoader('bar-loader');
+
   signInWithPopup(auth, provider)
     .then((result) => {
       const user = result.user;
       // Handle sign-in success
+    removeBarLoader('bar-loader');
+
     })
     .catch((error) => {
       // Handle sign-in error
+    removeBarLoader('bar-loader');
+
       console.error("Google sign-in error:", error);
     });
 };
@@ -28,6 +34,7 @@ document
   .getElementById("loginForm")
   .addEventListener("submit", function (event) {
     event.preventDefault(); // Prevent default form submission
+    injectBarLoader('bar-loader');
     const verificationElement = document.getElementById("verification");
     if (verificationElement) {
       verificationElement.style.display = "none";
@@ -38,12 +45,14 @@ document
 
     signInWithEmailAndPassword(auth, email, password)
       .then(function (userCredential) {
+        removeBarLoader('bar-loader');
         var errorMessage = document.getElementById("error-message");
         if (errorMessage) {
           errorMessage.style.display = "none";
         }
       })
-      .catch(function (error) {
+      .catch(function (error){
+        removeBarLoader('bar-loader');
         // Show error message
         var errorMessage = document.getElementById("error-message");
         if (errorMessage) {
@@ -55,26 +64,44 @@ document
       });
   });
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    let url =
-      baseUrl + "auth-process?fr=" + user.accessToken + "&br=" + user.uid;
-    fetch(url, {
-      method: "GET",
-    })
+  const maxRetries = 5;
+  const delay = 500; // Delay in milliseconds
+  
+  function fetchWithRetry(url, retries) {
+    injectBarLoader('bar-loader'); // Show loader
+    
+    return fetch(url, { method: "GET" })
       .then((result) => {
         if (result.status === 200) {
           window.location = baseUrl;
         } else {
-          console.error("Auth process error:", result.statusText);
+          throw new Error(result.statusText);
         }
       })
       .catch((error) => {
-        console.error("Auth process fetch error:", error);
+        if (retries > 0) {
+          // console.warn(`Retrying in ${delay / 1000} seconds... (${maxRetries - retries + 1}/${maxRetries})`);
+          return new Promise((resolve) =>
+            setTimeout(() => resolve(fetchWithRetry(url, retries - 1)), delay)
+          );
+        } else {
+          console.error("Auth process fetch error:", error);
+        }
+      })
+      .finally(() => {
+        removeBarLoader('bar-loader'); // Hide loader after fetch
       });
   }
-});
-
+  
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      let url =
+        baseUrl + "auth-process?fr=" + user.accessToken + "&br=" + user.uid;
+        // console.log(url);
+      fetchWithRetry(url, maxRetries);
+    }
+  });
+  
 if (signInGoogleButton) {
   signInGoogleButton.addEventListener("click", userGoogleSignIn);
 } else {

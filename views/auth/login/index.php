@@ -34,6 +34,11 @@ requireView("partials/head.php");
                                     </div>
                                 </div>
                             </div>
+                            <div class="mb-3">
+                                <div id="bar-loader"></div>
+                                <div id="error-message"></div>
+                            </div>
+                            
 
                             <!-- Placeholder for success message -->
                             <?php if(isset($_GET["verificationSuccess"])): ?>
@@ -88,6 +93,7 @@ requireView("partials/head.php");
         }
     }
 </script>
+<script src="<?= BASEURL ?>public/js/components/loadingAnimation.js"></script>
 <script type="module" src="<?= BASEURL ?>public/js/fbase.js"></script>
 <script type="module" src="<?= BASEURL ?>public/js/fbaseSignIn.js"></script>
 
