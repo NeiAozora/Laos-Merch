@@ -4,8 +4,9 @@ const auth = getAuth();
 
 signOut(auth).then(() => {
     const currentUrl = window.location.href;
-    const redirectUrl = "/logout?to=" + encodeURIComponent(currentUrl);
-    window.location.href = redirectUrl;
+    const redirectUrl =  baseUrl + "logout?to=" + encodeURIComponent(currentUrl);
+    console.log(redirectUrl);
+    // window.location.href = redirectUrl;
 }).catch((error) => {
     console.log(error);
 });

@@ -115,7 +115,7 @@ VALUES
 INSERT INTO product_images (id_product, image_url)
 VALUES
     (1, 'https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?cs=srgb&dl=pexels-tracy-le-blanc-67789-607812.jpg&fm=jpg'),
-    (2, 'https://media.discordapp.net/attachments/1036284251865366648/1268921522932944997/image.png?ex=66ae2ec2&is=66acdd42&hm=7167cecf399551eb8ef57385a4587cfd97f96a8a4134624771c7e8b79064198b&=&format=webp&quality=lossless');
+    (2, 'https://cdn.discordapp.com/attachments/1036284251865366648/1268921522932944997/image.png?ex=66af8042&is=66ae2ec2&hm=72f8a412c0018068e0f790a13551fec6e805bcf78151e148328cc24108add771&');
 
 -- Insert Reviews
 INSERT INTO reviews (id_combination, id_user, rating, comment, anonymity)

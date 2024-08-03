@@ -292,6 +292,33 @@ svg.star rect {
 
 /* End loading-animation */
 
+
+/* loading bar animation */
+.loading-bar-container {
+    width: 117%;
+    height: 5px;
+    border: 0px solid #000;
+    position: relative;
+    overflow: hidden;
+}
+.moving-element {
+    width: 10%; /* Width is 25% of the container's width */
+    height: 100%; /* Height is 100% of the container's height */
+    background-color: limegreen;
+    position: absolute;
+    animation: moveBackAndForth 3s infinite;
+}
+@keyframes moveBackAndForth {
+    0% { left: 0; }
+    25% { left: 75%; } /* Moves to 75% of the container's width */
+    50% { left: 0; }
+    75% { left: 75%; }
+    100% { left: 0; }
+}
+/* loading bar animation */
+
+
+
 /* Drop Down Animation */
 @media (min-width: 768px) {
     .animate {
