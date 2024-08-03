@@ -29,4 +29,20 @@ class OrderController extends Controller{
             view('404/index');
         }
     }
+
+    public function detail(){
+        $id_order = $_GET['id'] ?? null;
+
+        if($id_order){
+            $order = $this->orderModel->getOrderById($id_order);
+
+            if($order){
+                view('orderdetail/index', ['order' => $order]);
+            }else{
+                view('404/index');
+            }
+        }else{
+            view('404/index');
+        }
+    }
 }

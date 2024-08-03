@@ -72,9 +72,9 @@ Router::get("/about/privacy-policy", function () {
 
 Router::get('/login', invokeClass(LoginController::class, "index"));
 Router::get('/order', invokeClass(OrderController::class, "index"));
+Router::get('/order/detail', invokeClass(OrderController::class, "detail"));
 
 Router::get('/checkout', invokeClass(CheckoutController::class, "index"));
-Router::get('/order/detail', invokeClass(OrderDetailController::class, "index"));
 Router::get("/service/help-center", invokeClass(HelpCenterController::class, "index"));
 
 
