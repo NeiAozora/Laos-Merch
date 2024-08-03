@@ -10,58 +10,52 @@ class ProductController extends Controller {
     }
 
 
+    // Display product details (assuming by ID)
     public function getProduct($id) {
-        // Retrieve product details
         $product = $this->productModel->get($id);
-    
-        // Initialize arrays to hold variations and combinations
         $productVariations = [];
-        $productCombinations = [];
-    
-        // Retrieve product variations and combinations
         $VTs = VariationTypeModel::new()->get(["id_product", $id]);
         $productCombinations = VariationCombinationModel::new()->get(["id_product", $id]);
-    
-        // Loop through each variation type
-        foreach ($VTs as $variationType) {
-            // Retrieve variation options for each variation type
-            $VOs = VariationOptionModel::new()->get(["id_variation_type", $variationType["id_variation_type"]]);
-            
-            // Add variation type to the variations array
-            $variationType['variation_options'] = []; // Initialize the variation options array
-            $productVariations[] = $variationType;
-    
-            // Loop through each variation option
-            foreach ($VOs as $variationOption) {
-                // Retrieve combination details for each variation option
-                $CDs = CombinationDetailModel::new()->get(['id_option', $variationOption["id_option"]]);
+
+        for($i = 0; $i < count($productCombinations); $i++ ){
+            $productCombinations[$i]["combination_details"] = CombinationDetailModel::new()->get(["id_combination", $productCombinations[$i]['id_combination']]);
+        }
+
+        for ($a = 0; $a < count($VTs); $a++)
+        {
+            $VOs = VariationOptionModel::new()->get(["id_variation_type", $VTs[$a]["id_variation_type"]]);
+            $productVariations[$a] = $VTs[$a];
+            for($b = 0; $b < count($VOs); $b++)
+            {
                 
-                // Add combination details to the variation option
-                $variationOption['combination_details'] = $CDs;
-                
-                // Add variation option to the current variation type
-                $productVariations[count($productVariations) - 1]['variation_options'][] = $variationOption;
+                $productVariations[$a]["variation_options"][$b] = $VOs[$b];
+            }
+            // $productVariationOption = VariationOptionModel::new()->get(["id_variation_type", $productVariationType["id_variation_type"]]);
+
+        }
+
+        $variationOptions = [];
+        foreach($productVariations as $variation){
+            foreach($variation["variation_options"] as $variationOption){
+                $variationOptions[] = $variationOption;
             }
         }
-    
-        // Retrieve reviews and discounts for the product
+
         $reviews = ReviewModel::new()->getReviewsByProductId($id);
-        $discounts = DiscountProductModel::new()->getDiscountByProductId($id);
-    
-        // Prepare data for view
+        $discount = DiscountProductModel::new()->getDiscountByProductId($id);
+
         $data = [
             'product' => $product,
             'productVariations' => $productVariations,
+            'variationOptions' => $variationOptions,
             'productCombinations' => $productCombinations,
             'reviews' => $reviews,
-            'discounts' => $discounts
+            'discount' => $discount
         ];
-    
-        d($data); // Debugging output
-        die; // Terminate script execution
-        // Pass data to view
+
         $this->view('product/index', $data);
     }
+
     
     
     // Display the list of products with search and pagination

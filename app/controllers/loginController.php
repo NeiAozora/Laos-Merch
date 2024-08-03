@@ -63,51 +63,6 @@ class LoginController extends Controller{
         }
     }
 
-    public function processAuthForm(){
-        $idToken = $_GET["fr"] ?? null;
-        
-        if ($idToken) {
-
-    
-            // Verify the Firebase ID token
-            $verifiedIdToken = AuthHelpers::verifyFBAcessIdToken($idToken);
-            
-            if ($verifiedIdToken) {
-                $firebaseId = $verifiedIdToken->claims()->get("sub");
-                $email = $verifiedIdToken->claims()->get('email');
-                $name = $verifiedIdToken->claims()->get('name');
-                $picture = $verifiedIdToken->claims()->get('picture');
-                
-                // Check if user exists by Firebase ID
-                $user = $this->userModel->getUserByFirebaseId($firebaseId);
-                if (isNullOrFalse($user)) {
-
-                    session_destroy();
-                    http_response_code(401);
-                    echo json_encode(['status' => 'error', 'message' => 'Invalid ID token']);
-                    
-                }
-
-                $userId = $user['id_user'];
-    
-                // Set session variables
-                $_SESSION['user'] = [
-                    'fr' => $idToken,
-                    'uid' => $firebaseId,
-                    'id_user' => $userId
-                ];
-    
-                echo json_encode(['status' => 'success']);
-            } else {
-                session_destroy();
-                http_response_code(401);
-                echo json_encode(['status' => 'error', 'message' => 'Invalid ID token']);
-            }
-        } else {
-            http_response_code(400);
-            echo json_encode(['status' => 'error', 'message' => 'ID token is missing']);
-        }
-    }
 
     private function getUser($arr){
         foreach($arr as $value){

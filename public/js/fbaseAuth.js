@@ -14,6 +14,7 @@ auth.onIdTokenChanged(function (user) {
     user.getIdToken(true).then(function (token) {
       let url =
         baseUrl + "auth-process?fr=" + user.accessToken + "&br=" + user.uid;
+
       // window.location = url;
       const response = fetch(url, {
         method: "GET",

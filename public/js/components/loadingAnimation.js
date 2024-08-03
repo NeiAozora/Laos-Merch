@@ -1,5 +1,6 @@
 // JavaScript code to inject the loader
 const loaderHTML = `
+<center>
   <div class="loader loader--style4" title="3">
     <center>
     Fetching Data...
@@ -27,6 +28,8 @@ const loaderHTML = `
       </rect>
     </svg>
   </div>
+</center>
+
 `;
 
 // Function to inject the loader

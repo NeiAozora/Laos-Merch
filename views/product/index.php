@@ -6,7 +6,7 @@
    <div class="row">
       <!-- gambar produk -->
       <div class="col-sm-4 col-md-4 col-12 p-4">
-         <img src="" alt="ini kaos" class="img-fluid">
+         <img src="" alt="productImage" id="productMainImage" class="img-fluid">
          <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center mt-5">
                <li class="page-item disabled">
@@ -81,19 +81,18 @@
          <p><?= $product["description"] ?></p>
          <p class="title-detail">Pilih Variasi Anda</p>
          <div id="variations-container">
-            <?php foreach($productVariations as $variation): ?>
+         <?php foreach($productVariations as $variation): ?>
             <div class="variation-group" data-variation-type="<?= $variation['id_variation_type'] ?>">
-               <label for="variation-type-<?= $variation['id_variation_type'] ?>" id="<?= $variation['id_variation_type'] ?>"><?= $variation["name"] ?></label>
+               <label for="variation-type-<?= $variation['id_variation_type'] ?>" id="<?= $variation['id_variation_type'] ?>"><?= $variation["name"]?>:</label>
                <div>
-                  <?php foreach($variation["variation_options"] as $index => $option): ?>
-                  <button 
-                     class="btn laos-outline-button <?= $index === 0 ? 'active' : '' ?>" 
-                     data-option-id="<?= $option['id_option'] ?>" 
-                     data-option-id-combination="<?= $option['id_combination'] ?>" 
-                     onclick="chooseVariation('<?= $option['id_option'] ?>', <?= $variation['id_variation_type'] ?>)">
-                  <?= $option["option_name"] ?>
-                  </button>
-                  <?php endforeach; ?>
+                     <?php foreach($variation["variation_options"] as $index => $option): ?>
+                     <button 
+                        class="btn laos-outline-button <?= $index === 0 ? 'active' : '' ?>" 
+                        data-option-id="<?= $option['id_option'] ?>" 
+                        onclick="chooseVariation('<?= $option['id_option'] ?>', <?= $variation['id_variation_type'] ?>)">
+                        <?= $option["option_name"] ?>
+                     </button>
+                     <?php endforeach; ?>
                </div>
             </div>
             <?php endforeach; ?>
@@ -120,115 +119,142 @@
             </div>
             <!-- Aksi utama -->
             <script>
-               const productCombination = [
-                   <?php
-                  // Loop through your PHP data and create array entries
-                  foreach($productCombinations as $productCombination) {
-                      echo '{ id_combination: ' . intval($productCombination['id_combination']) . ', '
-                          
-                          . 'id_product: ' . intval($productCombination['id_product']) . ', '
-                          . 'price: ' . number_format($productCombination['price'], 2, '.', '') . ', '
-                          . 'stock: ' . intval($productCombination['stock']) . ' },';
-                  }
-                  ?>
-               ];
+    const productCombinations = [
+        <?php foreach($productCombinations as $combination): ?>
+            {
+                id_combination: <?= $combination['id_combination'] ?>,
+                id_product: <?= $combination['id_product'] ?>,
+                price: <?= number_format($combination['price'], 2, '.', '') ?>,
+                stock: <?= $combination['stock'] ?>,
+                combination_details: <?= json_encode($combination['combination_details']) ?>
+            },
+        <?php endforeach; ?>
+    ];
 
-               
-               const productVariations = [
-                <?php 
-                foreach($productVariations as $variation){
-                    foreach($variation['variation_options'] as $variationOptions){
-                        echo json_encode($variationOptions) . ",";
-                    }
+    <?php
+
+    ?>
+
+      const variationOptions = [
+         <?php
+            foreach ($variationOptions as $variationOption) {
+               $id_option = htmlspecialchars($variationOption['id_option'], ENT_QUOTES, 'UTF-8');
+               $id_variation_type = htmlspecialchars($variationOption['id_variation_type'], ENT_QUOTES, 'UTF-8');
+               $option_name = htmlspecialchars($variationOption['option_name'], ENT_QUOTES, 'UTF-8');
+               $image_url = htmlspecialchars($variationOption['image_url'], ENT_QUOTES, 'UTF-8');
+
+               echo json_encode([
+                  "id_option" => $id_option,
+                  "id_variation_type" => $id_variation_type,
+                  "option_name" => $option_name,
+                  "image_url" => $image_url
+               ]) . ",\n";
+            }
+         ?>
+      ];
+
+    // Create a map for quick lookup of id_variation_type based on id_option
+    const optionMap = variationOptions.reduce((map, option) => {
+        map[option.id_option] = option.id_variation_type;
+        return map;
+    }, {});
+
+
+    const discount = <?= json_encode($discount['discount_value'] ?? null) ?>;
+
+    // Initialize selectedOptions with null values
+    let selectedOptions = {
+        <?php foreach($productVariations as $variation): ?>
+            <?= $variation['id_variation_type'] ?>: null,
+        <?php endforeach; ?>
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.variation-group').forEach(group => {
+            const firstOption = group.querySelector('.btn');
+            if (firstOption) {
+                const variationTypeId = group.getAttribute('data-variation-type');
+                firstOption.classList.add('active');
+                selectedOptions[variationTypeId] = firstOption.getAttribute('data-option-id');
+            }
+        });
+        updateDisplayedValues();
+    });
+
+    function chooseVariation(optionId, variationTypeId) {
+        selectedOptions[variationTypeId] = optionId;
+        document.querySelectorAll(`.variation-group[data-variation-type="${variationTypeId}"] .btn`).forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-option-id') === optionId);
+        });
+        updateDisplayedValues();
+    }
+
+    function updateDisplayedValues() {
+        const selectedCombination = productCombinations.find(comb => {
+            // Create a map of the combination details for quick comparison
+            const combinationDetailsMap = comb.combination_details.reduce((map, detail) => {
+                map[optionMap[detail.id_option]] = detail.id_option;
+                return map;
+            }, {});
+
+            // Compare the selected options with the combination details
+            return Object.keys(combinationDetailsMap).every(key => {
+                return selectedOptions[key] === combinationDetailsMap[key].toString();
+            });
+        });
+
+
+
+        if (!selectedCombination) {
+            console.log("Selected combination not found.");
+            window.location = "<?= BASEURL ?>error?code=400&message=Bad%20Request&detailMessage=Produk%20memiliki%20kombinasi%20yang%20tidak%20valid.%20Segera%20hubungi%20admin.";
+
+            return;
+        }
+
+        if (selectedCombination) {
+            const fullPrice = selectedCombination.price;
+            const hasDiscount = discount && discount > 0;
+
+            // Update displayed variation options
+            variationOptions.forEach(option => {
+                if (selectedOptions[option.id_variation_type] === option.id_option) {
+                    document.getElementById('variation-type-' + option.id_variation_type).textContent = option.option_name;
                 }
-                ?>
-               ];
+            });
+
+            // Update price and stock
+            if (hasDiscount) {
+                const discountedPrice = fullPrice * (1 - discount / 100);
+                document.getElementById('price').textContent = `Rp ${discountedPrice.toFixed(2)}`;
+                document.getElementById('full-price').textContent = `Rp ${fullPrice.toFixed(2)}`;
+            } else {
+                document.getElementById('price').textContent = `Rp ${fullPrice.toFixed(2)}`;
+            }
+
+            document.getElementById('stock-value').textContent = selectedCombination.stock;
+        }
+    }
 
 
-               
-               
-               const discount = { discount_value: <?= isset($discount["discount_value"]) ? json_encode($discount["discount_value"]) : 'null' ?> }; // Set to null if no discount
-               
-               
-               let selectedOptions = {};
-               
-               document.addEventListener('DOMContentLoaded', () => {
-                   document.querySelectorAll('.variation-group').forEach(group => {
-                       const firstOption = group.querySelector('.btn');
-                       if (firstOption) {
-                           const variationTypeId = group.getAttribute('data-variation-type');
-                           firstOption.classList.add('active');
-                           selectedOptions[variationTypeId] = firstOption.getAttribute('data-option-id');
-                       }
-                   });
-                   updateDisplayedValues();
-               });
-               
-               function chooseVariation(optionId, variationTypeId) {
-                    console.log('optionId: ' + optionId, 'variationTypeId: ' + variationTypeId);
-                   selectedOptions[variationTypeId] = optionId;
-                   document.querySelectorAll(`.variation-group[data-variation-type="${variationTypeId}"] .btn`).forEach(btn => {
-                       btn.classList.toggle('active', btn.getAttribute('data-option-id') === optionId);
-                   });
-               
-                   updateDisplayedValues();
-               }
-               
-               function updateDisplayedValues() {
-                   const selectedCombination = productCombination.find(comb => {
-                       return Object.values(selectedOptions).includes(String(comb.id_combination));
-                   });
-                   
-                    console.log(selectedOptions);
+    document.querySelector('#add-cart').addEventListener('submit', function(event) {
+        event.preventDefault();
 
-                   if (!selectedCombination) {
-                       console.log("Kombinasi tidak valid");
-                       window.location = "<?= BASEURL ?>error?code=400&message=Bad%20Request&detailMessage=Produk%20memiliki%20kombinasi%20yang%20tidak%20valid.%20Segera%20hubungi%20admin.";
-                   }
-               
-                   if (selectedCombination) {
-                       const fullPrice = selectedCombination.price;
-                       const hasDiscount = discount && discount.discount_value > 0;
-                       const idVariationType = Object.keys(selectedOptions)[1];
-                       
+        const selectedCombination = productCombinations.find(comb => {
+            return comb.combination_details.every(detail => {
+                return selectedOptions[detail.id_variation_type] == detail.id_option;
+            });
+        });
 
-                       const variationTypes = productVariations.filter(row => row.id_combination == selectedCombination.id_combination);
+        if (selectedCombination) {
+            document.getElementById('combination-id').value = selectedCombination.id_combination;
+            event.target.submit();
+        } else {
+            console.log("Selected combination is not valid for adding to cart.");
+        }
+    });
+</script>
 
-                    variationTypes.forEach(variationType => {
-                       document.getElementById('variation-type-' + variationType.id_variation_type).textContent = variationType.option_name;
-                        
-                    });
-
-                    //    let checkOutLabelVariationType = document.getElementById("");
-               
-                       if (hasDiscount) {
-                           const discountedPrice = (fullPrice * (1 - discount.discount_value / 100));
-                           document.getElementById('price').textContent = `Rp ${discountedPrice.toFixed(2)}`;
-                           document.getElementById('full-price').textContent = `Rp ${fullPrice.toFixed(2)}`;
-                       } else {
-               
-                           document.getElementById('price').textContent = 'Rp ${fullPrice.toFixed(2)}'; // Clear discounted price
-                           // document.getElementById('full-price').textContent = `Rp ${fullPrice.toFixed(2)}`;
-                       }
-               
-                       document.getElementById('stock-value').textContent = selectedCombination.stock;
-                   }
-               }
-               
-            </script>
-            <!-- aksi untuk keranjang -->
-            <script>
-               document.querySelector('#add-cart').addEventListener('submit', function(event){
-                   event.preventDefault();
-               
-                   let selectedCombination = productCombination.find(comb => {
-                       return Object.values(selectedOptions).includes(string(comb.id_combination));
-                   });
-                   document.getElementById('combination-id').value = selectedCombination.id_combination;
-               
-                   event.target.submit();
-               });
-            </script>
          </div>
       </div>
    </div>

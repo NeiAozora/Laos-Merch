@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`api/products?page=${page}&limit=${itemsPerPage}&search=${search}`)
             .then(response => response.json())
             .then(data => {
+                
                 removeLoader('products-container');
                 updatePagination(data.current_page, data.total_pages);
                 updateProducts(data.products);
@@ -190,9 +191,12 @@ document.addEventListener('DOMContentLoaded', function() {
     let reviewsContainer = document.getElementById("reviews-container");
 
     function fetchReviews(){
+        injectLoader('reviews-container');
         fetch(`api/reviews`)
         .then(response => response.json())
         .then(data => {
+            removeLoader('reviews-container');
+            
             updateReviews(data.reviews);
         })
         .catch(error => console.error('Error fetching products:', error));
@@ -222,14 +226,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-            // LMAO
-            let variation_name = '';
 
-            review.variations.forEach(variation => {
-                if (variation.variation_type_name === review.variation_type_name) {
-                    variation_name = variation.variation_name;
-                }
-            });
+            variation_name = review.variations.map(variation => variation.variation_name).join(', ');
 
 
             // Create review HTML
@@ -241,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="review-details">
                         <h5>Bobon <span class="review-rating">${stars}</span></h5>
                         <div class="review-date">${review.date_posted}</div>
-                        <div class="review-product"><span style="font-weight: bold;">Barang</span>: ${review.product_name}<br><span style="font-weight: bold;">${review.variation_type_name}</span>: ${variation_name}</div>
+                        <div class="review-product"><span style="font-weight: bold;">Barang</span>: ${review.product_name}<br><span style="font-weight: bold;">Variasi:</span>: ${variation_name}</div>
                         <div class="review-text">${comment}</div>
                     </div>
                     ${reviewImages}
