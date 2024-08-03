@@ -43,12 +43,13 @@ class ProductController extends Controller {
 
         $reviews = ReviewModel::new()->getReviewsByProductId($id);
         $discount = DiscountProductModel::new()->getDiscountByProductId($id);
-
+        $productImages = ProductImageModel::new()->get(['id_product', $id]);
         $data = [
             'product' => $product,
             'productVariations' => $productVariations,
             'variationOptions' => $variationOptions,
             'productCombinations' => $productCombinations,
+            'productImages' => $productImages,
             'reviews' => $reviews,
             'discount' => $discount
         ];

@@ -89,4 +89,17 @@
         .replace(/'/g, "&#039;");
 }
 
+function removeTrailingZeros(number) {
+  // Convert the number to a string
+  let str = number.toString();
+  
+  // Check if it contains a decimal point
+  if (str.indexOf('.') !== -1) {
+    // Remove trailing zeros
+    str = str.replace(/\.?0+$/, '');
+  }
+  
+  return str;
+}
+
 </script>

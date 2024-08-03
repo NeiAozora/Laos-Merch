@@ -242,6 +242,62 @@ h3.notfound{
 /* end footer */
 
 /* detailproduk */
+.product-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#productMainImage {
+    max-width: 100%;
+    height: auto;
+}
+
+.image-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    overflow-x: auto; /* Allows horizontal scrolling if necessary */
+}
+
+.page-item {
+    display: flex;
+    align-items: center;
+    margin: 0 5px; /* Spacing between pagination items */
+}
+
+.page-link {
+    border: none;
+}
+
+
+.page-link img {
+    width: 80px; /* Set a consistent size for the thumbnails */
+    height: auto;
+    border: 1px solid #ddd; /* Optional: border around images */
+    border-radius: 4px; /* Optional: rounded corners */
+}
+
+.page-link.active img {
+    border-color: gray; /* Highlight active image */
+}
+
+  .page-item {
+    margin: 0px;
+  }
+  
+  .page-link img {
+    height: auto;
+  }
+  
+  .page-link.active img {
+    position: relative;
+    width: 100%;
+    border: 2px solid gray; /* Highlight active image */
+  }
+  
+
+
 .title-detail{
     /* color: limegreen; */
     color: rgb(34, 167, 34);

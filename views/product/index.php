@@ -4,23 +4,31 @@
    ?>
 <section class="content mt-5">
    <div class="row">
-      <!-- gambar produk -->
-      <div class="col-sm-4 col-md-4 col-12 p-4">
-         <img src="" alt="productImage" id="productMainImage" class="img-fluid">
-         <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center mt-5">
-               <li class="page-item disabled">
-                  <a class="page-link" style="text-decoration: none; color: inherit;"><</a>
-               </li>
-               <li class="page-item"><a class="page-link" href="#" style="text-decoration: none; color: inherit;"><img src="" alt="tampak depan"></a></li>
-               <li class="page-item"><a class="page-link" href="#" style="text-decoration: none; color: inherit;"><img src="" alt="tampak samping"></a></li>
-               <li class="page-item"><a class="page-link" href="#" style="text-decoration: none; color: inherit;"><img src="" alt="tampak belakang"></a></li>
-               <li class="page-item">
-                  <a class="page-link" href="#" style="text-decoration: none; color: inherit;">></a>
-               </li>
-            </ul>
-         </nav>
-      </div>
+<!-- gambar produk -->
+<div class="col-sm-4 col-md-4 col-12 p-4 product-image-container">
+   <img src="" alt="productImage" id="productMainImage" class="img-fluid">
+   <nav aria-label="Page navigation example">
+      <ul class="image-pagination pagination">
+         <li class="page-item disabled">
+            <a class="page-link" style="text-decoration: none; color: inherit;"><</a>
+         </li>
+         <?php $i = 1 ?>
+         <?php foreach($productImages as $productImage): ?>
+         <li class="page-item">
+            <a class="page-link" href="#" style="text-decoration: none; color: inherit;">
+               <img src="<?= $productImage['image_url'] ?>" alt="Gambar Produk <?= $i ?>">
+            </a>
+         </li>
+         <?php $i++ ?>
+         <?php endforeach; ?>
+         <li class="page-item">
+            <a class="page-link" href="#" style="text-decoration: none; color: inherit;">></a>
+         </li>
+      </ul>
+   </nav>
+</div>
+
+
       <!-- info produk -->
       <div class="col-sm-4 col-md-4 col-12 p-4">
          <h2><?= $product["product_name"] ?></h2>
@@ -100,23 +108,32 @@
       </div>
       <!-- checkout -->
       <div class="col-sm-4 col-md-4 col-12 mt-5 d-flex justify-content-center">
-         <div class="card d-flex flex-column justify-content-between" style="width:18rem;">
+               <div class="card d-flex flex-column justify-content-between" style="width:18rem;">
             <h5 class="mt-2 d-flex justify-content-center">Atur Pilihanmu</h5>
             <div class="ms-2">
                <?php foreach($productVariations as $variation): ?>
-               <p><?= $variation["name"] ?> : <span id="variation-type-<?= $variation['id_variation_type'] ?>" ></span></p>
+               <p><b class="font-weight-bold"><?= $variation["name"] ?></b> : <span id="variation-type-<?= $variation['id_variation_type'] ?>"></span></p>
                <?php endforeach; ?>
-               <p>Jumlah :</p>
-               <p>Subtotal :</p>
+               <div class="d-flex align-items-center mb-3">
+                     <p class="mb-0 me-2"><b>Jumlah:</b></p>
+                     <div class="d-flex align-items-center">
+                        <button type="button" id="decrease-quantity" class="btn btn-outline-secondary btn-sm">-</button>
+                        <input type="number" id="cart-quantity" name="quantity" value="1" min="1" class="form-control mx-2" style="width:60px;">
+                        <button type="button" id="increase-quantity" class="btn btn-outline-secondary btn-sm">+</button>
+                     </div>
+                  </div>
+                  <p><b>Subtotal:</b> <span id="subtotal">Rp 0.00</span></p>
+
             </div>
             <div class="mt-auto text-center">
                <form method="POST" action="<?= BASEURL?>cart/add" id="add-cart">
-                  <input type="hidden" name="quantity" id="cart-quantity" value="1">
-                  <input type="hidden" name="id_combination" id="combination-id" value="">
-                  <button class="btn btn-success mb-2 mt-3" style="width:12rem;">Masukkan Keranjang</button>
+                     <input type="hidden" name="id_combination" id="combination-id" value="">
+                     <button class="btn btn-success mb-2 mt-3" style="width:12rem;">Masukkan Keranjang</button>
                </form>
                <button class="btn laos-outline-button mb-3" style="width:12rem;">Beli Langsung</button>
             </div>
+         </div>
+
             <!-- Aksi utama -->
             <script>
     const productCombinations = [
@@ -189,6 +206,31 @@
         updateDisplayedValues();
     }
 
+
+    let selectedPrice = 0;
+
+    function updateSubtotal() {
+        const quantity = parseInt(document.getElementById('cart-quantity').value, 10);
+        const subtotal = selectedPrice * quantity;
+        document.getElementById('subtotal').textContent = `Rp ${removeTrailingZeros(subtotal.toFixed(2))}`;
+    }
+
+    // Quantity control event listeners
+    document.getElementById('increase-quantity').addEventListener('click', () => {
+        const quantityInput = document.getElementById('cart-quantity');
+        quantityInput.value = parseInt(quantityInput.value, 10) + 1;
+        updateSubtotal();
+    });
+
+    document.getElementById('decrease-quantity').addEventListener('click', () => {
+        const quantityInput = document.getElementById('cart-quantity');
+        const currentValue = parseInt(quantityInput.value, 10);
+        if (currentValue > 1) {
+            quantityInput.value = currentValue - 1;
+            updateSubtotal();
+        }
+    });
+
     function updateDisplayedValues() {
         const selectedCombination = productCombinations.find(comb => {
             // Create a map of the combination details for quick comparison
@@ -216,6 +258,7 @@
             const fullPrice = selectedCombination.price;
             const hasDiscount = discount && discount > 0;
 
+
             // Update displayed variation options
             variationOptions.forEach(option => {
                 if (selectedOptions[option.id_variation_type] === option.id_option) {
@@ -226,11 +269,16 @@
             // Update price and stock
             if (hasDiscount) {
                 const discountedPrice = fullPrice * (1 - discount / 100);
-                document.getElementById('price').textContent = `Rp ${discountedPrice.toFixed(2)}`;
-                document.getElementById('full-price').textContent = `Rp ${fullPrice.toFixed(2)}`;
+                document.getElementById('price').textContent = `Rp ${removeTrailingZeros(discountedPrice.toFixed(2))}`;
+                document.getElementById('full-price').textContent = `Rp ${removeTrailingZeros(fullPrice.toFixed(2))}`;
+               selectedPrice = removeTrailingZeros(discountedPrice.toFixed(2));
+
             } else {
-                document.getElementById('price').textContent = `Rp ${fullPrice.toFixed(2)}`;
+                document.getElementById('price').textContent = `Rp ${removeTrailingZeros(fullPrice.toFixed(2))}`;
+                selectedPrice = removeTrailingZeros(fullPrice.toFixed(2));
             }
+
+            updateSubtotal();
 
             document.getElementById('stock-value').textContent = selectedCombination.stock;
         }
@@ -254,6 +302,64 @@
         }
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Function to update the main image
+        function updateMainImage(imageUrl) {
+            document.getElementById('productMainImage').src = imageUrl;
+        }
+
+        // Function to highlight the selected image
+        function highlightSelectedImage(selectedElement) {
+            document.querySelectorAll('.image-pagination .page-item img').forEach(img => {
+                img.style.border = 'none'; // Remove highlight from all images
+            });
+            selectedElement.style.border = '2px solid gray'; // Highlight selected image
+        }
+
+        // Append option images to pagination if image_url is present
+        const pagination = document.querySelector('.image-pagination');
+        
+
+        variationOptions.forEach(option => {
+            if (option.image_url) {
+                const listItem = document.createElement('li');
+                listItem.className = 'page-item';
+
+                const link = document.createElement('a');
+                link.className = 'page-link';
+                link.href = '#';
+                link.style.textDecoration = 'none';
+                link.style.color = 'inherit';
+
+                const img = document.createElement('img');
+                img.src = option.image_url;
+                img.alt = `Option Image ${option.option_name}`;
+                img.style.width = '50px'; // Adjust size as needed
+                img.style.cursor = 'pointer'; // Add pointer cursor
+
+                img.addEventListener('click', () => {
+                    updateMainImage(option.image_url);
+                    highlightSelectedImage(img);
+                });
+
+                link.appendChild(img);
+                listItem.appendChild(link);
+                pagination.insertBefore(listItem, pagination.querySelector('.page-item:last-child')); // Insert before the last item
+            }
+        });
+
+        // Initialize first image if necessary
+        const firstImage = pagination.querySelector('.page-item img');
+        if (firstImage) {
+            updateMainImage(firstImage.src);
+            highlightSelectedImage(firstImage);
+        }
+    });
+</script>
+
+
+
 
          </div>
       </div>

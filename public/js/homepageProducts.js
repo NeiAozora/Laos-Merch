@@ -137,8 +137,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                         <p class="card-text">
                             ${product.product_name}<br>
-                            <span style="font-weight: bold;">Rp ${discountedPrice}</span>
-                            ${discountValue > 0 ? `<br><span style="text-decoration: line-through; color: #888;">Rp ${avgPrice.toFixed(2)}</span>` : ''}
+                            <span style="font-weight: bold;">Rp ${removeTrailingZeros(discountedPrice)}</span>
+                            ${discountValue > 0 ? `<br><span style="text-decoration: line-through; color: #888;">Rp ${removeTrailingZeros(avgPrice.toFixed(2))}</span>` : ''}
                         </p>
                     </div>
                 </a>
@@ -203,9 +203,31 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateReviews(reviews){
+
+        function censorName(name) {
+            // Split the name into parts (words)
+            const parts = name.split(' ');
+        
+            // Censor each part of the name
+            const censoredParts = parts.map(part => {
+                // Keep the first letter and replace the rest with asterisks
+                return part[0] + '*'.repeat(part.length - 1);
+            });
+        
+            // Join the censored parts back into a single string
+            return censoredParts.join(' ');
+        }
+        
+
         let profilePicture = reviews.profile_picture ?? "https://via.placeholder.com/60";
 
         reviews.forEach(review => {
+            let name = (review.full_name.length > 0) ? review.full_name : review.username;
+            
+            if (review.anonimity < 1){
+                name = censorName(name);
+            }
+        
             let reviewImages = ''; // Ensure reviewImages is initialized
 
             // Create review images HTML
@@ -237,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <img src="${profilePicture}" alt="User Image">
                     </div>
                     <div class="review-details">
-                        <h5>Bobon <span class="review-rating">${stars}</span></h5>
+                        <h5>${name}<span class="review-rating">${stars}</span></h5>
                         <div class="review-date">${review.date_posted}</div>
                         <div class="review-product"><span style="font-weight: bold;">Barang</span>: ${review.product_name}<br><span style="font-weight: bold;">Variasi:</span>: ${variation_name}</div>
                         <div class="review-text">${comment}</div>
