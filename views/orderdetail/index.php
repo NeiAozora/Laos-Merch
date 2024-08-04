@@ -2,7 +2,6 @@
 requireView("partials/head.php");
 requireView("partials/navbar.php");
 
-$order = $data['order'][0];
 ?>
 
 <section class="content">
