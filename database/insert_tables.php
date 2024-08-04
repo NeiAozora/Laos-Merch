@@ -66,7 +66,7 @@ VALUES
 -- Insert Carousels
 INSERT INTO carousels (name, image_url, link, title, subtitle, button_text, button_link)
 VALUES
-    ('Summer Sale', 'https://cdn.discordapp.com/attachments/1036284251865366648/1268922775335338064/image.png?ex=66ae2fed&is=66acde6d&hm=fc02309b77bb557860f2eb2663791037994fa2d2bd104221585f9cf5ef860917&', 'https://example.com/summer_sale', 'LAOS T-Shirt', 'Kaos Open Source', 'Beli Sekarang', 'product/2');
+    ('Kaos', 'https://cdn.discordapp.com/attachments/1036284251865366648/1268922775335338064/image.png?ex=66ae2fed&is=66acde6d&hm=fc02309b77bb557860f2eb2663791037994fa2d2bd104221585f9cf5ef860917&', 'product/2', 'LAOS T-Shirt', 'Kaos Open Source', 'Beli Sekarang', 'product/2');
 
 -- Insert Roles
 INSERT INTO roles (role_name, role_description)

@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Create the product HTML
             const productHTML = `
             <div class="col-6 col-md-3 product-card-container">
-            <div class="card product-card animate-1sec slideIn">
+            <div class="card product-card">
                 ${discountLabel}
                 <a href="${baseUrl}product/${product.id_product}" style="text-decoration: none; color: inherit;">
                     <div class="img-container">
@@ -149,6 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Insert the product HTML into the container
             productsContainer.insertAdjacentHTML('beforeend', productHTML);
         });
+        
         
     }
     
@@ -272,6 +273,7 @@ document.addEventListener('DOMContentLoaded', function() {
             reviewsContainer.insertAdjacentHTML("beforeend", reviewHtml);
 
         })
+
     }
 
     fetchReviews();
