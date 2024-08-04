@@ -18,39 +18,37 @@ requireView("partials/navbar.php");
             height: auto;
         }
     </style>
-
-    <!-- carousel -->
-    <div id="carouselAutoplaying" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <?php foreach ($carousel_items as $index => $item) : ?>
-                <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                    <a href="<?= $item['link'] ?>">
-                        <img src="<?= $item['image_url'] ?>" class="d-block w-100 carousel-img" alt="...">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5><?= $item['title'] ?></h5>
-                            <p><?= $item['subtitle'] ?></p>
-                            <a href="<?= $item['button_link'] ?>" class="btn btn-success"><?= $item['button_text'] ?></a>
-                        </div>
-                    </a>
-                </div>
-            <?php endforeach; ?>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselAutoplaying" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselAutoplaying" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-        <ol class="carousel-indicators">
-            <?php foreach ($carousel_items as $index => $item) : ?>
-                <li data-bs-target="#carouselAutoplaying" data-bs-slide-to="<?= $index ?>" class="<?= $index === 0 ? 'active' : '' ?>"></li>
-            <?php endforeach; ?>
-        </ol>
+    <div class="mt-5"></div>
+<!-- carousel -->
+<div id="carouselAutoplaying" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <?php foreach($carousel_items as $index => $item): ?>
+            <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                <a href="<?= $item['link'] ?>" class="d-block w-100" style="text-decoration: none;">
+                    <img src="<?= $item['image_url'] ?>" class="d-block w-100 carousel-img" alt="...">
+                    <div class="carousel-caption d-none d-md-block text-start">
+                        <h3 class="carousel-title"><?= $item['title'] ?></h3>
+                        <h4 class="carousel-subtitle"><?= $item['subtitle'] ?></h4>
+                        <a href="<?= $item['button_link'] ?>" class="btn btn-success"><?= $item['button_text'] ?></a>
+                    </div>
+                </a>
+            </div>
+        <?php endforeach; ?>
     </div>
-
-
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselAutoplaying" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselAutoplaying" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+    <ol class="carousel-indicators">
+        <?php foreach($carousel_items as $index => $item): ?>
+            <li data-bs-target="#carouselAutoplaying" data-bs-slide-to="<?= $index ?>" class="<?= $index === 0 ? 'active' : '' ?>"></li>
+        <?php endforeach; ?>
+    </ol>
+</div>
 
 
     <!-- card -->

@@ -1,8 +1,8 @@
 <?php
 
 class CarouselModel extends Model {
-    protected $table = 'carousel';
-    protected $primaryKey = 'id';
+    protected $table = 'carousels';
+    protected $primaryKey = 'id_carousels';
     use StaticInstantiator;
 
 }

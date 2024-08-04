@@ -6,7 +6,7 @@
    <div class="row">
 <!-- gambar produk -->
 <div class="col-sm-4 col-md-4 col-12 p-4 product-image-container">
-   <img src="" alt="productImage" id="productMainImage" class="img-fluid">
+   <img src="" alt="productImage" id="productMainImage" class="img-fluid ">
    <nav aria-label="Page navigation example">
       <ul class="image-pagination pagination">
          <li class="page-item disabled">
@@ -14,7 +14,7 @@
          </li>
          <?php $i = 1 ?>
          <?php foreach($productImages as $productImage): ?>
-         <li class="page-item">
+         <li class="page-item animate-1sec slideIn ">
             <a class="page-link" href="#" style="text-decoration: none; color: inherit;">
                <img src="<?= $productImage['image_url'] ?>" alt="Gambar Produk <?= $i ?>">
             </a>
@@ -414,6 +414,14 @@
          </div>
       </div>
    </div>
+
+   <div class="d-flex justify-content-center mt-5">
+        <h3>Ulasan Terbaru</h3>
+    </div>
+    <div class="container mt-5" id="reviews-container">
+
+    </div>
+
 </section>
 <?php
    requireView("partials/footer.php");

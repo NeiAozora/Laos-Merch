@@ -83,6 +83,10 @@ class ProductController extends Controller {
             // $criteria["category_name"] = $searchValue;
             // $criteria["tag"] = $searchValue;
         }
+
+        if (array_key_exists('category', $_GET)){
+            $criteria["category_name"] = $searchValue;
+        }
     
         $products = $this->productModel->getProducts($criteria, true);
     

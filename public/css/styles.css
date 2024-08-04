@@ -56,6 +56,7 @@ html, body {
 
 .laos-outline-button:hover{
     background-color: limegreen;
+    transition: .3s;
     color: white;
 }
 .laos-outline-button.active{
@@ -140,16 +141,65 @@ h3.notfound{
 
 
 /* img setting */
+
+.carousel-inner {
+    position: relative;
+}
+
+.carousel-caption {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    transform: translateY(-50%);
+    /* background: rgba(0, 0, 0, 0.5); */
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.carousel-title {
+    font-size: 5rem;
+    /* margin-bottom: -10px; */
+
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+}
+
+.carousel-subtitle {
+    /* font-size: 2rem; */
+    font-size: 2.2rem;
+
+    font-weight: bold;
+
+    color: #535151;
+}
+/* 
+.carousel-img {
+    object-fit: cover;
+    height: 400px;
+} */
+
 .carousel-img {
     height: 500px; 
     object-fit: cover; 
 }
 
+/* Mobile view adjustments */
 @media (max-width: 768px) {
     .carousel-img {
         height: 300px;
+        /* Make image align to the right */
+        object-position: right;
     }
-    .card.extra{
+
+    .carousel-caption {
+        /* Adjust caption position for mobile view */
+        left: auto;
+        right: 10%;
+        text-align: right;
+    }
+
+    .card.extra {
         width: 100px;
     }
 }
@@ -180,13 +230,12 @@ h3.notfound{
     position: relative;
     max-width: 220px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    transition: transform 0.3s ease, z-index 0.3s ease; /* Smooth transition for transform and z-index */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Hover state for product cards */
 .product-card:hover {
-    transform: translateY(-20px); /* Move the card up by 20px */
-    z-index: 10; /* Ensure the card appears above others */
+    transform: translateY(-20px);
+    box-shadow: rgba(99, 99, 99, 0.4) 0px 4px 16px 0px; 
 }
 
 /* Adjust card sizing and spacing */
@@ -220,6 +269,10 @@ h3.notfound{
     right: -13px;
     display: flex;
     align-items: center;
+}
+
+.img-container img {
+    max-height: 23rem;
 }
 
 .svg-image {
