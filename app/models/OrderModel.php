@@ -12,9 +12,9 @@ class OrderModel extends Model {
 
     public function getAllOrders($id_user, $status = null){
         $query ="
-            SELECT oi.id_order_item, p.product_name, pi.image_url, oi.quantity, GROUP_CONCAT(vo.option_name SEPARATOR ',') as option_names, o.total_price, os.status_name
-            FROM order_items oi
-            JOIN orders o ON oi.id_order = o.id_order
+            SELECT o.id_order, oi.id_order_item, p.product_name, pi.image_url, oi.quantity, GROUP_CONCAT(vo.option_name SEPARATOR ',') as option_names, o.total_price, os.status_name
+            FROM orders o
+            JOIN order_items oi ON o.id_order = oi.id_order
             JOIN order_statuses os ON o.id_status = os.id_status
             JOIN variation_combinations vc ON oi.id_combination = vc.id_combination
             JOIN combination_details cd ON vc.id_combination = cd.id_combination
@@ -34,8 +34,12 @@ class OrderModel extends Model {
         }
 
         $this->db->execute();
-        return $this->db->resultSet(PDO::FETCH_ASSOC);
+        $orders = $this->db->resultSet(PDO::FETCH_ASSOC);
+         if (!$orders) {
+            $orders = [];
+        }
 
+        return $orders;
     }
 
 

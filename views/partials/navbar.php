@@ -62,7 +62,7 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end animate slideIn" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item decoration-none" href="<?= BASEURL ?>user/<?= AuthHelpers::getLoggedInUserData()["id"] ?>/profile">Profil Saya</a></li>
-                                <li><a class="dropdown-item decoration-none" href="#">Pesanan Saya</a></li>
+                                <li><a class="dropdown-item decoration-none" href="<?= BASEURL?>order">Pesanan Saya</a></li>
                                 <li><a class="dropdown-item decoration-none" id="logout" href="#">Logout</a></li>
                             </ul>
                         </div>
