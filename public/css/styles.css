@@ -153,6 +153,20 @@ h3.notfound{
         width: 100px;
     }
 }
+
+.responsive-img {
+    width: 50%; /* Mengisi 100% dari container-nya */
+    max-width: 130px; /* Maksimal lebar gambar 200px */
+    height: auto; /* Menjaga rasio aspek gambar */
+}
+
+/* Aturan untuk gambar di perangkat mobile */
+@media (max-width: 768px) {
+    .responsive-img {
+        max-width: 100px; /* Maksimal lebar gambar 100px pada perangkat mobile */
+    }
+}
+
 /* end img */
 
 

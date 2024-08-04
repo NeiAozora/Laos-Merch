@@ -8,26 +8,26 @@ requireView("partials/navbar.php");
       <div class="container mt-3">
         <h4>Pesananku</h4>   
         <div class="mb-3">
-            <a href="?status=Semua" class="btn laos-outline-button me-2 <?php echo ($status === 'Semua') ? 'active' : ''; ?>">Semua</a>
-            <a href="?status=Diproses" class="btn laos-outline-button me-2 <?php echo ($status === 'Diproses') ? 'active' : ''; ?>">Diproses</a>
-            <a href="?status=Dikirim" class="btn laos-outline-button me-2 <?php echo ($status === 'Dikirim') ? 'active' : ''; ?>">Dikirim</a>
-            <a href="?status=Selesai" class="btn laos-outline-button me-2 <?php echo ($status === 'Selesai') ? 'active' : ''; ?>">Selesai</a>
-            <a href="?status=Dibatalkan" class="btn laos-outline-button me-2 <?php echo ($status === 'Dibatalkan') ? 'active' : ''; ?>">Dibatalkan</a>
+            <a href="?status=Semua" class="btn laos-outline-button me-2 my-2 <?php echo ($status === 'Semua') ? 'active' : ''; ?>">Semua</a>
+            <a href="?status=Diproses" class="btn laos-outline-button me-2 my-2 <?php echo ($status === 'Diproses') ? 'active' : ''; ?>">Diproses</a>
+            <a href="?status=Dikirim" class="btn laos-outline-button me-2 my-2 <?php echo ($status === 'Dikirim') ? 'active' : ''; ?>">Dikirim</a>
+            <a href="?status=Selesai" class="btn laos-outline-button me-2 my-2 <?php echo ($status === 'Selesai') ? 'active' : ''; ?>">Selesai</a>
+            <a href="?status=Dibatalkan" class="btn laos-outline-button me-2 my-2 <?php echo ($status === 'Dibatalkan') ? 'active' : ''; ?>">Dibatalkan</a>
         </div>
         <div class="row justify-content-center">
-        <?php if (!empty($orders)) : ?>
-            <?php foreach ($orders as $item) : ?>
+            <?php foreach ($orders as $order) : ?>
+                <?php if (!empty($order['product_name']) && !empty($order['quantity']) && !empty($order['total_price'])) : ?>
             <div class="card">
                 <div class="card-body row justify-content-between align-items-center">
                     <div class="col-sm-4 col-md-4 col-12 d-flex align-items-center">
-                        <img src="<?= $item['product_url']?>" alt="ini produk" class="img-fluid">
+                        <img src="<?= $order['image_url']?>" alt="ini produk" class="img-fluid responsive-img rounded mb-3">
                         <!-- Menambahkan nama produk di sebelah kanan gambar -->
                         <div class="product-name ms-3">
-                            <h4><?= $item['product_name']?></h4>
+                            <h4><?= $order['product_name']?></h4>
                             <div style="display: flex;">
                                 <div class="me20">
                                     <h6 class="title-detail" >Variasi Produk:</h6>
-                                    <p><?= $item['option_names']?></p>
+                                    <p><?= $order['option_names']?></p>
                                 </div>
                                 <!-- <div class="me20">
                                     <h6 class="title-detail">Ukuran:</h6>
@@ -38,7 +38,7 @@ requireView("partials/navbar.php");
                     </div>
                     <div class="col-sm-4 col-md-4 col-12">                     
                         <h6 class="title-detail mb-1">Jumlah:</h6>
-                        <h5><?= $item['quantity']?></h5>
+                        <h5><?= $order['quantity']?></h5>
                         <h6 class="title-detail">Total:</h6> 
                         <h5>Rp. <?= number_format($order['total_price'], 0, ',', '.')?></h5>
                     </div>
@@ -46,7 +46,7 @@ requireView("partials/navbar.php");
                     <div class="col-sm-4 col-md-4 col-12">
                         <h5 class="title-detail ">Status:</h5>
                         <p class="alert alert-success mt-1" role="alert" style="max-width:fit-content;">
-                           <?= $item['status_name']?>
+                           <?= $order['status_name']?>
                         </p>
                     </div>      
                     <div class="col-sm-4 col-md-4 col-12">
@@ -55,10 +55,10 @@ requireView("partials/navbar.php");
                     </div>
                 </div>
             </div>
-            <?php endforeach;?>
             <?php else:?>
-                <p>Belum ada pesanan...</p>   
+                <h6>Belum ada pesanan...</h6>   
             <?php endif;?>
+            <?php endforeach;?>
         </div>
       </div>
   </section>
