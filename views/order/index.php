@@ -51,7 +51,25 @@ requireView("partials/navbar.php");
                     </div>      
                     <div class="col-sm-4 col-md-4 col-12">
                         <a href="<?= BASEURL?>order/detail/<?= $order['id_order']?>" class="btn btn-secondary me-2">Detail Pesanan</a>
-                        <a href="<?= BASEURL?>" class="btn btn-success">Pesanan Selesai</a>
+                        <a href="<?= BASEURL?>" class="btn btn-success" data-order-id="<?= $order['id_order']?>"  data-bs-toggle="modal" data-bs-target="#exampleModal">Pesanan Selesai</a>
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Peringatan!</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Yakin ingin selesaikan pesanan?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="button" id="ConfirmCompleteOrder" class="btn btn-success">Selesaikan Pesanan</button>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -64,39 +82,54 @@ requireView("partials/navbar.php");
   </section>
 
 
-    <!-- Mengatur tombol aktif berdasarkan status -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        // Ambil status dari query string
-        const params = new URLSearchParams(window.location.search);
-        const status = params.get('status') || 'Semua'; // Default ke 'Semua' jika tidak ada status
+   
+    <!-- memperbarui status ketika menekan tombol selesaikan pesanan dan memfilter status -->
+     <script>
+            document.addEventListener('DOMContentLoaded', function () {
+            const buttons = document.querySelectorAll('.laos-outline-button');
+            const completeOrderButton = document.getElementById('confirmCompleteOrder');
 
-        // Ambil semua tombol
-        const buttons = document.querySelectorAll('.laos-outline-button');
+            let orderId = null;
 
-        buttons.forEach(button => {
-            // Ambil status dari href tombol
-            const buttonStatus = new URL(button.href).searchParams.get('status');
+            // Menyimpan ID pesanan yang akan diselesaikan saat tombol "Pesanan Selesai" diklik
+            document.querySelectorAll('.btn-success').forEach(button => {
+                button.addEventListener('click', function() {
+                    orderId = this.getAttribute('data-order-id'); // Ambil ID pesanan dari atribut data
+                });
+            });
 
-            // Setel kelas active jika status tombol sama dengan status query string
-            if (buttonStatus === status) {
-                button.classList.add('active');
-            } else {
-                button.classList.remove('active');
-            }
-        });
+            completeOrderButton.addEventListener('click', function() {
+                if (orderId) {
+                    fetch('/order/updateStatus', { // Arahkan ke rute updateStatus
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: new URLSearchParams({
+                            'id_order': orderId,
+                            'status': 'Delivered' // Status yang ingin diupdate
+                        })
+                    })
+                    .then(response => response.text())
+                    .then(result => {
+                        if (result === 'success') {
+                            // Reload page to reflect the status change
+                            window.location.reload();
+                        } else {
+                            alert('Terjadi kesalahan saat memperbarui status pesanan.');
+                        }
+                    });
+                }
+            });
 
-        // Tambahkan event listener untuk mengubah status saat tombol diklik
-        buttons.forEach(button => {
-            button.addEventListener('click', function (event) {
-                // Hapus kelas active dari semua tombol
-                buttons.forEach(btn => btn.classList.remove('active'));
-                // Tambahkan kelas active pada tombol yang diklik
-                event.currentTarget.classList.add('active');
+            buttons.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    buttons.forEach(btn => btn.classList.remove('active'));
+                    event.currentTarget.classList.add('active');
+                });
             });
         });
-    });
 
-    </script>
+     </script>
 <?php
 requireView("partials/footer.php");

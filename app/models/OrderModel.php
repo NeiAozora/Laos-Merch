@@ -23,13 +23,15 @@ class OrderModel extends Model {
             JOIN product_images pi ON p.id_product = pi.id_product
             WHERE o.id_user = :id_user
         ";
-        if($status !== null AND $status !== 'Semua'){
+        if($status !== null && $status !== 'Semua'){
             $query .= 'AND os.status_name = :status';
         }
 
+        $query .= " GROUP BY o.id_order, oi.id_order_item, p.product_name, pi.image_url, oi.quantity, o.total_price, os.status_name";
+
         $this->db->query($query);
         $this->db->bind(':id_user', $id_user);
-        if($status !== null AND $status !== 'Semua'){
+        if($status !== null && $status !== 'Semua'){
             $this->db->bind(':status', $status);
         }
 
@@ -43,7 +45,7 @@ class OrderModel extends Model {
     }
 
 
-    public function getOrderById($id_order){
+    public function getOrderById($id, $id_user){
         $this->db->query("
             SELECT o.id_order, o.order_date, os.status_name, o.total_price, s.shipping_method, GROUP_CONCAT(sa.street_address, sa.city, sa.state, sa.postal_code SEPARATOR ',') as address,
                    sa.recipient_name, u.wa_number, p.product_name, pi.image_url, 
@@ -59,12 +61,24 @@ class OrderModel extends Model {
             JOIN product_images pi ON p.id_product = pi.id_product
             JOIN combination_details cd ON vc.id_combination = cd.id_combination
             JOIN variation_options vo ON cd.id_option = vo.id_option
-            WHERE o.id_order = :id_order
-            GROUP BY oi.id_order_item
+            WHERE o.id_order = :id_order AND o.id_user = :id_user
         ");
-        $this->db->bind(':id_order', $id_order);
+        $this->db->bind(':id_order', $id);
+        $this->db->bind(':id_user', $id_user);
 
         $this->db->execute();
         return $this->db->single(PDO::FETCH_ASSOC);
+    }
+
+
+    public function updateOrderStatus($id_order, $status){
+        $this->db->query('
+            UPDATE orders SET id_status = (SELECT id_status FROM order_statuses WHERE status_name = :status) WHERE id_order = :id_order
+        ');
+
+        $this->db->bind(':id_order', $id_order);
+        $this->db->bind(':status', $status);
+
+        return $this->db->execute();
     }
 }
