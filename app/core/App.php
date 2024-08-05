@@ -10,9 +10,9 @@ class App {
         $whoops->writeToOutput(false);
         $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
         Router::setExceptionHandler(function(Throwable $e) use ($whoops){
+            http_response_code(500);
             echo $whoops->handleException($e);
         });
-
         Router::getInstance()->dispatch(); // Dispatch using Router
     }
 

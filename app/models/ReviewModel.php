@@ -80,16 +80,22 @@ class ReviewModel extends Model {
 
     public function getReviewsByProductId(int $idProduct) {
         $this->db->query("
-            SELECT r.*, 
-                   u.username, 
-                   CONCAT(u.first_name, ' ', u.last_name) AS full_name, 
-                   u.profile_picture, 
-                   ri.id_review_image, 
-                   ri.image_url, 
-                   p.product_name, 
-                   vc.id_combination,  -- Ensure this column exists and is correct
-                   vo.option_name AS variation_name,
-                   vt.name AS variation_type_name
+        SELECT r.id_review, 
+                    r.id_combination,  -- Ensure this column exists and is correct
+                    r.id_user, 
+                    u.username, 
+                    CONCAT(u.first_name, ' ', u.last_name) AS full_name, 
+                    u.profile_picture, 
+                    r.rating, 
+                    r.comment, 
+                    r.anonymity, 
+                    r.date_posted, 
+                    p.product_name,
+                    vc.id_combination, -- Ensure this column exists and is correct
+                    vt.name AS variation_type_name,
+                    vo.option_name AS variation_name,
+                    ri.id_review_image,
+                    ri.image_url
             FROM reviews r
             LEFT JOIN review_images ri ON r.id_review = ri.id_review
             LEFT JOIN users u ON r.id_user = u.id_user

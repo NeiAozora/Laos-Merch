@@ -39,7 +39,7 @@ class ReviewController {
         }
     
         // Fetch reviews using the model
-        $reviews = $this->reviewModel->getReviewsByProductId((int) $_GET['product']);
+        $reviews = $this->reviewModel->getReviewsByProductId((int) $id);
     
         // Respond with the reviews in JSON format
         header('Content-Type: application/json');

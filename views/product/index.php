@@ -4,33 +4,31 @@
    ?>
 <section class="content mt-5">
    <div class="row">
-<!-- gambar produk -->
-<div class="col-sm-4 col-md-4 col-12 p-4 product-image-container">
-   <img src="" alt="productImage" id="productMainImage" class="img-fluid ">
-   <nav aria-label="Page navigation example">
-      <ul class="image-pagination pagination">
-         <li class="page-item disabled">
-            <a class="page-link" style="text-decoration: none; color: inherit;"><</a>
-         </li>
-         <?php $i = 1 ?>
-         <?php foreach($productImages as $productImage): ?>
-         <li class="page-item animate-1sec slideIn ">
-            <a class="page-link" href="#" style="text-decoration: none; color: inherit;">
-               <img src="<?= $productImage['image_url'] ?>" alt="Gambar Produk <?= $i ?>">
-            </a>
-         </li>
-         <?php $i++ ?>
-         <?php endforeach; ?>
-         <li class="page-item">
-            <a class="page-link" href="#" style="text-decoration: none; color: inherit;">></a>
-         </li>
-      </ul>
-   </nav>
-</div>
-
-
+      <!-- gambar produk -->
+      <div class="col-sm-4 col-md-4 col-12 p-4 product-image-container">
+         <img src="" alt="productImage" id="productMainImage" class="img-fluid ">
+         <nav aria-label="Page navigation example">
+            <ul class="image-pagination pagination">
+               <li class="page-item disabled">
+                  <a class="page-link" style="text-decoration: none; color: inherit;"><</a>
+               </li>
+               <?php $i = 1 ?>
+               <?php foreach($productImages as $productImage): ?>
+               <li class="page-item animate-1sec slideIn ">
+                  <a class="page-link" href="#" style="text-decoration: none; color: inherit;">
+                  <img src="<?= $productImage['image_url'] ?>" alt="Gambar Produk <?= $i ?>">
+                  </a>
+               </li>
+               <?php $i++ ?>
+               <?php endforeach; ?>
+               <li class="page-item">
+                  <a class="page-link" href="#" style="text-decoration: none; color: inherit;">></a>
+               </li>
+            </ul>
+         </nav>
+      </div>
       <!-- info produk -->
-      <div class="col-sm-4 col-md-4 col-12 p-4">
+      <div class="col-sm-4 col-md-4 col-12 p-4 container">
          <h2><?= $product["product_name"] ?></h2>
          <p class="title-detail">Stok Tersedia: <span id="stock-value"></span></p>
          <div class="d-flex">
@@ -89,18 +87,18 @@
          <p><?= $product["description"] ?></p>
          <p class="title-detail">Pilih Variasi Anda</p>
          <div id="variations-container">
-         <?php foreach($productVariations as $variation): ?>
+            <?php foreach($productVariations as $variation): ?>
             <div class="variation-group" data-variation-type="<?= $variation['id_variation_type'] ?>">
                <label for="variation-type-<?= $variation['id_variation_type'] ?>" id="<?= $variation['id_variation_type'] ?>"><?= $variation["name"]?>:</label>
                <div>
-                     <?php foreach($variation["variation_options"] as $index => $option): ?>
-                     <button 
-                        class="btn laos-outline-button <?= $index === 0 ? 'active' : '' ?>" 
-                        data-option-id="<?= $option['id_option'] ?>" 
-                        onclick="chooseVariation('<?= $option['id_option'] ?>', <?= $variation['id_variation_type'] ?>)">
-                        <?= $option["option_name"] ?>
-                     </button>
-                     <?php endforeach; ?>
+                  <?php foreach($variation["variation_options"] as $index => $option): ?>
+                  <button 
+                     class="btn laos-outline-button <?= $index === 0 ? 'active' : '' ?>" 
+                     data-option-id="<?= $option['id_option'] ?>" 
+                     onclick="chooseVariation('<?= $option['id_option'] ?>', <?= $variation['id_variation_type'] ?>)">
+                  <?= $option["option_name"] ?>
+                  </button>
+                  <?php endforeach; ?>
                </div>
             </div>
             <?php endforeach; ?>
@@ -108,321 +106,283 @@
       </div>
       <!-- checkout -->
       <div class="col-sm-4 col-md-4 col-12 mt-5 d-flex justify-content-center">
-               <div class="card d-flex flex-column justify-content-between" style="width:18rem;">
+         <div class="card d-flex flex-column justify-content-between" style="width:18rem;">
             <h5 class="mt-2 d-flex justify-content-center">Atur Pilihanmu</h5>
             <div class="ms-2">
                <?php foreach($productVariations as $variation): ?>
                <p><b class="font-weight-bold"><?= $variation["name"] ?></b> : <span id="variation-type-<?= $variation['id_variation_type'] ?>"></span></p>
                <?php endforeach; ?>
                <div class="d-flex align-items-center mb-3">
-                     <p class="mb-0 me-2"><b>Jumlah:</b></p>
-                     <div class="d-flex align-items-center">
-                        <button type="button" id="decrease-quantity" class="btn btn-outline-secondary btn-sm">-</button>
-                        <input type="number" id="cart-quantity" name="quantity" value="1" min="1" class="form-control mx-2" style="width:60px;">
-                        <button type="button" id="increase-quantity" class="btn btn-outline-secondary btn-sm">+</button>
-                     </div>
+                  <p class="mb-0 me-2"><b>Jumlah:</b></p>
+                  <div class="d-flex align-items-center">
+                     <button type="button" id="decrease-quantity" class="btn btn-outline-secondary btn-sm">-</button>
+                     <input type="number" id="cart-quantity" name="quantity" value="1" min="1" class="form-control mx-2" style="width:60px;">
+                     <button type="button" id="increase-quantity" class="btn btn-outline-secondary btn-sm">+</button>
                   </div>
-                  <p><b>Subtotal:</b> <span id="subtotal">Rp 0.00</span></p>
-
+               </div>
+               <p><b>Subtotal:</b> <span id="subtotal">Rp 0.00</span></p>
             </div>
             <div class="mt-auto text-center">
                <form method="POST" action="<?= BASEURL?>cart/add" id="add-cart">
-                     <input type="hidden" name="id_combination" id="combination-id" value="">
-                     <button class="btn btn-success mb-2 mt-3" style="width:12rem;">Masukkan Keranjang</button>
+                  <input type="hidden" name="id_combination" id="combination-id" value="">
+                  <input type="hidden" name="quantity" id="input-quantity" value="">
+                  <button class="btn btn-success mb-2 mt-3" style="width:12rem;">Masukkan Keranjang</button>
                </form>
                <button class="btn laos-outline-button mb-3" style="width:12rem;">Beli Langsung</button>
             </div>
          </div>
+      </div>
+   </div>
+   </div>
+   <div class="container">
+    <!-- rekomendasi produk lainnya -->
+    <?php if (count($products) > 0 ): ?>
+    <h3 class="d-flex justify-content-center mt-5">Produk Lainnya</h3>
+    <?php endif; ?>
+       <div class="row  " id="products-container">
 
-            <!-- Aksi utama -->
-            <script>
-    const productCombinations = [
-        <?php foreach($productCombinations as $combination): ?>
+
+        <?php
+
+        function updateProducts($products) {
+            $filledStar = '
+            <svg class="star" width="15" height="14" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 2px;">
+              <path d="M10.1304 0L12.4293 7.07548H19.8689L13.8501 11.4484L16.1491 18.5238L10.1304 14.151L4.11159 18.5238L6.41055 11.4484L0.391793 7.07548H7.83139L10.1304 0Z" fill="#FFC100"/>
+            </svg>';
+            
+            $unfilledStar = '
+            <svg class="star" width="15" height="14" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 2px;">
+              <path d="M9.76121 0L12.0602 7.07548H19.4998L13.481 11.4484L15.78 18.5238L9.76121 14.151L3.74245 18.5238L6.04141 11.4484L0.0226526 7.07548H7.46225L9.76121 0Z" fill="#D9D9D9"/>
+            </svg>';
+
+            $output = '';
+            
+            if (count($products) < 1) {
+            } else {
+                foreach ($products as $product) {
+                    $avgPrice = (float)$product['avg_price'];
+                    $discountValue = (float)$product['discount_value'];
+                    $discountLabel = '';
+
+                    if ($discountValue > 0) {
+                        $discountLabel = '
+                        <div class="discount-label">
+                            <svg class="svg-image" viewBox="0 0 79 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M78.988 29.9637L65.3345 53.6189L65.334 29.9638L78.988 29.9637Z" fill="#830D0B"/>
+                                <path d="M0 0H79V30H0L11 15L0 0Z" fill="#D7211E"/>
+                            </svg>
+                            <div class="overlay-text">' . round($discountValue) . '%</div>
+                        </div>';
+                    }
+
+                    $discountedPrice = number_format($avgPrice * (1 - $discountValue / 100), 2);
+
+                    $starRatingHTML = '';
+                    $fullStars = floor($product['avg_rating']);
+                    $halfStar = $product['avg_rating'] % 1 !== 0;
+                    $emptyStars = 5 - $fullStars - ($halfStar ? 1 : 0);
+
+                    for ($i = 0; $i < $fullStars; $i++) {
+                        $starRatingHTML .= $filledStar;
+                    }
+                    if ($halfStar) {
+                        $starRatingHTML .= '
+                        <svg class="star" width="15" height="14" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 2px;">
+                            <path d="M10.1304 0L12.4293 7.07548H19.8689L13.8501 11.4484L16.1491 18.5238L10.1304 14.151L4.11159 18.5238L6.41055 11.4484L0.391793 7.07548H7.83139L10.1304 0Z" fill="#FFC100" style="clip-path: inset(0 50% 0 0);"/>
+                        </svg>';
+                    }
+                    for ($i = 0; $i < $emptyStars; $i++) {
+                        $starRatingHTML .= $unfilledStar;
+                    }
+
+                    $productHTML = '
+                    <div class="col-6 col-md-3 product-card-container">
+                        <div class="card product-card">
+                            ' . $discountLabel . '
+                            <a href="product/' . htmlspecialchars($product['id_product']) . '" style="text-decoration: none; color: inherit;">
+                                <div class="img-container">
+                                    <img src="' . htmlspecialchars($product['product_image']) . '" class="card-img-top" alt="' . htmlspecialchars($product['product_name']) . '">
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex flex-row mb-2">
+                                        ' . $starRatingHTML . '
+                                    </div>
+                                    <p class="card-text">
+                                        ' . htmlspecialchars($product['product_name']) . '<br>
+                                        <span style="font-weight: bold;">Rp ' . removeTrailingZeros($discountedPrice) . '</span>
+                                        ' . ($discountValue > 0 ? '<br><span style="text-decoration: line-through; color: #888;">Rp ' . removeTrailingZeros(number_format($avgPrice, 2)) . '</span>' : '') . '
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>';
+
+                    $output .= $productHTML;
+                }
+            }
+            
+            return $output;
+        }
+
+        function removeTrailingZeros($price) {
+            return rtrim(rtrim($price, '0'), '.');
+        }
+
+        // Fetch and display products (default page and search)
+        echo updateProducts($products);
+        ?>
+        </div>
+
+    </div>
+
+<?php
+
+$apiUrl = BASEURL . "api/reviews/product/" . $product['id_product'];;
+$reviewsData = file_get_contents($apiUrl);
+$reviews = json_decode($reviewsData, true)['reviews'];
+
+
+function censorName($name) {
+   $parts = explode(' ', $name);
+   $censoredParts = array_map(function($part) {
+       return $part[0] . str_repeat('*', strlen($part) - 1);
+   }, $parts);
+   return implode(' ', $censoredParts);
+}
+
+function escapeHtml($string) {
+   return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+}
+?>
+
+?>
+
+<div class="container mt-5" id="reviews-container">
+    <?php if (!empty($reviews)) : ?>
+        <div class="d-flex justify-content-center mt-5" id="reviews-header">
+            <h3>Ulasan Terbaru</h3>
+        </div>
+
+        <?php
+        $reviewHtmls = '';
+        foreach ($reviews as $review) {
+            $profilePicture = !empty($review['profile_picture']) ? $review['profile_picture'] : "https://via.placeholder.com/60";
+            $name = !empty($review['full_name']) ? $review['full_name'] : $review['username'];
+            if ($review['anonymity'] > 0) {
+                $name = censorName($name);
+            }
+            $stars = str_repeat('&#9733;', $review['rating']) . str_repeat('&#9734;', 5 - $review['rating']);
+            $variation_name = implode(', ', array_map(function($variation) {
+                return $variation['variation_name'];
+            }, $review['variations']));
+            $comment = escapeHtml($review['comment']);
+            
+            $reviewHtmls .= '
+                <div class="review-card">
+                    <div class="review-image">
+                        <img src="' . $profilePicture . '" alt="User Image">
+                    </div>
+                    <div class="review-details">
+                        <h5>' . $name . '<span class="review-rating">' . $stars . '</span></h5>
+                        <div class="review-date">' . $review['date_posted'] . '</div>
+                        <div class="review-product">
+                            <span style="font-weight: bold;">Barang</span>: ' . $review['product_name'] . '<br>
+                            <span style="font-weight: bold;">Variasi</span>: ' . $variation_name . '
+                        </div>
+                        <div class="review-text">' . $comment . '</div>
+                    </div>';
+            if (!empty($review['images'])) {
+                foreach ($review['images'] as $image) {
+                    $reviewHtmls .= '
+                        <div class="review-product-image">
+                            <img src="' . $image['image_url'] . '" alt="Product Image">
+                        </div>';
+                }
+            }
+            $reviewHtmls .= '</div>';
+        }
+        ?>
+
+        <!-- Reviews HTML Placeholder -->
+        <div id="reviews-cards" class="reviews-cards">
+            <?php echo $reviewHtmls; ?>
+        </div>
+
+        <!-- Pagination Controls -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center mt-5">
+                <li class="page-item" id="prev-page">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" id="page-info"><span class="page-link"></span></li>
+                <li class="page-item" id="next-page">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+    <?php else : ?>
+        <p>No reviews found.</p>
+    <?php endif; ?>
+</div>
+
+<!-- Aksi utama -->
+<script>
+   const productCombinations = [
+         <?php foreach($productCombinations as $combination): ?>
             {
-                id_combination: <?= $combination['id_combination'] ?>,
-                id_product: <?= $combination['id_product'] ?>,
-                price: <?= number_format($combination['price'], 2, '.', '') ?>,
-                stock: <?= $combination['stock'] ?>,
-                combination_details: <?= json_encode($combination['combination_details']) ?>
+               id_combination: <?= $combination['id_combination'] ?>,
+               id_product: <?= $combination['id_product'] ?>,
+               price: <?= number_format($combination['price'], 2, '.', '') ?>,
+               stock: <?= $combination['stock'] ?>,
+               combination_details: <?= json_encode($combination['combination_details']) ?>
             },
-        <?php endforeach; ?>
-    ];
-
-    <?php
-
-    ?>
-
+         <?php endforeach; ?>
+   ];
+   
+   <?php
+      ?>
+   
       const variationOptions = [
          <?php
-            foreach ($variationOptions as $variationOption) {
-               $id_option = htmlspecialchars($variationOption['id_option'], ENT_QUOTES, 'UTF-8');
-               $id_variation_type = htmlspecialchars($variationOption['id_variation_type'], ENT_QUOTES, 'UTF-8');
-               $option_name = htmlspecialchars($variationOption['option_name'], ENT_QUOTES, 'UTF-8');
-               $image_url = htmlspecialchars($variationOption['image_url'], ENT_QUOTES, 'UTF-8');
-
-               echo json_encode([
-                  "id_option" => $id_option,
-                  "id_variation_type" => $id_variation_type,
-                  "option_name" => $option_name,
-                  "image_url" => $image_url
-               ]) . ",\n";
-            }
-         ?>
+      foreach ($variationOptions as $variationOption) {
+         $id_option = htmlspecialchars($variationOption['id_option'], ENT_QUOTES, 'UTF-8');
+         $id_variation_type = htmlspecialchars($variationOption['id_variation_type'], ENT_QUOTES, 'UTF-8');
+         $option_name = htmlspecialchars($variationOption['option_name'], ENT_QUOTES, 'UTF-8');
+         $image_url = htmlspecialchars($variationOption['image_url'], ENT_QUOTES, 'UTF-8');
+      
+         echo json_encode([
+            "id_option" => $id_option,
+            "id_variation_type" => $id_variation_type,
+            "option_name" => $option_name,
+            "image_url" => $image_url
+         ]) . ",\n";
+      }
+      ?>
       ];
-
-    // Create a map for quick lookup of id_variation_type based on id_option
-    const optionMap = variationOptions.reduce((map, option) => {
-        map[option.id_option] = option.id_variation_type;
-        return map;
-    }, {});
-
-
-    const discount = <?= json_encode($discount['discount_value'] ?? null) ?>;
-
-    // Initialize selectedOptions with null values
-    let selectedOptions = {
-        <?php foreach($productVariations as $variation): ?>
+   
+   // Create a map for quick lookup of id_variation_type based on id_option
+   const optionMap = variationOptions.reduce((map, option) => {
+         map[option.id_option] = option.id_variation_type;
+         return map;
+   }, {});
+   
+   
+   const discount = <?= json_encode($discount['discount_value'] ?? null) ?>;
+   
+   // Initialize selectedOptions with null values
+   let selectedOptions = {
+         <?php foreach($productVariations as $variation): ?>
             <?= $variation['id_variation_type'] ?>: null,
-        <?php endforeach; ?>
-    };
-
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.variation-group').forEach(group => {
-            const firstOption = group.querySelector('.btn');
-            if (firstOption) {
-                const variationTypeId = group.getAttribute('data-variation-type');
-                firstOption.classList.add('active');
-                selectedOptions[variationTypeId] = firstOption.getAttribute('data-option-id');
-            }
-        });
-        updateDisplayedValues();
-    });
-
-    function chooseVariation(optionId, variationTypeId) {
-        selectedOptions[variationTypeId] = optionId;
-        document.querySelectorAll(`.variation-group[data-variation-type="${variationTypeId}"] .btn`).forEach(btn => {
-            btn.classList.toggle('active', btn.getAttribute('data-option-id') === optionId);
-        });
-        updateDisplayedValues();
-    }
-
-
-    let selectedPrice = 0;
-
-    function updateSubtotal() {
-        const quantity = parseInt(document.getElementById('cart-quantity').value, 10);
-        const subtotal = selectedPrice * quantity;
-        document.getElementById('subtotal').textContent = `Rp ${removeTrailingZeros(subtotal.toFixed(2))}`;
-    }
-
-    // Quantity control event listeners
-    document.getElementById('increase-quantity').addEventListener('click', () => {
-        const quantityInput = document.getElementById('cart-quantity');
-        quantityInput.value = parseInt(quantityInput.value, 10) + 1;
-        updateSubtotal();
-    });
-
-    document.getElementById('decrease-quantity').addEventListener('click', () => {
-        const quantityInput = document.getElementById('cart-quantity');
-        const currentValue = parseInt(quantityInput.value, 10);
-        if (currentValue > 1) {
-            quantityInput.value = currentValue - 1;
-            updateSubtotal();
-        }
-    });
-
-    function updateDisplayedValues() {
-        const selectedCombination = productCombinations.find(comb => {
-            // Create a map of the combination details for quick comparison
-            const combinationDetailsMap = comb.combination_details.reduce((map, detail) => {
-                map[optionMap[detail.id_option]] = detail.id_option;
-                return map;
-            }, {});
-
-            // Compare the selected options with the combination details
-            return Object.keys(combinationDetailsMap).every(key => {
-                return selectedOptions[key] === combinationDetailsMap[key].toString();
-            });
-        });
-
-
-
-        if (!selectedCombination) {
-            console.log("Selected combination not found.");
-            window.location = "<?= BASEURL ?>error?code=400&message=Bad%20Request&detailMessage=Produk%20memiliki%20kombinasi%20yang%20tidak%20valid.%20Segera%20hubungi%20admin.";
-
-            return;
-        }
-
-        if (selectedCombination) {
-            const fullPrice = selectedCombination.price;
-            const hasDiscount = discount && discount > 0;
-
-
-            // Update displayed variation options
-            variationOptions.forEach(option => {
-                if (selectedOptions[option.id_variation_type] === option.id_option) {
-                    document.getElementById('variation-type-' + option.id_variation_type).textContent = option.option_name;
-                }
-            });
-
-            // Update price and stock
-            if (hasDiscount) {
-                const discountedPrice = fullPrice * (1 - discount / 100);
-                document.getElementById('price').textContent = `Rp ${removeTrailingZeros(discountedPrice.toFixed(2))}`;
-                document.getElementById('full-price').textContent = `Rp ${removeTrailingZeros(fullPrice.toFixed(2))}`;
-               selectedPrice = removeTrailingZeros(discountedPrice.toFixed(2));
-
-            } else {
-                document.getElementById('price').textContent = `Rp ${removeTrailingZeros(fullPrice.toFixed(2))}`;
-                selectedPrice = removeTrailingZeros(fullPrice.toFixed(2));
-            }
-
-            updateSubtotal();
-
-            document.getElementById('stock-value').textContent = selectedCombination.stock;
-        }
-    }
-
-
-    document.querySelector('#add-cart').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const selectedCombination = productCombinations.find(comb => {
-            return comb.combination_details.every(detail => {
-                return selectedOptions[detail.id_variation_type] == detail.id_option;
-            });
-        });
-
-        if (selectedCombination) {
-            document.getElementById('combination-id').value = selectedCombination.id_combination;
-            event.target.submit();
-        } else {
-            console.log("Selected combination is not valid for adding to cart.");
-        }
-    });
+         <?php endforeach; ?>
+   };
 </script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Function to update the main image
-        function updateMainImage(imageUrl) {
-            document.getElementById('productMainImage').src = imageUrl;
-        }
-
-        // Function to highlight the selected image
-        function highlightSelectedImage(selectedElement) {
-            document.querySelectorAll('.image-pagination .page-item img').forEach(img => {
-                img.style.border = 'none'; // Remove highlight from all images
-            });
-            selectedElement.style.border = '2px solid gray'; // Highlight selected image
-        }
-
-        // Append option images to pagination if image_url is present
-        const pagination = document.querySelector('.image-pagination');
-        
-
-        variationOptions.forEach(option => {
-            if (option.image_url) {
-                const listItem = document.createElement('li');
-                listItem.className = 'page-item';
-
-                const link = document.createElement('a');
-                link.className = 'page-link';
-                link.href = '#';
-                link.style.textDecoration = 'none';
-                link.style.color = 'inherit';
-
-                const img = document.createElement('img');
-                img.src = option.image_url;
-                img.alt = `Option Image ${option.option_name}`;
-                img.style.width = '50px'; // Adjust size as needed
-                img.style.cursor = 'pointer'; // Add pointer cursor
-
-                img.addEventListener('click', () => {
-                    updateMainImage(option.image_url);
-                    highlightSelectedImage(img);
-                });
-
-                link.appendChild(img);
-                listItem.appendChild(link);
-                pagination.insertBefore(listItem, pagination.querySelector('.page-item:last-child')); // Insert before the last item
-            }
-        });
-
-        // Initialize first image if necessary
-        const firstImage = pagination.querySelector('.page-item img');
-        if (firstImage) {
-            updateMainImage(firstImage.src);
-            highlightSelectedImage(firstImage);
-        }
-    });
-</script>
-
-
-
-
-         </div>
-      </div>
-   </div>
-   <!-- rekomendasi produk lainnya -->
-   <h3 class="d-flex justify-content-center mt-5">Produk Lainnya</h3>
-   <div class="container">
-      <div class="row justify-content-center">
-         <div class="col-6 col-md-3 mt-3">
-            <div class="card extra" style="text-align: left;">
-               <a href="#" style="text-decoration: none; color: inherit;">
-                  <img src="#" class="card-img-top" alt="ini foto">
-                  <div class="card-body">
-                     <h5 class="card-title">Produk 1</h5>
-                     <p class="card-text">Rating: 5/5</p>
-                  </div>
-               </a>
-            </div>
-         </div>
-         <div class="col-6 col-md-3 mt-3">
-            <div class="card extra" style="text-align: left;">
-               <a href="#" style="text-decoration: none; color: inherit;">
-                  <img src="#" class="card-img-top" alt="ini foto">
-                  <div class="card-body">
-                     <h5 class="card-title">Produk 2</h5>
-                     <p class="card-text">Rating: 5/5</p>
-                  </div>
-               </a>
-            </div>
-         </div>
-         <div class="col-6 col-md-3 mt-3">
-            <div class="card extra" style="text-align: left;">
-               <a href="#" style="text-decoration: none; color: inherit;">
-                  <img src="#" class="card-img-top" alt="ini foto">
-                  <div class="card-body">
-                     <h5 class="card-title">Produk 3</h5>
-                     <p class="card-text">Rating: 4/5</p>
-                  </div>
-               </a>
-            </div>
-         </div>
-         <div class="col-6 col-md-3 mt-3">
-            <div class="card extra" style="text-align: left;">
-               <a href="#" style="text-decoration: none; color: inherit;">
-                  <img src="#" class="card-img-top" alt="ini foto">
-                  <div class="card-body">
-                     <h5 class="card-title">Produk 4</h5>
-                     <p class="card-text">Rating: 5/5</p>
-                  </div>
-               </a>
-            </div>
-         </div>
-      </div>
-   </div>
-
-   <div class="d-flex justify-content-center mt-5">
-        <h3>Ulasan Terbaru</h3>
-    </div>
-    <div class="container mt-5" id="reviews-container">
-
-    </div>
-
-</section>
+<script src="<?= BASEURL ?>public/js/components/loadingAnimation.js"></script>
+<script src="<?= BASEURL ?>public/js/customerPageProduct.js"></script>
 <?php
    requireView("partials/footer.php");
    ?>

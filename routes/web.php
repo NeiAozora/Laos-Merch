@@ -81,17 +81,21 @@ Router::get("/service/help-center", invokeClass(HelpCenterController::class, "in
 
 
 Router::get("/notfound", function () {
+    http_response_code(404);
+
     view("/404/index");
 });
+
 Router::get("/error", function () {
+    http_response_code(500);
 
     if (!isset($_GET["code"]) && !isset($_GET["message"]) && !isset($_GET["detailMessage"])) {
         jsRedirect("/notfound");
     }
-
     view("/customerror/index", ['errorCode' => $_GET['code'], 'errorMessage' => $_GET['message'], 'detailMessage' => ($_GET["detailMessage"])]);
 });
 // Custom 404 Not Found handler
 Router::notFound(function () {
+    http_response_code(404);
     view("/404/index");
 });

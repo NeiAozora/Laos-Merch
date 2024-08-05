@@ -3,7 +3,17 @@
 <script src="<?= BASEURL ?>public/js/fbaseAuth.js" type="module"></script>
 
 <script>
-    var baseUrl = "<?= BASEURL ?>";
+    
+var baseUrl = "<?= BASEURL ?>";
+document.addEventListener('DOMContentLoaded', () => {
+// Check if there are any <footer> elements
+if (document.getElementsByTagName('footer').length === 0) {
+    // Reload the page after a short delay (if needed)
+    setTimeout(() => {
+    window.location.reload();
+    }, 2000); // Delay of 2 seconds (2000 milliseconds)
+}
+});
 
 
 </script>

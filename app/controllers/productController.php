@@ -44,8 +44,16 @@ class ProductController extends Controller {
         $reviews = ReviewModel::new()->getReviewsByProductId($id);
         $discount = DiscountProductModel::new()->getDiscountByProductId($id);
         $productImages = ProductImageModel::new()->get(['id_product', $id]);
+        $products = ProductModel::new()->getProducts(['id_category' => $product['id_category'], 'limit' => 4], true);
+        
+        for($i = 0; $i < count($products); $i++){
+            if($products[$i]['id_product'] == $product['id_product']){
+                unset($products[$i]);
+            }
+        }
         $data = [
             'product' => $product,
+            'products' => $products,
             'productVariations' => $productVariations,
             'variationOptions' => $variationOptions,
             'productCombinations' => $productCombinations,
