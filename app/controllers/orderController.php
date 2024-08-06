@@ -61,21 +61,29 @@ class OrderController extends Controller{
             if($id_order && $status){
                 $arrStatus = ['Pending', 'Shipped', 'Delivered', 'Cancelled'];
                 if(in_array($status, $arrStatus)){
-                    $UpdateStatus = $this->orderModel->updateOrderStatus($id_order, $status);
-
-                    if($UpdateStatus){
-                        echo 'Berhasil';
-                    }else{
-                        echo 'Gagal';
+                    if ($this->orderModel->updateOrderStatus($id_order, $status)) {
+                        // Status berhasil diubah, arahkan ulang ke halaman pesanan
+                        header("Location: " . BASEURL . "order");
+                        exit;
+                    } else {
+                        // Gagal memperbarui status di database
+                        $_SESSION['error'] = 'Failed to update order status in database.';
                     }
-                }else{
-                    echo 'Status Invalid';
+                } else {
+                    // Status tidak valid
+                    $_SESSION['error'] = 'Invalid status received.';
                 }
-            }else{
-                echo 'Tidak Sesuai Param';
+            } else {
+                // Parameter tidak lengkap
+                $_SESSION['error'] = 'Missing parameters: id_order or status';
             }
-        }else{
-            echo 'Tidak Login';
+        } else {
+            // Permintaan tidak sah atau metode permintaan tidak valid
+            $_SESSION['error'] = 'Unauthorized request or invalid request method.';
         }
+
+        // Jika terjadi kesalahan, arahkan ulang ke halaman pesanan dengan pesan kesalahan
+        header("Location: " . BASEURL . "order");
+        exit;
     }
 }
