@@ -163,14 +163,14 @@ VALUES
     ('Cancelled');
 
 -- Insert Orders
-INSERT INTO orders (id_user, total_price, id_status, id_shipping_address)
+INSERT INTO orders (id_user, order_date, total_price, id_status, id_shipping_address, shipping_fee, service_fee, handling_fee, id_payment_method)
 VALUES
-    (1, 120.00, 1, 1);
+    (1, NOW(), 120.00, 1, 1, 10.00, 5.00, 2.00, 1);
 
 -- Insert Order Items
-INSERT INTO order_items (id_order, quantity, id_combination, id_discount)
+INSERT INTO order_items (id_order, quantity, id_combination, id_discount, price)
 VALUES
-    (1, 1, 1, 1);  -- Order 1: Smartphone with 10% discount
+    (1, 1, 1, 1, 700.00);  -- Order 1: Smartphone with 10% discount
 
 -- Insert Carriers
 INSERT INTO carriers (carrier_name, wa_number, email, website)
@@ -187,6 +187,7 @@ VALUES
 INSERT INTO shipment_statuses (id_shipment, status_date, status_description)
 VALUES
     (1, NOW(), 'Package is out for delivery.');
+
 
 ";
 

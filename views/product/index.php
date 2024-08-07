@@ -115,10 +115,10 @@
                <div class="d-flex align-items-center mb-3">
                   <p class="mb-0 me-2"><b>Jumlah:</b></p>
                   <div class="d-flex align-items-center">
-                     <button type="button" id="decrease-quantity" class="btn btn-outline-secondary btn-sm">-</button>
-                     <input type="number" id="cart-quantity" name="quantity" value="1" min="1" class="form-control mx-2" style="width:60px;">
-                     <button type="button" id="increase-quantity" class="btn btn-outline-secondary btn-sm">+</button>
-                  </div>
+                    <button type="button" id="decrease-quantity" class="btn btn-outline-secondary btn-sm">-</button>
+                    <input type="number" id="cart-quantity" name="quantity" value="1" min="1" class="form-control mx-2" style="width:60px;">
+                    <button type="button" id="increase-quantity" class="btn btn-outline-secondary btn-sm">+</button>
+                </div>
                </div>
                <p><b>Subtotal:</b> <span id="subtotal">Rp 0.00</span></p>
             </div>
@@ -126,9 +126,9 @@
                <form method="POST" action="<?= BASEURL?>cart/add" id="add-cart">
                   <input type="hidden" name="id_combination" id="combination-id" value="">
                   <input type="hidden" name="quantity" id="input-quantity" value="">
-                  <button class="btn btn-success mb-2 mt-3" style="width:12rem;">Masukkan Keranjang</button>
+                  <button class="btn btn-success mb-2 mt-3" id="add-to-cart-button" style="width:12rem;">Masukkan Keranjang</button>
                </form>
-               <button class="btn laos-outline-button mb-3" style="width:12rem;">Beli Langsung</button>
+               <button class="btn laos-outline-button mb-3" id="buy-button" style="width:12rem;">Beli Langsung</button>
             </div>
          </div>
       </div>
@@ -199,7 +199,7 @@
                     <div class="col-6 col-md-3 product-card-container">
                         <div class="card product-card">
                             ' . $discountLabel . '
-                            <a href="product/' . htmlspecialchars($product['id_product']) . '" style="text-decoration: none; color: inherit;">
+                            <a href="' . BASEURL . 'product/' . htmlspecialchars($product['id_product']) . '" style="text-decoration: none; color: inherit;">
                                 <div class="img-container">
                                     <img src="' . htmlspecialchars($product['product_image']) . '" class="card-img-top" alt="' . htmlspecialchars($product['product_name']) . '">
                                 </div>

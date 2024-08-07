@@ -36,13 +36,25 @@ class CartController extends Controller
         if ($id_user) {
             $id_combination = $_POST['id_combination'];
             $quantity = $_POST['quantity'];
-
-            $this->cartItemModel->addCartItem($id_user, $id_combination, $quantity);
-            header('location:' . BASEURL . 'cart');
+    
+            // Check if the cart item already exists
+            $existingCartItem = $this->cartItemModel->getCartItemByUserAndCombination($id_user, $id_combination);
+    
+            if ($existingCartItem) {
+                // Update the existing cart item quantity
+                $newQuantity = $existingCartItem['quantity'] + $quantity;
+                $this->cartItemModel->updateCartItem($existingCartItem['id_cart_item'], $newQuantity);
+            } else {
+                // Insert a new cart item
+                $this->cartItemModel->addCartItem($id_user, $id_combination, $quantity);
+            }
+    
+            header('Location: ' . BASEURL . 'cart');
         } else {
             view('404/index');
         }
     }
+    
 
     public function removeItem($id_cart_item)
     {

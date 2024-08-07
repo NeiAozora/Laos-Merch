@@ -28,21 +28,7 @@ function updateSubtotal() {
     document.getElementById('subtotal').textContent = `Rp ${removeTrailingZeros(subtotal.toFixed(2))}`;
 }
 
-// Quantity control event listeners
-document.getElementById('increase-quantity').addEventListener('click', () => {
-    const quantityInput = document.getElementById('cart-quantity');
-    quantityInput.value = parseInt(quantityInput.value, 10) + 1;
-    updateSubtotal();
-});
 
-document.getElementById('decrease-quantity').addEventListener('click', () => {
-    const quantityInput = document.getElementById('cart-quantity');
-    const currentValue = parseInt(quantityInput.value, 10);
-    if (currentValue > 1) {
-        quantityInput.value = currentValue - 1;
-        updateSubtotal();
-    }
-});
 
 function updateDisplayedValues() {
     const selectedCombination = productCombinations.find(comb => {
@@ -72,6 +58,71 @@ function updateDisplayedValues() {
         const hasDiscount = discount && discount > 0;
 
 
+        const decreaseButton = document.getElementById('decrease-quantity');
+        const increaseButton = document.getElementById('increase-quantity');
+        const quantityInput = document.getElementById('cart-quantity');
+
+        if (parseInt(quantityInput.value, 10) > selectedCombination.stock) {
+            quantityInput.value = selectedCombination.stock;
+        }
+
+        if ((parseInt(quantityInput.value, 10) == 0 && selectedCombination.stock != 0)){
+            quantityInput.value = 1;
+        }
+
+        function updateButtons() {
+            const quantity = parseInt(quantityInput.value, 10);
+            increaseButton.disabled = quantity >= selectedCombination.stock;
+            decreaseButton.disabled = quantity <= 1;
+        }
+
+        function increaseListener() {
+            let quantity = parseInt(quantityInput.value, 10);
+            if (quantity < selectedCombination.stock) {
+                quantityInput.value = quantity + 1;
+                updateSubtotal();
+            }
+            updateButtons();
+        }
+
+        function decreaseListener() {
+            let quantity = parseInt(quantityInput.value, 10);
+            if (quantity > 1) {
+                quantityInput.value = quantity - 1;
+                updateSubtotal();
+            }
+            updateButtons();
+        }
+
+        function inputListener() {
+            let quantity = parseInt(quantityInput.value, 10);
+            if (isNaN(quantity) || quantity < 1) {
+                quantityInput.value = 1;
+            } else if (quantity > selectedCombination.stock) {
+                quantityInput.value = selectedCombination.stock;
+            }
+            updateSubtotal();
+            updateButtons();
+        }
+
+        // Remove existing event listeners if they exist
+        increaseButton.removeEventListener('click', window.increaseListener);
+        decreaseButton.removeEventListener('click', window.decreaseListener);
+        quantityInput.removeEventListener('input', window.inputListener);
+
+        // Store the listeners in the window object to access them for removal later
+        window.increaseListener = increaseListener;
+        window.decreaseListener = decreaseListener;
+        window.inputListener = inputListener;
+
+        // Add event listeners
+        increaseButton.addEventListener('click', increaseListener);
+        decreaseButton.addEventListener('click', decreaseListener);
+        quantityInput.addEventListener('input', inputListener);
+
+        // Initial update to set the correct button states
+        updateButtons();
+
         // Update displayed variation options
         variationOptions.forEach(option => {
             if (selectedOptions[option.id_variation_type] === option.id_option) {
@@ -92,6 +143,15 @@ function updateDisplayedValues() {
         }
 
         updateSubtotal();
+
+        if(parseInt(quantityInput.value, 10) === 0){
+            document.getElementById('add-to-cart-button').disabled = true
+            document.getElementById('buy-button').disabled = true
+        } else {
+            document.getElementById('add-to-cart-button').disabled = false
+            document.getElementById('buy-button').disabled = false
+        }
+        
 
         document.getElementById('stock-value').textContent = selectedCombination.stock;
     }

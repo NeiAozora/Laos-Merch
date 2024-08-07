@@ -200,12 +200,18 @@ CREATE TABLE shipping_addresses (
   postal_code VARCHAR(50),
   extra_note TEXT,
   is_temporary BOOLEAN DEFAULT FALSE,
+  wa_number VARCHAR(16), -- Contact number
   FOREIGN KEY (id_user) REFERENCES users(id_user) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE order_statuses (
   id_status BIGINT PRIMARY KEY AUTO_INCREMENT,
   status_name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE payment_methods (
+  id_payment_method BIGINT PRIMARY KEY AUTO_INCREMENT,
+  method_name VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE orders (
@@ -215,9 +221,14 @@ CREATE TABLE orders (
   total_price DECIMAL(10, 2),
   id_status BIGINT,
   id_shipping_address BIGINT,
+  shipping_fee DECIMAL(10, 2),
+  service_fee DECIMAL(10, 2),
+  handling_fee DECIMAL(10, 2),
+  id_payment_method BIGINT, -- Foreign key to payment methods table
   FOREIGN KEY (id_user) REFERENCES users(id_user) ON UPDATE CASCADE ON DELETE SET NULL,
   FOREIGN KEY (id_shipping_address) REFERENCES shipping_addresses(id_shipping_address) ON UPDATE CASCADE ON DELETE SET NULL,
-  FOREIGN KEY (id_status) REFERENCES order_statuses(id_status) ON UPDATE CASCADE ON DELETE RESTRICT
+  FOREIGN KEY (id_status) REFERENCES order_statuses(id_status) ON UPDATE CASCADE ON DELETE RESTRICT,
+  FOREIGN KEY (id_payment_method) REFERENCES payment_methods(id_payment_method) ON UPDATE CASCADE ON DELETE SET NULL
 );
 
 CREATE TABLE order_items (
@@ -226,6 +237,7 @@ CREATE TABLE order_items (
   quantity INT,
   id_combination BIGINT NOT NULL,
   id_discount BIGINT,
+  price DECIMAL(10, 2) NOT NULL, -- Price for the individual item
   FOREIGN KEY (id_combination) REFERENCES variation_combinations(id_combination) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY (id_order) REFERENCES orders(id_order) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY (id_discount) REFERENCES discounts(id_discount) ON UPDATE CASCADE ON DELETE SET NULL
@@ -260,6 +272,7 @@ CREATE TABLE shipment_statuses (
   status_description VARCHAR(255),
   FOREIGN KEY (id_shipment) REFERENCES shipments(id_shipment) ON UPDATE CASCADE ON DELETE CASCADE
 );
+
 
 
 
