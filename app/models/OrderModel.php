@@ -54,7 +54,7 @@ class OrderModel extends Model {
             JOIN order_statuses os ON o.id_status = os.id_status
             JOIN shipments s ON o.id_order = s.id_order
             JOIN users u ON o.id_user = u.id_user
-            JOIN shipping_addresses sa ON u.id_user = sa.id_user
+            LEFT JOIN shipping_addresses sa ON u.id_user = sa.id_user
             JOIN order_items oi ON o.id_order = oi.id_order
             JOIN variation_combinations vc ON oi.id_combination = vc.id_combination
             JOIN products p ON vc.id_product = p.id_product
