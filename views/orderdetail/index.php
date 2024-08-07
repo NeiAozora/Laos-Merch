@@ -60,10 +60,6 @@ $order = $data['order'];
                                                     <h6 class="title-detail">Variasi Produk:</h6>
                                                     <p><?= htmlspecialchars($order['option_names']); ?></p>
                                                 </div>
-                                                <!-- <div class="me20">
-                                                    <h6 class="title-detail">Ukuran:</h6>
-                                                    <p><?= htmlspecialchars($order['option_names']); ?></p>
-                                                </div> -->
                                             </div>
                                         </div>
                                     </div>
@@ -90,7 +86,7 @@ $order = $data['order'];
                                 </div>
                             </div>
                             <div class="d-flex flex-column text-start ms-3">
-                                <h6><?= htmlspecialchars($order['shipping_method']); ?></h6>
+                                <h6><?= htmlspecialchars($order['carrier_name']); ?></h6>
                                 <h6 class="mb-0"><?= htmlspecialchars($order['recipient_name']); ?></h6>
                                 <h6 class="mb-0"><?= htmlspecialchars($order['wa_number']); ?></h6>
                                 <h6 class="mb-0"><?= htmlspecialchars($order['address']); ?></h6>
@@ -122,11 +118,18 @@ $order = $data['order'];
                 </div>
             </div>
             <div class="col-lg-4 col-md-10 col-sm-12">
+            <form action="<?= BASEURL;?>order/updateStatus" method="post">
+                <input type="hidden" name="id_order" value="<?= $order['id_order'] ?>">
+                <input type="hidden" name="status" value="Cancelled">
                 <div class="d-flex flex-column justify-content-center mt-1">
                     <a class="btn laos-outline-button mb-3" onclick="history.back()">Kembali</a>
-                    <a type="button" class="btn btn-success mb-3" href="https://wa.me/+6285606689642" target="_blank">Hubungi Admin</a>
-                    <button class="btn btn-secondary">Batalkan Pesanan</button>
+                    <?php if($order['status_name'] !== 'Cancelled'): ?>
+                        <a type="button" class="btn btn-success mb-3" href="https://wa.me/+6285606689642" target="_blank">Hubungi Admin</a>
+                        <button class="btn btn-secondary">Batalkan Pesanan</button>
+                   
+                    <?php endif; ?>
                 </div>
+            </form>
             </div>  
         </div>
     </div>

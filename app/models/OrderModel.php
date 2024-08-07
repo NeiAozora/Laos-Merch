@@ -47,13 +47,14 @@ class OrderModel extends Model {
 
     public function getOrderById($id, $id_user){
         $this->db->query("
-            SELECT o.id_order, o.order_date, os.status_name, o.total_price, s.shipping_method, GROUP_CONCAT(sa.street_address, sa.city, sa.state, sa.postal_code SEPARATOR ',') as address,
+            SELECT o.id_order, o.order_date, os.status_name, o.total_price, s.shipping_method, c.carrier_name, GROUP_CONCAT(sa.street_address, sa.city, sa.state, sa.postal_code SEPARATOR ',') as address,
                    sa.recipient_name, u.wa_number, p.product_name, pi.image_url, 
                    oi.quantity, GROUP_CONCAT(vo.option_name SEPARATOR ',') as option_names
             FROM orders o
             JOIN order_statuses os ON o.id_status = os.id_status
             JOIN shipments s ON o.id_order = s.id_order
             JOIN users u ON o.id_user = u.id_user
+            JOIN carriers c ON s.id_carrier = c.id_carrier
             LEFT JOIN shipping_addresses sa ON u.id_user = sa.id_user
             JOIN order_items oi ON o.id_order = oi.id_order
             JOIN variation_combinations vc ON oi.id_combination = vc.id_combination
