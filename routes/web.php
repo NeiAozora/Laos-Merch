@@ -56,10 +56,7 @@ Router::get('/purchase/order', function () {
 // Keranjang
 Router::get('/cart', invokeClass(CartController::class, "index"));
 Router::post('/cart/add', invokeClass(CartController::class, 'add'));
-// Router::post('/cart/remove', function() {
-//     $id_cart_item = $_POST['id_cart_item'];
-//     invokeClass(CartController::class, 'removeItem', [$id_cart_item]);
-// });
+Router::get('/cart/remove', invokeClass(CartController::class, 'removeItem'));
 // Router::post('/cart/update', function() {
 //     $id_cart_item = $_POST['id_cart_item'];
 //     $quantity = $_POST['quantity'];

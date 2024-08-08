@@ -37,17 +37,29 @@ class CartItemModel extends Model{
     // Get all cart items by user id
     public function getCartItemsByUserId($id_user)
     {
-        $this->db->query('
-            SELECT ci.*, pi.image_url, vo.option_name, vt.name as variation_type, p.product_name, p.description, p.weight, p.dimensions, vc.price
-            FROM cart_items ci
-            JOIN variation_combinations vc ON ci.id_combination = vc.id_combination
-            JOIN combination_details cd ON cd.id_combination = vc.id_combination
-            JOIN variation_options vo ON vo.id_option = cd.id_option
-            JOIN variation_types vt ON vt.id_variation_type = vo.id_variation_type
-            JOIN products p ON vc.id_product = p.id_product
-            LEFT JOIN product_images pi ON pi.id_product = p.id_product
-            WHERE ci.id_user = :id_user
-        ');
+        $this->db->query("SELECT 
+        ci.id_cart_item,
+        ci.id_user,
+        ci.id_combination,
+        ci.quantity,
+        pi.image_url,
+        GROUP_CONCAT(DISTINCT vo.option_name ORDER BY vo.option_name SEPARATOR ', ') AS option_name,
+        GROUP_CONCAT(DISTINCT vt.name ORDER BY vt.name SEPARATOR ', ') AS variation_types,
+        p.product_name,
+        p.description,
+        p.weight,
+        p.dimensions,
+        vc.price
+    FROM cart_items ci
+    JOIN variation_combinations vc ON ci.id_combination = vc.id_combination
+    JOIN combination_details cd ON cd.id_combination = vc.id_combination
+    JOIN variation_options vo ON vo.id_option = cd.id_option
+    JOIN variation_types vt ON vt.id_variation_type = vo.id_variation_type
+    JOIN products p ON vc.id_product = p.id_product
+    LEFT JOIN product_images pi ON pi.id_product = p.id_product
+    WHERE ci.id_user = :id_user
+    GROUP BY ci.id_cart_item, ci.id_user, ci.id_combination, ci.quantity, pi.image_url, p.product_name, p.description, p.weight, p.dimensions, vc.price;
+    ");
         $this->db->bind(':id_user', $id_user, PDO::PARAM_INT);
         
         return $this->db->resultSet();

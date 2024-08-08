@@ -159,6 +159,49 @@ class ProductModel extends Model {
         return $this->db->resultSet();
     }
 
+    public function getProductsByCombinations($combinationIds) {
+        $placeholders = implode(',', array_fill(0, count($combinationIds), '?'));
+    
+        $this->db->query("
+            SELECT 
+                vc.id_combination,
+                p.id_product,
+                p.product_name,
+                p.description,
+                p.weight,
+                p.dimensions,
+                c.category_name,
+                GROUP_CONCAT(DISTINCT vo.option_name ORDER BY vo.option_name SEPARATOR ', ') AS selected_options,
+                GROUP_CONCAT(DISTINCT t.tag_name ORDER BY t.tag_name SEPARATOR ', ') AS tags,
+                MIN(pi.image_url) AS product_image,
+                MIN(vc.price) AS price,
+                COALESCE(MAX(d.discount_value), 0) AS discount_value
+            FROM variation_combinations vc
+            JOIN products p ON vc.id_product = p.id_product
+            JOIN combination_details cd ON cd.id_combination = vc.id_combination
+            JOIN variation_options vo ON vo.id_option = cd.id_option
+            JOIN variation_types vt ON vt.id_variation_type = vo.id_variation_type
+            LEFT JOIN categories c ON p.id_category = c.id_category
+            LEFT JOIN product_images pi ON p.id_product = pi.id_product
+            LEFT JOIN product_tags pt ON p.id_product = pt.id_product
+            LEFT JOIN tags t ON pt.id_tag = t.id_tag
+            LEFT JOIN discount_products dp ON p.id_product = dp.id_product
+            LEFT JOIN discounts d ON dp.id_discount = d.id_discount AND d.end_date > NOW() -- Ensure discount is not expired
+            WHERE vc.id_combination IN ($placeholders)
+            GROUP BY vc.id_combination, p.id_product
+        ");
+        
+        // Bind each value individually
+        foreach ($combinationIds as $index => $id) {
+            $this->db->bind($index + 1, $id, PDO::PARAM_INT);
+        }
+        
+        return $this->db->resultSet();
+    }
+
+    
+    
+
     public function getTotalProducts($criteria = [], $strictAndOperator = false) {
         // Base query
         $query = '

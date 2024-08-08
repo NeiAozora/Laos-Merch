@@ -157,31 +157,52 @@ function updateDisplayedValues() {
     }
 }
 
+// Utility function to encode data to Base64
+function encodeBase64(data) {
+    // Convert string to Uint8Array
+    const encoder = new TextEncoder();
+    const uint8Array = encoder.encode(data);
+    // Convert Uint8Array to Base64 string
+    return btoa(String.fromCharCode(...uint8Array));
+}
 
-document.querySelector('#add-cart').addEventListener('submit', function(event) {
-    event.preventDefault();
-
+function getSelectedData() {
     const selectedCombination = productCombinations.find(comb => {
-        // Create a map of the combination details for quick comparison
         const combinationDetailsMap = comb.combination_details.reduce((map, detail) => {
             map[optionMap[detail.id_option]] = detail.id_option;
             return map;
         }, {});
 
-        // Compare the selected options with the combination details
-        return Object.keys(combinationDetailsMap).every(key => {
-            return selectedOptions[key] === combinationDetailsMap[key].toString();
-        });
+        return Object.keys(combinationDetailsMap).every(key => selectedOptions[key] === combinationDetailsMap[key].toString());
     });
 
-
     if (selectedCombination) {
-        document.getElementById('combination-id').value = selectedCombination.id_combination;
-        document.getElementById('input-quantity').value = document.getElementById('cart-quantity').value;
+        return {
+            combinationId: selectedCombination.id_combination,
+            quantity: document.getElementById('cart-quantity').value
+        };
+    }
+    console.log("Selected combination is not valid for further process");
+    return null;
+}
 
-        event.target.submit();
-    } else {
-        console.log("Selected combination is not valid for adding to cart.");
+document.querySelector('#buy-button').addEventListener('click', (event) => {
+    event.preventDefault();
+    const selectedData = getSelectedData();
+    if (selectedData) {
+        const encodedProductIds = encodeBase64(selectedData.combinationId.toString());
+        const encodedQuantities = encodeBase64(selectedData.quantity.toString());
+        window.location.href = `/checkout?p=${encodedProductIds}&q=${encodedQuantities}`;
+    }
+});
+
+document.querySelector('#add-cart').addEventListener('click', (event) => {
+    event.preventDefault();
+    const selectedData = getSelectedData();
+    if (selectedData) {
+        document.getElementById('combination-id').value = selectedData.combinationId;
+        document.getElementById('input-quantity').value = selectedData.quantity;
+        event.target.closest('form').submit();
     }
 });
 
