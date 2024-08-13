@@ -53,6 +53,7 @@ class ComposerStaticInit573c0a765223a49f6e3cf404932c757a
         'M' => 
         array (
             'Monolog\\' => 8,
+            'Midtrans\\' => 9,
             'MailerSend\\' => 11,
         ),
         'L' => 
@@ -193,6 +194,10 @@ class ComposerStaticInit573c0a765223a49f6e3cf404932c757a
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
+        'Midtrans\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/midtrans/midtrans-php/Midtrans',
         ),
         'MailerSend\\' => 
         array (

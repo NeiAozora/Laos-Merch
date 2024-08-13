@@ -7,39 +7,58 @@ class OrderController extends Controller{
         $this->orderModel = new OrderModel();
     }
 
-     public function index()
+    public function index()
     {
         $id_user = $_SESSION['user']['id_user'] ?? null;
-
+    
         if ($id_user) {
             $statusMapping = [
                 'Semua' => null,
-                'Diproses' => 'Pending',  
-                'Dikirim' => 'Shipped',   
-                'Selesai' => 'Delivered', 
+                'Diproses' => 'Processing',
+                'Dikirim' => 'Shipped',
+                'Selesai' => 'Delivered',
                 'Dibatalkan' => 'Cancelled'
             ];
+    
+            // Reverse mapping for displaying status in Indonesian
+            $reverseStatusMapping = [
+                null => 'Semua',
+                'Processing' => 'Diproses',
+                'Shipped' => 'Sedang Dikirim',
+                'Delivered' => 'Selesai',
+                'Cancelled' => 'Dibatalkan'
+            ];
+    
             $status = isset($_GET['status']) ? $_GET['status'] : 'Semua';
             $statusDb = $statusMapping[$status] ?? null;
-
+    
             // Log status yang diterima
             error_log("Selected Status: " . $status);
             error_log("Mapped Status: " . $statusDb);
-
+    
             $orders = $this->orderModel->getAllOrders($id_user, $statusDb);
+    
+            // Loop through orders to update the status to Indonesian
+            foreach ($orders as &$order) {
+                $order['status_name'] = $reverseStatusMapping[$order['status_name']] ?? 'Semua';
+            }
+            unset($order); // Unset reference to avoid unintended side effects
 
             view('order/index', ['orders' => $orders, 'status' => $status]);
         } else {
             view('404/index');
         }
     }
-
+    
+    
+    
     public function detail($id){
         $id_user = $_SESSION['user']['id_user'] ?? null;
 
         if($id_user){
             $order = $this->orderModel->getOrderById($id, $id_user);
-
+            d($order);
+            die;
             if($order){
                 view('orderdetail/index', ['order' => $order]);
             }else{
@@ -85,5 +104,20 @@ class OrderController extends Controller{
         // Jika terjadi kesalahan, arahkan ulang ke halaman pesanan dengan pesan kesalahan
         header("Location: " . BASEURL . "order");
         exit;
+    }
+
+    public function prepareOrder(){
+        $user = AuthHelpers::getLoggedInUserData();
+
+        // Check if the cart item belongs to the current user
+        if (empty($user)){
+            header('HTTP/1.1 403 Forbidden');
+            echo json_encode(['error' => 'Forbidden']);
+            exit();
+        }
+
+        OrderModel::new()->deleteOrdersByInterval($user['id_user'], '30m');
+
+        
     }
 }

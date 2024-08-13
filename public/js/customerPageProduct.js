@@ -25,7 +25,7 @@ let selectedPrice = 0;
 function updateSubtotal() {
     const quantity = parseInt(document.getElementById('cart-quantity').value, 10);
     const subtotal = selectedPrice * quantity;
-    document.getElementById('subtotal').textContent = `Rp ${removeTrailingZeros(subtotal.toFixed(2))}`;
+    document.getElementById('subtotal').textContent = `Rp ${formatPriceValue(subtotal.toFixed(2))}`;
 }
 
 
@@ -133,12 +133,12 @@ function updateDisplayedValues() {
         // Update price and stock
         if (hasDiscount) {
             const discountedPrice = fullPrice * (1 - discount / 100);
-            document.getElementById('price').textContent = `Rp ${removeTrailingZeros(discountedPrice.toFixed(2))}`;
-            document.getElementById('full-price').textContent = `Rp ${removeTrailingZeros(fullPrice.toFixed(2))}`;
+            document.getElementById('price').textContent = `Rp ${formatPriceValue(removeTrailingZeros(discountedPrice.toFixed(2)))}`;
+            document.getElementById('full-price').textContent = `Rp ${formatPriceValue(removeTrailingZeros(fullPrice.toFixed(2)))}`;
             selectedPrice = removeTrailingZeros(discountedPrice.toFixed(2));
 
         } else {
-            document.getElementById('price').textContent = `Rp ${removeTrailingZeros(fullPrice.toFixed(2))}`;
+            document.getElementById('price').textContent = `Rp ${formatPriceValue(removeTrailingZeros(fullPrice.toFixed(2)))}`;
             selectedPrice = removeTrailingZeros(fullPrice.toFixed(2));
         }
 
@@ -157,14 +157,6 @@ function updateDisplayedValues() {
     }
 }
 
-// Utility function to encode data to Base64
-function encodeBase64(data) {
-    // Convert string to Uint8Array
-    const encoder = new TextEncoder();
-    const uint8Array = encoder.encode(data);
-    // Convert Uint8Array to Base64 string
-    return btoa(String.fromCharCode(...uint8Array));
-}
 
 function getSelectedData() {
     const selectedCombination = productCombinations.find(comb => {

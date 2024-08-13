@@ -243,13 +243,22 @@ CREATE TABLE order_items (
   FOREIGN KEY (id_discount) REFERENCES discounts(id_discount) ON UPDATE CASCADE ON DELETE SET NULL
 );
 
-CREATE TABLE carriers (
-  id_carrier BIGINT PRIMARY KEY AUTO_INCREMENT,
-  carrier_name VARCHAR(255),
-  wa_number VARCHAR(50),
-  email VARCHAR(255),
-  website VARCHAR(255)
+CREATE TABLE shipment_companies (
+  id_shipment_company BIGINT AUTO_INCREMENT PRIMARY KEY,
+  company_name VARCHAR(255) NOT NULL,
+  company_email VARCHAR(255),
+  company_website VARCHAR(255)
 );
+
+CREATE TABLE carriers (
+  id_carrier BIGINT AUTO_INCREMENT PRIMARY KEY,
+  carrier_name VARCHAR(255) NOT NULL,
+  wa_number VARCHAR(20),
+  email VARCHAR(255),
+  id_shipment_company BIGINT,
+  FOREIGN KEY (id_shipment_company) REFERENCES shipment_companies(id_shipment_company)
+);
+
 
 CREATE TABLE shipments (
   id_shipment BIGINT PRIMARY KEY AUTO_INCREMENT,

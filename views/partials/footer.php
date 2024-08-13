@@ -25,11 +25,11 @@
             </div>
                 
             </div>
-            <!-- <div class="col-sm-4 col-md-3 col-6 mt-2">
+            <div class="col-sm-4 col-md-3 col-6 mt-2">
                 <h5 class="footer-heading">Metode Pengiriman</h5>
-                <img src="" alt="ini jnt" class="shipping-method-icon">
-                <img src="" alt="ini jne" class="shipping-method-icon">
-            </div> -->
+                <img src="https://mytrackcdn.com/images/couriers/jt.png.webp" alt="ini jnt" class="shipping-method-icon">
+                <!-- <img src="" alt="ini jne" class="shipping-method-icon"> -->
+            </div>
         </div>
         <p class="text-center mt-2 footer-copy">Copyright &copy;2024 By <a href="#" class="footer-link" target="_blank">Tim Pemburu Gratisan</a></p>
     </div>

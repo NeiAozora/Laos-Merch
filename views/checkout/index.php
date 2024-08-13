@@ -44,7 +44,7 @@ requireView("partials/navbar.php");
                         <select class="form-control" name="shipping_method" id="shipping_method">
                             <option value="disabled" disabled selected>Pilih Pengiriman</option>
                             <?php foreach ($shipping_methods as $shipping_method): ?>
-                                <option value="<?php echo htmlspecialchars($shipping_method['id_carrier']); ?>"><?php echo htmlspecialchars($shipping_method['carrier_name']); ?></option>
+                                <option value="<?php echo htmlspecialchars($shipping_method['id_shipment_company']); ?>"><?php echo htmlspecialchars($shipping_method['company_name']); ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -53,14 +53,23 @@ requireView("partials/navbar.php");
                 <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="title-detail mb-2">Metode Pembayaran:</h5>
-                        <select class="form-control" name="payment_method" id="payment_method">
-                            <option value="disabled" disabled selected>Pilih Pembayaran</option>
+                        <div class="d-flex flex-wrap">
                             <?php foreach ($payment_methods as $payment_method): ?>
-                                <option value="<?php echo htmlspecialchars($payment_method['id_payment_method']); ?>"><?php echo htmlspecialchars($payment_method['payment_method_name']); ?></option>
+                                <div class="form-check me-3 mb-2">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="payment_method_<?php echo htmlspecialchars($payment_method['id_payment_method']); ?>" value="<?php echo htmlspecialchars($payment_method['id_payment_method']); ?>">
+                                    <label class="form-check-label" for="payment_method_<?php echo htmlspecialchars($payment_method['id_payment_method']); ?>">
+                                        <?php echo htmlspecialchars($payment_method['method_name']); ?>
+                                    </label>
+                                </div>
                             <?php endforeach; ?>
-                        </select>
+                        </div>
+                        <div id="snap-embed-container"></div>
                     </div>
                 </div>
+
+
+
+
 
                 <div class="card mb-3">
                     <div class="card-body row justify-content-between align-items-center">
@@ -70,7 +79,7 @@ requireView("partials/navbar.php");
                                 <div class="card">
                                     <div class="card-body row justify-content-between align-items-center">
                                         <div class="col-sm-4 col-md-4 col-12 d-flex">
-                                            <img src="<?php echo htmlspecialchars($product['image_url']); ?>" alt="Product Image" class="img-fluid">
+                                            <img src="<?php echo htmlspecialchars($product['image_url']); ?>" alt="Product Image" class="img-fluid" style="max-height: 5rem; border-radius:8px">
                                             <div class="product-name ms-3">
                                                 <h4><?php echo htmlspecialchars($product['product_name']); ?></h4>
                                                 <div style="display: flex;">
@@ -111,9 +120,9 @@ requireView("partials/navbar.php");
                         <h5 class="me20">Nama Pembeli:</h5>
                         <h6><?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></h6>
                         <h5 class="me20 mt-3">Metode Pembayaran:</h5>
-                        <h6 id="selected_payment_method">Select payment method</h6>
+                        <h6 id="selected_payment_method">Pilih Metode Pembayaran</h6>
                         <h5 class="me20 mt-3">Jenis Pengiriman:</h5>
-                        <h6 id="selected_shipping_method">Select shipping method</h6>
+                        <h6 id="selected_shipping_method">Pilih Metode Pengiriman</h6>
                         <h5 class="mt-5 me20">Total:</h5>
                         <h6 id="total_amount">Rp. <?php echo number_format($total_price, 2); ?></h6>
                     </div>
@@ -137,12 +146,12 @@ requireView("partials/navbar.php");
         document.getElementById('selected_payment_method').textContent = selectedMethod;
     });
 
-    function submitOrder() {
-        // Form submission logic here
-    }
+
 </script>
-
-
+<script type="text/javascript" 
+    src="https://app.sandbox.midtrans.com/snap/snap.js"
+    data-client-key="Mid-client-VVa8MqsfFdh9WpVr"></script>
+<script src="<?= BASEURL ?>public/js/checkout.js"></script>
 <?php
 requireView("partials/footer.php");
 ?>

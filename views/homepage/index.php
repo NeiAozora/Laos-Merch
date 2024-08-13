@@ -13,15 +13,27 @@ requireView("partials/navbar.php");
             margin: auto;
         }
 
-        .card img {
-            width: 100%;
-            height: auto;
+        .card .img-container {
+            height: 200px; /* Fixed height for the container */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
+
+        .card img {
+            max-height: 80%; /* Ensures the image scales down to fit within the container */
+            width: auto; /* Maintain the aspect ratio */
+            object-fit: cover; /* Scale down larger images to fit within the container */
+            display: block;
+            margin: auto; /* Center the image horizontally */
+        }
+
     </style>
     <div class="mt-5"></div>
 <!-- carousel -->
 <div id="carouselAutoplaying" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
+    <div class="carousel-inner animate-1sec slideIn">
         <?php foreach($carousel_items as $index => $item): ?>
             <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
                 <a href="<?= $item['link'] ?>" class="d-block w-100" style="text-decoration: none;">

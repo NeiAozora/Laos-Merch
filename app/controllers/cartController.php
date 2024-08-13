@@ -22,6 +22,8 @@ class CartController extends Controller
                 $cartDetails[] = array_merge($item, $combination);
             }
 
+
+
             view('cart/index', [
                 'cartItems' => $cartItems,
                 'totalCost' => array_sum(array_column($cartDetails, 'total_price'))

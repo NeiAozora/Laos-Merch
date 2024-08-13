@@ -6,15 +6,54 @@
     
 var baseUrl = "<?= BASEURL ?>";
 document.addEventListener('DOMContentLoaded', () => {
-// Check if there are any <footer> elements
-if (document.getElementsByTagName('footer').length === 0) {
+    // Check if there are any <footer> elements
+    const hasFooter = document.getElementsByTagName('footer').length > 0;
+    // Check if there is a <span id="plain-exception"> element with text containing the specified substring
+    const hasPlainException = Array.from(document.querySelectorAll('span#plain-exception')).some(
+        span => span.textContent.includes('Whoops\\Exception\\')
+    );
+
     // Reload the page after a short delay (if needed)
-    setTimeout(() => {
-    window.location.reload();
-    }, 2000); // Delay of 2 seconds (2000 milliseconds)
-}
+    if (!hasFooter) {
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000); // Delay of 2 seconds (2000 milliseconds)
+    }
 });
 
+function formatPriceValue(value) {
+    // Check if the value is a number and not null/undefined
+    if (value == null || isNaN(value)) {
+        console.error("Invalid number:", value);
+        return "0.00"; // Default or fallback value
+    }
+
+    // Ensure value is a number
+    value = parseFloat(value);
+
+    // Convert the value to a fixed-point notation with two decimals
+    let parts = value.toFixed(2).split(".");
+
+    // Add commas to the integer part
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    // Check if the decimal part is ".00" and remove it if so
+    if (parts[1] === "00") {
+        return parts[0];
+    }
+
+    // Join the integer part with the decimal part
+    return parts.join(".");
+}
+
+// Utility function to encode data to Base64
+function encodeBase64(data) {
+    // Convert string to Uint8Array
+    const encoder = new TextEncoder();
+    const uint8Array = encoder.encode(data);
+    // Convert Uint8Array to Base64 string
+    return btoa(String.fromCharCode(...uint8Array));
+}
 
 </script>
 

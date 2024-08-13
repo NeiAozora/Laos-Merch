@@ -3,10 +3,10 @@
    requireView("partials/navbar.php");
    ?>
 <section class="content mt-5">
-   <div class="row">
+    <div class="row container-fluid d-flex">
       <!-- gambar produk -->
       <div class="col-sm-4 col-md-4 col-12 p-4 product-image-container">
-         <img src="" alt="productImage" id="productMainImage" class="img-fluid ">
+         <img src="" alt="productImage" id="productMainImage" class="img-fluid" style="border-radius:8px; max-height: 17rem">
          <nav aria-label="Page navigation example">
             <ul class="image-pagination pagination">
                <li class="page-item disabled">
@@ -15,6 +15,13 @@
                <?php $i = 1 ?>
                <?php foreach($productImages as $productImage): ?>
                <li class="page-item animate-1sec slideIn ">
+                <?php
+
+                    if (strpos($productImage['image_url'], 'public/storage/') !== false) {
+                        $productImage['image_url'] = BASEURL . $productImage['image_url'];
+                    }
+
+                ?>
                   <a class="page-link" href="#" style="text-decoration: none; color: inherit;">
                   <img src="<?= $productImage['image_url'] ?>" alt="Gambar Produk <?= $i ?>">
                   </a>
@@ -163,6 +170,10 @@
                     $avgPrice = (float)$product['avg_price'];
                     $discountValue = (float)$product['discount_value'];
                     $discountLabel = '';
+
+                    if (strpos($product['product_image'], 'public/storage/') !== false) {
+                        $product['product_image'] = BASEURL . $product['product_image'];
+                    }
 
                     if ($discountValue > 0) {
                         $discountLabel = '
@@ -355,6 +366,10 @@ function escapeHtml($string) {
          $option_name = htmlspecialchars($variationOption['option_name'], ENT_QUOTES, 'UTF-8');
          $image_url = htmlspecialchars($variationOption['image_url'], ENT_QUOTES, 'UTF-8');
       
+         if (strpos($image_url, 'public/storage/') !== false) {
+            $image_url = $baseUrl . $image_url;
+        }
+
          echo json_encode([
             "id_option" => $id_option,
             "id_variation_type" => $id_variation_type,

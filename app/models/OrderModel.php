@@ -4,6 +4,7 @@ class OrderModel extends Model {
     protected $db;
     protected $table = 'orders';
     protected $primaryKey = 'id_order';
+    use StaticInstantiator;
 
     public function __construct() {
         $this->db = new Database();
@@ -79,6 +80,59 @@ class OrderModel extends Model {
         $this->db->bind(':status', $status);
 
         return $this->db->execute();
+    }
+
+    /**
+     * Delete orders based on a time interval, status, and increment attempt count.
+     *
+     * @param int $userId User ID for the orders.
+     * @param string $timeInterval Time interval string (e.g., '30m' for 30 minutes, '1h' for 1 hour).
+     * @return bool True if successful, false otherwise.
+     */
+    public function deleteOrdersByInterval($userId, $timeInterval) {
+        // Extract the numeric value and the time unit (m for minutes, h for hours)
+        $intervalValue = (int) substr($timeInterval, 0, -1);
+        $intervalUnit = substr($timeInterval, -1);
+
+        // Determine the interval type based on the time unit
+        $intervalType = ($intervalUnit === 'm') ? 'MINUTE' : 'HOUR';
+
+        try {
+            // Increment `attempt_count` for rows that meet the condition
+            $incrementQuery = "
+                UPDATE orders
+                SET attempt_count = attempt_count + 1
+                WHERE id_user = :user_id
+                AND id_status = 1
+                AND order_date < NOW() - INTERVAL :interval_value $intervalType
+            ";
+            $this->db->query($incrementQuery);
+            $this->db->bind(':user_id', $userId);
+            $this->db->bind(':interval_value', $intervalValue);
+            if (!$this->db->execute()) {
+                throw new Exception('Failed to increment attempt count.');
+            }
+
+            // Delete the rows after incrementing
+            $deleteQuery = "
+                DELETE FROM orders
+                WHERE id_user = :user_id
+                AND id_status = 1
+                AND order_date < NOW() - INTERVAL :interval_value $intervalType
+            ";
+            $this->db->query($deleteQuery);
+            $this->db->bind(':user_id', $userId);
+            $this->db->bind(':interval_value', $intervalValue);
+            if (!$this->db->execute()) {
+                throw new Exception('Failed to delete orders.');
+            }
+
+            return true;
+        } catch (Exception $e) {
+            // Handle the exception, e.g., log the error or display a message
+            // No transaction, just ensure that errors are handled
+            return false;
+        }
     }
 }
 ?>
