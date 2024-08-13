@@ -36,34 +36,33 @@
                </div>
                <div class="col-md-8">
                   <?php if ($isEditMode): ?>
-                  <form>
+                  <form action="<?= BASEURL ?>user/<?= $userData['id']; ?>/profile/update" method="POST">
                      <div class="form-group mt-1">
                         <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" placeholder="Masukkan username..." value="<?php echo htmlspecialchars($userData['username']); ?>" required>
+                        <input type="text" class="form-control" name="username" id="username" placeholder="Masukkan username..." value="<?php echo htmlspecialchars($userData['username']); ?>" required>
                      </div>
                      <div class="form-group mt-1">
                         <label for="first_name">Nama Depan</label>
-                        <input type="text" class="form-control" id="first_name" placeholder="Masukkan nama depan..." value="<?php echo htmlspecialchars($userData['first_name']); ?>" required>
+                        <input type="text" class="form-control" name="first_name" id="first_name" placeholder="Masukkan nama depan..." value="<?php echo htmlspecialchars($userData['first_name']); ?>" required>
                      </div>
                      <div class="form-group mt-1">
                         <label for="last_name">Nama Belakang</label>
-                        <input type="text" class="form-control" id="last_name" placeholder="Masukkan nama belakang..." value="<?php echo htmlspecialchars($userData['last_name']); ?>" required>
+                        <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Masukkan nama belakang..." value="<?php echo htmlspecialchars($userData['last_name']); ?>" required>
                      </div>
-                  </form>
-                  <h4 class="mt-4 mb-3">Kontak</h4>
-                  <form>
+                  
+                     <h4 class="mt-4 mb-3">Kontak</h4>
                      <div class="form-group mt-1">
                         <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" value="<?php echo htmlspecialchars($userData['email']); ?>" required>
+                        <input type="email" class="form-control" name="email" id="email" value="<?php echo htmlspecialchars($userData['email']); ?>" required>
                      </div>
                      <div class="form-group mt-2">
                         <label for="wa_number">Nomor WhatsApp</label>
-                        <input type="text" class="form-control" id="wa_number" value="<?php echo htmlspecialchars($userData['wa_number']); ?>" required>
+                        <input type="number" class="form-control" name="wa_number" id="wa_number" value="<?php echo htmlspecialchars($userData['wa_number']); ?>" required>
                      </div>
                      <div class="d-flex justify-content-end flex-wrap">
                         <a href="#" class="btn btn-danger mt-3 mb-3 me-2" data-bs-toggle="modal" data-bs-target="#cancelModal">
                         Batal Perubahan
-                        </a>                                    
+                        </a>                                 
                         <button class="btn btn-success mt-3 mb-3">Simpan</button>
                      </div>
                   </form>
@@ -89,7 +88,7 @@
          <!-- Address Tab -->
          <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
             <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
-               <h4>Daftar Alamat</h4>
+               
                <?php if ($isEditMode): ?>
                <div class="mb-1">
                   <div class="d-flex justify-content-end flex-wrap">
@@ -105,10 +104,7 @@
                </div>
                <?php endif; ?>
             </div>
-            <!-- Search Bar -->
-            <div class="mb-3">
-               <input type="text" id="addressSearch" class="form-control" placeholder="Cari alamat...">
-            </div>
+            
 
             <?php
 // Sample data for demonstration purposes. Replace with your database fetching logic.
@@ -162,18 +158,35 @@ $addresses = [
       </div>
     <?php endforeach; ?>
    <?php else: ?>
+      <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
+         <h4>Daftar Alamat</h4>
+         <div class="mb-1">
+            <a href="?edit=true&tab=address" class="decoration-none">Ubah Alamat
+            <i class="fa-solid fa-pen-to-square ms-2" style="color: gold;"></i>
+            </a>
+         </div>
+      </div>
+      <!-- Search Bar -->
+      <div class="mb-3">
+         <input type="text" id="addressSearch" class="form-control mb-3" placeholder="Cari alamat...">
+      </div>
    </div>
 
    <!-- Display addresses when not in edit mode -->
    <?php foreach ($addresses as $address): ?>
    <div class="address-entry">
       <h5>Alamat <?php echo $address['id']; ?></h5>
-      <p><strong>Nama Penerima:</strong> <?php echo htmlspecialchars($address['recipient_name']); ?></p>
-      <p><strong>Alamat Jalan:</strong> <?php echo htmlspecialchars($address['street_address']); ?></p>
-      <p><strong>Kota:</strong> <?php echo htmlspecialchars($address['city']); ?></p>
-      <p><strong>Provinsi:</strong> <?php echo htmlspecialchars($address['state']); ?></p>
-      <p><strong>Kode Pos:</strong> <?php echo htmlspecialchars($address['postal_code']); ?></p>
-      <p><strong>Catatan Tambahan:</strong> <?php echo htmlspecialchars($address['extra_note']); ?></p>
+      <div class="card">
+         <div class="card-body">
+
+            <p class="mb-0"><strong>Nama Penerima:</strong> <?php echo htmlspecialchars($address['recipient_name']); ?></p>
+            <p class="mb-0"><strong>Alamat Jalan:</strong> <?php echo htmlspecialchars($address['street_address']); ?></p>
+            <p class="mb-0"><strong>Kota:</strong> <?php echo htmlspecialchars($address['city']); ?></p>
+            <p class="mb-0"><strong>Provinsi:</strong> <?php echo htmlspecialchars($address['state']); ?></p>
+            <p class="mb-0"><strong>Kode Pos:</strong> <?php echo htmlspecialchars($address['postal_code']); ?></p>
+            <p class="mb-0"><strong>Catatan Tambahan:</strong> <?php echo htmlspecialchars($address['extra_note']); ?></p>
+         </div>
+      </div>
    </div>
    <?php endforeach; ?>
    <?php endif; ?>
