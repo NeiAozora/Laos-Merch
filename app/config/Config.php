@@ -24,4 +24,7 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'laos_merch');
 
+// Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+define('PRODUCTION_MODE', false); 
+
 define('CONTROLLER', "../app/controller");

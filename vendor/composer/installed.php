@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '691cf61e9e0fffe40debe4cea9dd8317237ceefe',
+        'reference' => 'd11943d3992a7868ca95d98272afd595c1d3a2d7',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '691cf61e9e0fffe40debe4cea9dd8317237ceefe',
+            'reference' => 'd11943d3992a7868ca95d98272afd595c1d3a2d7',
             'dev_requirement' => false,
         ),
         'beberlei/assert' => array(
@@ -287,6 +287,15 @@
             'install_path' => __DIR__ . '/../mailersend/mailersend',
             'aliases' => array(),
             'reference' => '7fba98fb307f7e69df31f57364b4855ab45d661b',
+            'dev_requirement' => false,
+        ),
+        'midtrans/midtrans-php' => array(
+            'pretty_version' => '2.5.2',
+            'version' => '2.5.2.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../midtrans/midtrans-php',
+            'aliases' => array(),
+            'reference' => 'a1ad0c824449ca8c68c4cf11b3417ad518311d2b',
             'dev_requirement' => false,
         ),
         'monolog/monolog' => array(

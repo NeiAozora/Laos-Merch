@@ -2,12 +2,12 @@
 
 class CheckoutController extends Controller {
     private $productModel;
-    private $shippingModel;
+    private $shipmentMethodModel;
     private $paymentModel;
     
     public function __construct() {
         $this->productModel = new ProductModel();
-        $this->shippingModel = new ShipmentModel(); // Assuming you have a ShippingModel
+        $this->shipmentMethodModel = new ShipmentMethodModel(); // Assuming you have a ShipmentMethodModel
         $this->paymentModel = new PaymentMethodModel(); // Assuming you have a PaymentModel
     }
     
@@ -18,6 +18,7 @@ class CheckoutController extends Controller {
             return base64_decode($data);
         }
 
+        
         // Example obfuscation: Base64 encoding for parameters
         if (isset($_GET['p']) && isset($_GET['q'])) {
             // Decode the obfuscated parameters
@@ -40,7 +41,7 @@ class CheckoutController extends Controller {
                     $productId = $detail['id_product'];
                     $quantity = $quantities[array_search($productId, $productIds)];
                     if ($quantity > 0) { // Ensure quantity is not 0
-                        $totalPrice += $detail['price'] * $quantity;
+                        $totalPrice += $quantity * ($detail['price'] * (1 - ($detail['discount_value'] / 100)));
                         $products[] = [
                             'product_id' => $productId,
                             'quantity' => $quantity,
@@ -54,7 +55,11 @@ class CheckoutController extends Controller {
                 }
 
                 // Fetch shipping methods and payment methods
-                $shippingMethods = $this->shippingModel->getAll();
+                // $shippingMethods = $this->shipmentMethodModel->get(1); // memaksakan memakai COD
+                // $shippingMethods = [$shippingMethods];
+
+                $shippingMethods = $this->shipmentMethodModel->getAll();
+
                 $paymentMethods = $this->paymentModel->getAll();
 
                 // Fetch user information (for example purposes)
@@ -65,8 +70,7 @@ class CheckoutController extends Controller {
                     exit;
                 }
 
-                // d($products);
-                // die;
+                
 
                 // Pass data to the view
                 $this->view('checkout/index', [
@@ -87,4 +91,7 @@ class CheckoutController extends Controller {
             exit;
         }
     }
+
+
+
 }

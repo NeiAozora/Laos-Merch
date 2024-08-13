@@ -45,6 +45,7 @@ class CartItemModel extends Model{
         pi.image_url,
         GROUP_CONCAT(DISTINCT vo.option_name ORDER BY vo.option_name SEPARATOR ', ') AS option_name,
         GROUP_CONCAT(DISTINCT vt.name ORDER BY vt.name SEPARATOR ', ') AS variation_types,
+        COALESCE(MAX(d.discount_value), 0) AS discount_value,
         p.product_name,
         p.description,
         p.weight,
@@ -56,6 +57,8 @@ class CartItemModel extends Model{
     JOIN variation_options vo ON vo.id_option = cd.id_option
     JOIN variation_types vt ON vt.id_variation_type = vo.id_variation_type
     JOIN products p ON vc.id_product = p.id_product
+    LEFT JOIN discount_products dp ON p.id_product = dp.id_product
+    LEFT JOIN discounts d ON dp.id_discount = d.id_discount AND d.end_date > NOW() -- Ensure discount is not expired
     LEFT JOIN product_images pi ON pi.id_product = p.id_product
     WHERE ci.id_user = :id_user
     GROUP BY ci.id_cart_item, ci.id_user, ci.id_combination, ci.quantity, pi.image_url, p.product_name, p.description, p.weight, p.dimensions, vc.price;

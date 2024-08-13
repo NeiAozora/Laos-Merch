@@ -82,6 +82,10 @@ function random_str(
     return implode('', $pieces);
 }
 
+function  formatPriceValue($value){
+    return rtrim(rtrim(number_format($value, 2), '0'), '.');
+}
+
 function jsRedirect(string $urlTarget){
     echo "<script>
     window.location.href = '$urlTarget'    

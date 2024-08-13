@@ -2,6 +2,28 @@
 requireView("partials/head.php");
 requireView("partials/navbar.php");
 ?>
+
+<style>
+.cart-image-container {
+    width: 7rem; /* Set a fixed width for the image container */
+    height: 5rem; /* Set a fixed height for the image container */
+    display: flex;
+    justify-content: center; /* Center the image horizontally */
+    align-items: center; /* Center the image vertically */
+    overflow: hidden; /* Hide any overflow if the image is too large */
+    padding: 0; /* Remove any padding if present */
+    margin: 0; /* Remove any margin if present */
+}
+
+.cart-image-container img {
+    max-width: 100%; /* Ensure the image fits within the container's width */
+    max-height: 100%; /* Ensure the image fits within the container's height */
+    object-fit: contain; /* Maintain the aspect ratio of the image */
+    display: block; /* Ensure the image behaves like a block element */
+}
+
+
+</style>
 <section class="content mt-3">
     <div class="container">
         <h4>Keranjang</h4>
@@ -16,13 +38,26 @@ requireView("partials/navbar.php");
                         <div class="card mb-4" id="cart-item-<?= $item['id_cart_item'] ?>">
                             <div class="card-body row justify-content-between align-items-center">
                                 <div class="col-lg-6 col-md-6 col-12 d-flex">
-                                    <input type="checkbox" class="checkbox-item cursor-pointer me-3" data-price="<?= $item['price'] ?>" data-id="<?= $item['id_combination'] ?>" data-max-quantity="<?= $item['quantity'] ?>">
-                                    <img src="<?= $item['image_url'] ?>" alt="<?= $item['product_name'] ?>" class="img-fluid" style="max-height: 5rem; border-radius:8px">
+                                <input type="checkbox" class="checkbox-item cursor-pointer me-3" data-price="<?= $item['price'] ?>" data-id="<?= $item['id_combination'] ?>" data-max-quantity="<?= $item['quantity'] ?>" data-discount="<?= $item['discount_value'] ?>">
+                                    <div class="cart-image-container d-flex justify-content-center align-items-center">
+                                        <img src="<?= $item['image_url'] ?>" alt="<?= $item['product_name'] ?>" class="img-fluid" style="max-height: 5rem; border-radius:8px;">
+                                    </div>
+
                                     <div class="ms-3">
-                                        <h4><?= $item['product_name'] ?></h4>
+                                        <div class="d-flex">    
+                                            <h4><?= $item['product_name'] ?></h4>
+                                            <?php if (($item['discount_value']) > 0): ?>
+                                                <div class="discount-label-container">
+                                                    <svg class="discount-label-svg-image" viewBox="0 0 79 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M0 0H79V30H0L11 15L0 0Z" fill="#D7211E"/>
+                                                    </svg>
+                                                    <div class="discount-label-overlay-text">-<?= round($item['discount_value']) ?>%</div>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
                                         <div style="display: flex;">
                                             <div class="me-3">
-                                                <h6 class="title-detail">Warna:</h6>
+                                                <h6 class="title-detail">Variasi:</h6>
                                                 <p><?= $item['option_name'] ?></p>
                                             </div>
                                             <div class="me-3">
@@ -48,17 +83,27 @@ requireView("partials/navbar.php");
                                                 </div>
                                                 <input type="text" name="quantity" id="input-<?= $item['id_cart_item'] ?>" class="form-control text-center" value="<?= $item['quantity'] ?>" readonly>
                                                 <div class="input-group-append">
-                                                    <button type="button" class="btn btn-outline-secondary increment-btn" onclick="incrementQuantity(this)" style="border-radius: 0 0.25rem 0.25rem 0; border-color: #ced4da;">+</button>
+                                                    <button type="button" class="btn btn-outline-secondary increment-btn" onclick="incrementQuantity(this)" style="border-radius: 0 0.25rem 0.25rem 0; border-color: #ced4da;" disabled>+</button>
                                                 </div>
                                             </div>
                                             <button type="submit" style="display: none;"></button>
                                         </form>
                                     </div>
 
-                                    <h5 class="item-total">Rp. <?= $item['price'] * $item['quantity'] ?></h5>
+                                    <div>
+                                        <h5 class="item-total" id="total-price-per-item-<?= $item['id_cart_item'] ?>">
+                                            Rp. <?= formatPriceValue(($item['price'] * (1 - $item['discount_value'] / 100) * $item['quantity'])) ?>
+                                        </h5>
+                                        <?php if (($item['discount_value'] > 0)): ?> 
+                                            <h6 class="original-price" style="text-decoration: line-through; color: #888;">
+                                                Rp. <?= (formatPriceValue($item['price'] * $item['quantity'])) ?>
+                                            </h6>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     <?php endforeach; ?>
                 <?php else : ?>
                     <p>Your cart is empty.</p>
@@ -82,15 +127,6 @@ requireView("partials/navbar.php");
 </section>
 
 <script>
-        // Utility function to encode data to Base64
-    function encodeBase64(data) {
-        // Convert string to Uint8Array
-        const encoder = new TextEncoder();
-        const uint8Array = encoder.encode(data);
-        // Convert Uint8Array to Base64 string
-        return btoa(String.fromCharCode(...uint8Array));
-    }
-
 
     function updateTotalCost() {
         let totalCost = 0;
@@ -100,46 +136,68 @@ requireView("partials/navbar.php");
             const quantityInput = checkbox.closest('.card-body').querySelector('input[name="quantity"]');
             const quantity = parseInt(quantityInput.value);
             const price = parseFloat(checkbox.getAttribute('data-price'));
-            totalCost += quantity * price;
+            const discount = parseFloat(checkbox.getAttribute('data-discount')) || 0;
+            
+            // Calculate the discounted price
+            const discountedPrice = price * (1 - discount / 100);
+            totalCost += quantity * discountedPrice;
         });
 
-        document.getElementById('totalCost').innerText = `Rp. ${totalCost}`;
+        document.getElementById('totalCost').innerText = `Rp. ${formatPriceValue(totalCost)}`;
     }
 
     function confirmDelete(cartItemId) {
-        let quantity = document.getElementById("input-" + cartItemId).value;
-        if (confirm('Are you sure you want to delete this item?')) {
-            // Make AJAX request to delete the item
-            let url = baseUrl + `cart/remove?id_cart_item=${cartItemId}&quantity=${quantity}`;
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.action === 'update') {
-                    // Update the row with new data
-                    const cardBody = document.getElementById(`cart-item-${cartItemId}`);
-                    if (data.new_quantity !== undefined) {
-                        const quantityInput = cardBody.querySelector('input[name="quantity"]');
-                        const maxQuantity = parseInt(cardBody.querySelector('.checkbox-item').getAttribute('data-max-quantity'));
-                        quantityInput.value = data.new_quantity;
-                        cardBody.querySelector('.checkbox-item').setAttribute('data-max-quantity', data.new_quantity);
-                        updateTotalCost();
-                        toggleIncrementButton(cardBody.querySelector('.checkbox-item'));
-                    }
-                } else if (data.action === 'delete' && Object.keys(data).length === 1) {
-                    // Delete the row
-                    const cardBody = document.getElementById(`cart-item-${cartItemId}`);
-                    cardBody.remove();
+    let quantity = document.getElementById("input-" + cartItemId).value;
+    if (confirm('Are you sure you want to delete this item?')) {
+        let url = baseUrl + `cart/remove?id_cart_item=${cartItemId}&quantity=${quantity}`;
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const cardBody = document.getElementById(`cart-item-${cartItemId}`);
+            if (data.action === 'update') {
+                if (data.new_quantity !== undefined) {
+                    const quantityInput = cardBody.querySelector('input[name="quantity"]');
+                    const maxQuantity = parseInt(cardBody.querySelector('.checkbox-item').getAttribute('data-max-quantity'));
+                    
+                    // Update the quantity and the max quantity
+                    quantityInput.value = data.new_quantity;
+                    cardBody.querySelector('.checkbox-item').setAttribute('data-max-quantity', data.new_quantity);
+                    
+                    // Update the price and original price
+                    updateItemPrices(cardBody, data.new_quantity);
+
                     updateTotalCost();
+                    toggleIncrementButton(cardBody.querySelector('.checkbox-item'));
                 }
-            })
-            .catch(error => console.error('Error:', error));
-        }
+            } else if (data.action === 'delete' && Object.keys(data).length === 1) {
+                cardBody.remove();
+                updateTotalCost();
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
+}
+
+function updateItemPrices(cardBody, newQuantity) {
+    const price = parseFloat(cardBody.querySelector('.checkbox-item').getAttribute('data-price'));
+    const discountValue = parseFloat(cardBody.querySelector('.checkbox-item').getAttribute('data-discount')) || 0;
+
+    // Calculate discounted price
+    const discountedPrice = price * (1 - discountValue / 100);
+    const totalItemPrice = discountedPrice * newQuantity;
+    
+    // Update the displayed prices
+    cardBody.querySelector('.item-total').innerText = `Rp. ${formatPriceValue(totalItemPrice)}`;
+    if (discountValue > 0) {
+        cardBody.querySelector('.original-price').innerText = `Rp. ${formatPriceValue(price * newQuantity)}`;
+    }
+}
+
 
     // Handle select all checkbox
     document.getElementById('selectAll').addEventListener('change', function() {
@@ -162,27 +220,49 @@ requireView("partials/navbar.php");
         });
     });
 
-    // Handle quantity change
-    function decrementQuantity(button) {
-        let quantityInput = button.closest('.input-group').querySelector('input[name="quantity"]');
-        let quantity = parseInt(quantityInput.value);
-        if (quantity > 1) {
-            quantityInput.value = quantity - 1;
-            updateTotalCost();
-            toggleIncrementButton(button.closest('.card-body').querySelector('.checkbox-item'));
-        }
-    }
+// Handle quantity decrement
+function decrementQuantity(button) {
+    let cardBody = button.closest('.card-body');
+    let quantityInput = cardBody.querySelector('input[name="quantity"]');
+    let quantity = parseInt(quantityInput.value);
+    let price = parseFloat(cardBody.querySelector('.checkbox-item').getAttribute('data-price'));
+    let discountValue = parseFloat(cardBody.querySelector('.checkbox-item').getAttribute('data-discount')) || 0;
 
-    function incrementQuantity(button) {
-        let quantityInput = button.closest('.input-group').querySelector('input[name="quantity"]');
-        let quantity = parseInt(quantityInput.value);
-        let maxQuantity = parseInt(button.closest('.card-body').querySelector('.checkbox-item').getAttribute('data-max-quantity'));
-        if (quantity < maxQuantity) {
-            quantityInput.value = quantity + 1;
-            updateTotalCost();
+    if (quantity > 1) {
+        quantityInput.value = quantity - 1;
+        let discountedPrice = price * (1 - discountValue / 100);
+        let totalItemPrice = discountedPrice * (quantity - 1);
+        cardBody.querySelector('.item-total').innerText = `Rp. ${formatPriceValue(totalItemPrice)}`;
+        if(discountValue != 0){
+            cardBody.querySelector('.original-price').innerText = `Rp. ${formatPriceValue(price * ( parseInt(quantityInput.value)))}`;
         }
-        toggleIncrementButton(button.closest('.card-body').querySelector('.checkbox-item'));
+        updateTotalCost();
     }
+    toggleIncrementButton(cardBody.querySelector('.checkbox-item'));
+
+}
+
+// Handle quantity increment
+function incrementQuantity(button) {
+    let cardBody = button.closest('.card-body');
+    let quantityInput = cardBody.querySelector('input[name="quantity"]');
+    let quantity = parseInt(quantityInput.value);
+    let maxQuantity = parseInt(cardBody.querySelector('.checkbox-item').getAttribute('data-max-quantity'));
+    let price = parseFloat(cardBody.querySelector('.checkbox-item').getAttribute('data-price'));
+    let discountValue = parseFloat(cardBody.querySelector('.checkbox-item').getAttribute('data-discount')) || 0;
+
+    if (quantity < maxQuantity) {
+        quantityInput.value = quantity + 1;
+        let discountedPrice = price * (1 - discountValue / 100);
+        let totalItemPrice = discountedPrice * (quantity + 1);
+        cardBody.querySelector('.item-total').innerText = `Rp. ${formatPriceValue(totalItemPrice)}`;
+        if(discountValue != 0){
+            cardBody.querySelector('.original-price').innerText = `Rp. ${formatPriceValue(price * ( parseInt(quantityInput.value)))}`;
+        }
+        updateTotalCost();
+    }
+    toggleIncrementButton(cardBody.querySelector('.checkbox-item'));
+}
 
     function toggleIncrementButton(checkbox) {
         const quantityInput = checkbox.closest('.card-body').querySelector('input[name="quantity"]');
@@ -205,19 +285,22 @@ requireView("partials/navbar.php");
         });
 
         if (productIds.length > 0) {
-            const encodedProductIds = productIds.map(id => encodeBase64(id));
-            const encodedQuantities = quantities.map(qty => encodeBase64(qty));
-            
-            // Construct query string parameters
-            const productParams = encodedProductIds.map((id, index) => `p${index + 1}=${id}`).join('&');
-            const quantityParams = encodedQuantities.map((qty, index) => `q${index + 1}=${qty}`).join('&');
+            // Join the arrays into comma-separated strings
+            const productIdsString = productIds.join(',');
+            const quantitiesString = quantities.join(',');
 
-            // Redirect to checkout with encoded parameters
-            window.location.href = `/checkout?${productParams}&${quantityParams}`;
+            // Encode the comma-separated strings using Base64
+            const encodedProductIds = encodeBase64(productIdsString);
+            const encodedQuantities = encodeBase64(quantitiesString);
+
+            // Construct the query string with the encoded parameters
+            let url = `/checkout?p=${encodedProductIds}&q=${encodedQuantities}`;
+            window.location.href = url;
         } else {
             alert('Please select at least one item to proceed.');
         }
     }
+
 </script>
 
 

@@ -10,117 +10,117 @@ require_once "helper.php";
 
 $query = 
 "
--- Insert Categories
-INSERT INTO categories (category_name, category_description)
-VALUES
-    ('Electronics', 'Electronic devices and accessories.'),
-    ('Apparel', 'Clothing and accessories.');
-
--- Insert Products
-INSERT INTO products (id_category, product_name, description, weight, dimensions, discontinued)
-VALUES
-    (1, 'Smartphone', 'Latest model smartphone with advanced features', '150g', '145 x 70 x 7 mm', FALSE),
-    (2, 'T-Shirt', 'Comfortable cotton t-shirt', '200g', 'Medium', FALSE);
-
--- Insert Variation Types
-INSERT INTO variation_types (id_product, name)
-VALUES
-    (1, 'Color'), -- id 1 for Smartphone
-    (1, 'Storage'), -- id 2 for Smartphone
-    (2, 'Size'); -- id 3 for T-Shirt
-
--- Insert Variation Options
-INSERT INTO variation_options (id_variation_type, option_name, image_url)
-VALUES
-    (1, 'Black', NULL),   -- Option for Color
-    (1, 'White', NULL),   -- Option for Color
-    (2, '64GB', NULL),    -- Option for Storage
-    (2, '128GB', NULL),   -- Option for Storage
-    (3, 'Medium', NULL),  -- Option for Size
-    (3, 'Large', NULL);   -- Option for Size
-
--- Insert Variation Combinations
-INSERT INTO variation_combinations (id_product, price, stock)
-VALUES
-    (1, 700.00, 50),  -- Smartphone, Color: Black, Storage: 64GB
-    (1, 800.00, 30),  -- Smartphone, Color: Black, Storage: 128GB
-    (1, 750.00, 20),  -- Smartphone, Color: White, Storage: 64GB
-    (1, 850.00, 10),  -- Smartphone, Color: White, Storage: 128GB
-    (2, 15.00, 100),  -- T-Shirt, Size: Medium
-    (2, 15.00, 80);   -- T-Shirt, Size: Large
-
--- Insert Combination Details
-INSERT INTO combination_details (id_combination, id_option)
-VALUES
-    (1, 1),  -- Smartphone, Black color
-    (1, 3),  -- Smartphone, 64GB storage
-    (2, 1),  -- Smartphone, Black color
-    (2, 4),  -- Smartphone, 128GB storage
-    (3, 2),  -- Smartphone, White color
-    (3, 3),  -- Smartphone, 64GB storage
-    (4, 2),  -- Smartphone, White color
-    (4, 4),  -- Smartphone, 128GB storage
-    (5, 5),  -- T-Shirt, Medium size
-    (6, 6);  -- T-Shirt, Large size
-
--- Insert Carousels
-INSERT INTO carousels (name, image_url, link, title, subtitle, button_text, button_link)
-VALUES
-    ('Kaos', 'https://cdn.discordapp.com/attachments/1036284251865366648/1268922775335338064/image.png?ex=66ae2fed&is=66acde6d&hm=fc02309b77bb557860f2eb2663791037994fa2d2bd104221585f9cf5ef860917&', 'product/2', 'LAOS T-Shirt', 'Kaos Open Source', 'Beli Sekarang', 'product/2');
-
 -- Insert Roles
 INSERT INTO roles (role_name, role_description)
 VALUES
-    ('Admin', 'Administrator with full access rights.'),
-    ('Customer', 'Regular customer with access to order and account management.'),
-    ('Support', 'Support staff with access to customer service functionalities.');
+    ('Admin', 'Administrator dengan hak akses penuh.'),
+    ('Customer', 'Pelanggan biasa dengan akses untuk manajemen pesanan dan akun.'),
+    ('Support', 'Staf dukungan dengan akses ke fungsionalitas layanan pelanggan.');
 
 -- Insert Permissions
 INSERT INTO permissions (permission_name, permission_description)
 VALUES
-    ('VIEW_PRODUCTS', 'Allows viewing of products.'),
-    ('EDIT_PRODUCTS', 'Allows editing of products.'),
-    ('MANAGE_ORDERS', 'Allows managing of orders.'),
-    ('MANAGE_USERS', 'Allows managing of users.');
+    ('VIEW_PRODUCTS', 'Memungkinkan melihat produk.'),
+    ('EDIT_PRODUCTS', 'Memungkinkan mengedit produk.'),
+    ('MANAGE_ORDERS', 'Memungkinkan mengelola pesanan.'),
+    ('MANAGE_USERS', 'Memungkinkan mengelola pengguna.');
 
 -- Insert Role Permissions
 INSERT INTO role_permissions (id_role, id_permission)
 VALUES
-    (1, 1),  -- Admin can VIEW_PRODUCTS
-    (1, 2),  -- Admin can EDIT_PRODUCTS
-    (1, 3),  -- Admin can MANAGE_ORDERS
-    (1, 4),  -- Admin can MANAGE_USERS
-    (2, 1),  -- Customer can VIEW_PRODUCTS
-    (2, 3);  -- Customer can MANAGE_ORDERS
+    (1, 1),  -- Admin dapat VIEW_PRODUCTS
+    (1, 2),  -- Admin dapat EDIT_PRODUCTS
+    (1, 3),  -- Admin dapat MANAGE_ORDERS
+    (1, 4),  -- Admin dapat MANAGE_USERS
+    (2, 1),  -- Customer dapat VIEW_PRODUCTS
+    (2, 3);  -- Customer dapat MANAGE_ORDERS
 
 -- Insert Users
 INSERT INTO users (id_firebase, username, password, first_name, last_name, profile_picture, email, wa_number, id_role, is_active)
 VALUES
     ('ljiO9mSdnocXG1veOvRfW3g84wX2', 'noxindocraft', 'password123', 'Ahmad', 'Fauzan', '', 'noxindocraft@gmail.com', '+6283119624458', 1, TRUE);
 
--- Insert Tags
-INSERT INTO tags (tag_name)
+-- Insert Categories
+INSERT INTO categories (category_name, category_description)
 VALUES
-    ('New Arrival'),
-    ('Best Seller'),
-    ('Discounted');
+    ('Elektronik', 'Perangkat dan aksesoris elektronik.'),
+    ('Pakaian', 'Pakaian dan aksesoris.');
 
--- Insert Product Tags
-INSERT INTO product_tags (id_product, id_tag)
+-- Insert Products
+INSERT INTO products (id_category, product_name, description, weight, dimensions, discontinued)
 VALUES
-    (1, 1),  -- Smartphone tagged as New Arrival
-    (2, 3);  -- T-Shirt tagged as Discounted
+    (1, 'Smartphone', 'Smartphone model terbaru dengan fitur canggih', '150g', '145 x 70 x 7 mm', FALSE),
+    (2, 'Kaos', 'Kaos katun yang nyaman', '200g', 'Medium', FALSE);
+
+-- Insert Variation Types
+INSERT INTO variation_types (id_product, name)
+VALUES
+    (1, 'Warna'), -- id 1 untuk Smartphone
+    (1, 'Storage'), -- id 2 untuk Smartphone
+    (2, 'Ukuran'); -- id 3 untuk Kaos
+
+-- Insert Variation Options
+INSERT INTO variation_options (id_variation_type, option_name, image_url)
+VALUES
+    (1, 'Hitam', NULL),   -- Pilihan untuk Warna
+    (1, 'Putih', NULL),   -- Pilihan untuk Warna
+    (2, '64GB', NULL),    -- Pilihan untuk Storage
+    (2, '128GB', NULL),   -- Pilihan untuk Storage
+    (3, 'Medium', NULL),  -- Pilihan untuk Ukuran
+    (3, 'Large', NULL);   -- Pilihan untuk Ukuran
+
+-- Insert Variation Combinations
+INSERT INTO variation_combinations (id_product, price, stock)
+VALUES
+    (1, 700000.00, 50),  -- Smartphone, Warna: Hitam, Storage: 64GB
+    (1, 800000.00, 30),  -- Smartphone, Warna: Hitam, Storage: 128GB
+    (1, 750000.00, 20),  -- Smartphone, Warna: Putih, Storage: 64GB
+    (1, 850000.00, 10),  -- Smartphone, Warna: Putih, Storage: 128GB
+    (2, 150000.00, 100),  -- Kaos, Ukuran: Medium
+    (2, 150000.00, 80);   -- Kaos, Ukuran: Large
+
+-- Insert Combination Details
+INSERT INTO combination_details (id_combination, id_option)
+VALUES
+    (1, 1),  -- Smartphone, warna Hitam
+    (1, 3),  -- Smartphone, storage 64GB
+    (2, 1),  -- Smartphone, warna Hitam
+    (2, 4),  -- Smartphone, storage 128GB
+    (3, 2),  -- Smartphone, warna Putih
+    (3, 3),  -- Smartphone, storage 64GB
+    (4, 2),  -- Smartphone, warna Putih
+    (4, 4),  -- Smartphone, storage 128GB
+    (5, 5),  -- Kaos, ukuran Medium
+    (6, 6);  -- Kaos, ukuran Large
 
 -- Insert Product Images
 INSERT INTO product_images (id_product, image_url)
 VALUES
     (1, 'https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?cs=srgb&dl=pexels-tracy-le-blanc-67789-607812.jpg&fm=jpg'),
-    (2, 'https://cdn.discordapp.com/attachments/1036284251865366648/1268921522932944997/image.png?ex=66af8042&is=66ae2ec2&hm=72f8a412c0018068e0f790a13551fec6e805bcf78151e148328cc24108add771&');
+    (2, 'public/storage/kaos.webp');
+
+-- Insert Tags
+INSERT INTO tags (tag_name)
+VALUES
+    ('Produk Baru'),
+    ('Best Seller'),
+    ('Diskon');
+
+-- Insert Product Tags
+INSERT INTO product_tags (id_product, id_tag)
+VALUES
+    (1, 1),  -- Smartphone ditandai sebagai Produk Baru
+    (2, 3);  -- Kaos ditandai sebagai Diskon
+
+-- Insert Carousels
+INSERT INTO carousels (name, image_url, link, title, subtitle, button_text, button_link)
+VALUES
+    ('Kaos', 'public/storage/carausel_kaos.webp', 'product/2', 'Kaos T-Shirt', 'Kaos Berkualitas', 'Beli Sekarang', 'product/2');
 
 -- Insert Reviews
 INSERT INTO reviews (id_combination, id_user, rating, comment, anonymity)
 VALUES
-    (1, 1, 5, 'Excellent smartphone with amazing features!', FALSE);
+    (1, 1, 5, 'Smartphone yang luar biasa dengan fitur-fitur hebat!', FALSE);
 
 -- Insert Review Images
 INSERT INTO review_images (id_review, image_url)
@@ -135,29 +135,36 @@ VALUES
 -- Insert Discount Types
 INSERT INTO discount_types (type_name)
 VALUES
-    ('Percentage'),
-    ('Fixed Amount');
+    ('Persentase'),
+    ('Jumlah Tetap');
 
 -- Insert Discounts
 INSERT INTO discounts (id_discount_type, discount_value, start_date, end_date)
 VALUES
-    (1, 10.00, NOW(), DATE_ADD(NOW(), INTERVAL 1 MONTH)),  -- 10% discount
-    (2, 20.00, NOW(), DATE_ADD(NOW(), INTERVAL 1 MONTH));  -- $20 discount
+    (1, 10.00, NOW(), DATE_ADD(NOW(), INTERVAL 1 MONTH)),  -- Diskon 10%
+    (2, 20000.00, NOW(), DATE_ADD(NOW(), INTERVAL 1 MONTH));  -- Diskon Rp20.000
 
 -- Insert Discount Products
 INSERT INTO discount_products (id_discount, id_product)
 VALUES
-    (1, 1);  -- 10% discount for Smartphone
+    (1, 1);  -- Diskon 10% untuk Smartphone
+
+-- Insert Payment Methods
+INSERT INTO payment_methods (method_name)
+VALUES
+    ('COD'),
+    ('Transfer');
 
 -- Insert Shipping Addresses
 INSERT INTO shipping_addresses (id_user, recipient_name, street_address, city, state, postal_code, extra_note, is_temporary)
 VALUES
-    (1, 'Alice Johnson', '123 Main St', 'Springfield', 'IL', '62701', 'Leave at front door', FALSE);
+    (1, 'Budi Santoso', 'Jl. Merdeka No. 10', 'Jakarta', 'DKI Jakarta', '10110', 'Tinggalkan di depan pintu', FALSE);
 
 -- Insert Order Statuses
 INSERT INTO order_statuses (status_name)
 VALUES
-    ('Pending'),
+    ('Pending Payment'),
+    ('Processing'),
     ('Shipped'),
     ('Delivered'),
     ('Cancelled');
@@ -165,30 +172,34 @@ VALUES
 -- Insert Orders
 INSERT INTO orders (id_user, order_date, total_price, id_status, id_shipping_address, shipping_fee, service_fee, handling_fee, id_payment_method)
 VALUES
-    (1, NOW(), 120.00, 1, 1, 10.00, 5.00, 2.00, 1);
+    (2, NOW(), 120000.00, 2, 1, 10000.00, 5000.00, 2000.00, 1);
 
 -- Insert Order Items
 INSERT INTO order_items (id_order, quantity, id_combination, id_discount, price)
 VALUES
-    (1, 1, 1, 1, 700.00);  -- Order 1: Smartphone with 10% discount
+    (1, 1, 1, 1, 700000.00);  -- Pesanan 1: Smartphone dengan diskon 10%
+
+-- Insert Shipment Companies
+INSERT INTO shipment_companies (company_name, company_email, company_website)
+VALUES
+    ('Laos Merch Shipment', 'kurir@laosmerch.co.id', 'http://laosmerch.neiaozora.my.id'),
+    ('JNT Express', 'info@jntexpress.co.id', 'http://jntexpress.co.id');
 
 -- Insert Carriers
-INSERT INTO carriers (carrier_name, wa_number, email, website)
+INSERT INTO carriers (carrier_name, wa_number, email, id_shipment_company)
 VALUES
-    ('Fast Ship', '123-456-7890', 'support@fastship.com', 'http://fastship.com'),
-    ('Quick Delivery', '098-765-4321', 'info@quickdelivery.com', 'http://quickdelivery.com');
+    ('Bobon', '0812-3456-7890', 'bobon@gmail.com', 1),
+    ('Kushiro', '0856-7890-1234', 'kushiro@gmail.com', 2);
 
 -- Insert Shipments
 INSERT INTO shipments (id_order, id_carrier, shipping_method, tracking_number, shipment_date, expected_delivery_date, status)
 VALUES
-    (1, 1, 'Standard Shipping', 'TRACK12345', NOW(), DATE_ADD(NOW(), INTERVAL 5 DAY), 'Shipped');
+    (1, 1, 'Pengiriman Standar', 'TRACK12345', NOW(), DATE_ADD(NOW(), INTERVAL 5 DAY), 'Dalam Perjalanan');
 
 -- Insert Shipment Statuses
 INSERT INTO shipment_statuses (id_shipment, status_date, status_description)
 VALUES
-    (1, NOW(), 'Package is out for delivery.');
-
-
+    (1, NOW(), 'Kurir telah ditugaskan, dan sedanng dalam perjalanan.');
 ";
 
 $db = new Database();

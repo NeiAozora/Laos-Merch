@@ -121,7 +121,10 @@ document.addEventListener('DOMContentLoaded', function() {
             for (let i = 0; i < emptyStars; i++) {
                 starRatingHTML += unfilledStar;
             }
-        
+            if (product.product_image.includes('public/storage/')) {
+                product.product_image = baseUrl + product.product_image;
+            }
+
             // Create the product HTML
             const productHTML = `
             <div class="col-6 col-md-3 product-card-container">
@@ -129,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 ${discountLabel}
                 <a href="${baseUrl}product/${product.id_product}" style="text-decoration: none; color: inherit;">
                     <div class="img-container">
-                        <img src="${product.product_image}" class="card-img-top" alt="${product.product_name}">
+                        <img src="${product.product_image}" class="card-img-top img-fluid" alt="${product.product_name}">
                     </div>
                     <div class="card-body">
                         <div class="d-flex flex-row mb-2">
@@ -137,8 +140,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                         <p class="card-text">
                             ${product.product_name}<br>
-                            <span style="font-weight: bold;">Rp ${removeTrailingZeros(discountedPrice)}</span>
-                            ${discountValue > 0 ? `<br><span style="text-decoration: line-through; color: #888;">Rp ${removeTrailingZeros(avgPrice.toFixed(2))}</span>` : ''}
+                            <span style="font-weight: bold;">Rp ${formatPriceValue(removeTrailingZeros(discountedPrice))}</span>
+                            ${discountValue > 0 ? `<br><span style="text-decoration: line-through; color: #888;">Rp ${formatPriceValue(removeTrailingZeros(avgPrice.toFixed(2)))}</span>` : ''}
                         </p>
                     </div>
                 </a>

@@ -3,7 +3,8 @@
         "filp/whoops": "^2.15",
         "kreait/firebase-php": "^7.13",
         "kint-php/kint": "^5.1",
-        "mailersend/mailersend": "^0.25.0"
+        "mailersend/mailersend": "^0.25.0",
+        "midtrans/midtrans-php": "^2.5"
     },
     "config": {
         "allow-plugins": {
