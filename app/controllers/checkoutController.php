@@ -66,7 +66,7 @@ class CheckoutController extends Controller {
                 $user = AuthHelpers::getLoggedInUserData();
                 
                 if(is_null($user)){
-                    header('Location: /login');
+                    header('Location: ' . BASEURL . ' /login');
                     exit;
                 }
 
@@ -92,6 +92,19 @@ class CheckoutController extends Controller {
         }
     }
 
+
+    public function getUserAddresses(){
+        $user = AuthHelpers::getLoggedInUserData();
+                
+        if(is_null($user)){
+            header('HTTP/1.1 403 Forbidden');
+            echo json_encode(['error' => 'Forbidden']);
+            exit();
+        }
+
+        
+
+    }
 
 
 }

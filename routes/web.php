@@ -11,9 +11,7 @@ Router::getInstance()->addGlobalMiddleware(function () {
 Router::get("/api/products", invokeClass(ProductController::class, "list"));
 Router::get("/api/reviews", invokeClass(ReviewController::class, "getReviews"));
 Router::get("/api/reviews/product/{id}", invokeClass(ReviewController::class, "getReviewsByProductId"));
-
-
-
+Router::get("/api/user/addresses", invokeClass(CheckoutController::class, ))
 
 Router::get('/auth-process', invokeClass(LoginController::class, "processAuth"));
 
@@ -66,6 +64,7 @@ Router::get('/cart/remove', invokeClass(CartController::class, 'removeItem'));
 
 //Pesanan
 Router::get('/order', invokeClass(OrderController::class, "index"));
+Router::post('/prepareOrder', invokeClass(OrderController::class, "prepareOrder"));
 Router::post('/order/updateStatus', invokeClass(OrderController::class, "updateStatus"));
 Router::get('/order/detail/{id}', invokeClass(OrderController::class, "detail"));
 

@@ -156,9 +156,9 @@ VALUES
     ('Transfer');
 
 -- Insert Shipping Addresses
-INSERT INTO shipping_addresses (id_user, recipient_name, street_address, city, state, postal_code, extra_note, is_temporary)
+INSERT INTO shipping_addresses (id_user, label_name, street_address, city, state, postal_code, extra_note, is_prioritize, is_temporary)
 VALUES
-    (1, 'Budi Santoso', 'Jl. Merdeka No. 10', 'Jakarta', 'DKI Jakarta', '10110', 'Tinggalkan di depan pintu', FALSE);
+    (1, 'Rumah', 'Jl. Merdeka No. 10', 'Jakarta', 'DKI Jakarta', '10110', 'Tinggalkan di depan pintu', TRUE, FALSE);
 
 -- Insert Order Statuses
 INSERT INTO order_statuses (status_name)
@@ -172,7 +172,7 @@ VALUES
 -- Insert Orders
 INSERT INTO orders (id_user, order_date, total_price, id_status, id_shipping_address, shipping_fee, service_fee, handling_fee, id_payment_method)
 VALUES
-    (2, NOW(), 120000.00, 2, 1, 10000.00, 5000.00, 2000.00, 1);
+    (1, NOW(), 120000.00, 2, 1, 10000.00, 5000.00, 2000.00, 1);
 
 -- Insert Order Items
 INSERT INTO order_items (id_order, quantity, id_combination, id_discount, price)

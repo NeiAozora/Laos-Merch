@@ -193,14 +193,14 @@ CREATE TABLE discount_products (
 CREATE TABLE shipping_addresses (
   id_shipping_address BIGINT PRIMARY KEY AUTO_INCREMENT,
   id_user BIGINT NULL,
-  recipient_name VARCHAR(255),
+  label_name VARCHAR(255),
   street_address VARCHAR(255),
   city VARCHAR(255),
   state VARCHAR(255),
   postal_code VARCHAR(50),
   extra_note TEXT,
+  is_prioritize BOOLEAN DEFAULT FALSE,
   is_temporary BOOLEAN DEFAULT FALSE,
-  wa_number VARCHAR(16), -- Contact number
   FOREIGN KEY (id_user) REFERENCES users(id_user) ON UPDATE CASCADE ON DELETE CASCADE
 );
 

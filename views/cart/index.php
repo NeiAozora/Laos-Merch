@@ -294,7 +294,7 @@ function incrementQuantity(button) {
             const encodedQuantities = encodeBase64(quantitiesString);
 
             // Construct the query string with the encoded parameters
-            let url = `/checkout?p=${encodedProductIds}&q=${encodedQuantities}`;
+            let url = baseUrl + `checkout?p=${encodedProductIds}&q=${encodedQuantities}`;
             window.location.href = url;
         } else {
             alert('Please select at least one item to proceed.');

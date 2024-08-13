@@ -266,7 +266,6 @@ function escapeHtml($string) {
 }
 ?>
 
-?>
 
 <div class="container mt-5" id="reviews-container">
     <?php if (!empty($reviews)) : ?>
