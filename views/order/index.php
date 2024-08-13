@@ -46,7 +46,7 @@ requireView("partials/navbar.php");
                         </div>      
                         <div class="col-sm-4 col-md-4 col-12">
                             <a href="<?= BASEURL?>order/detail/<?= $order['id_order']?>" class="btn btn-secondary me-2">Detail Pesanan</a>
-                            <?php if($order['status_name'] !== 'Delivered' OR 'Cancelled'):?>
+                            <?php if($order['status_name'] !== 'Delivered' AND 'Cancelled'):?>
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal<?= $order['id_order']?>">
                                 Pesanan Selesai
