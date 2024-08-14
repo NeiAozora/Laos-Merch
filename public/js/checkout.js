@@ -33,10 +33,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
 document.addEventListener("DOMContentLoaded", function() {
-    const apiUrl = 'YOUR_API_ENDPOINT'; // Replace with your actual API endpoint
+    const apiUrl = baseUrl + 'api/user/addresses'; // Replace with your actual API endpoint
     const modalElement = document.getElementById('exampleModalCenter');
+    let addresses = [];
 
     // Fetch and populate modal when 'Ubah Alamat' modal is triggered
     modalElement.addEventListener('show.bs.modal', function () {
@@ -44,92 +44,122 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.json())
             .then(data => {
                 if (data.status) {
-                    const addresses = data.data;
-                    const modalBody = modalElement.querySelector('.modal-body');
-                    let prioritizedAddress = null;
-                    let otherAddresses = [];
-
-                    // Loop through addresses to find the prioritized one and others
-                    addresses.forEach(address => {
-                        if (address.is_prioritize) {
-                            prioritizedAddress = address;
-                        } else {
-                            otherAddresses.push(address);
-                        }
-                    });
-
-                    // If there's no prioritized address, select the first one
-                    if (!prioritizedAddress && addresses.length > 0) {
-                        prioritizedAddress = addresses[0];
-                        otherAddresses = addresses.slice(1);
-                    }
-
-                    // Function to create address card
-                    const createAddressCard = (address, isPrioritized = false) => {
-                        const card = document.createElement('div');
-                        card.className = 'card mb-3';
-
-                        // Customize card style based on priority
-                        card.innerHTML = `
-                            <div class="card-body" style="background-color: ${isPrioritized ? '#034d26' : '#1e1e1e'}; color: #fff;">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <h6 class="card-title mb-1">${address.label_name} ${isPrioritized ? '<span class="badge bg-warning text-dark">Utama</span>' : ''}</h6>
-                                        <p class="card-text mb-1">${address.street_address}, ${address.city}, ${address.state}, ${address.postal_code}</p>
-                                        <p class="card-text">${address.extra_note || ''}</p>
-                                    </div>
-                                    <div class="text-end">
-                                        ${isPrioritized ? '<i class="fa-solid fa-check text-success" style="font-size: 24px;"></i>' : '<button type="button" class="btn btn-outline-success mb-2">Pilih</button>'}
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between mt-3">
-                                    <a href="#" class="text-light"></a>
-                                    <div>
-                                        <a href="#" class="text-light me-3">Ubah Alamat</a>
-                                        ${!isPrioritized ? '<a href="#" class="text-light me-3">Jadikan Alamat Utama & Pilih</a>' : ''}
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        return card;
-                    };
-
-                    // Clear existing cards
-                    modalBody.innerHTML = '';
-
-                    // Add the prioritized address card first
-                    if (prioritizedAddress) {
-                        modalBody.appendChild(createAddressCard(prioritizedAddress, true));
-                    }
-
-                    // Add other address cards with 'Pilih' and 'Jadikan Alamat Utama & Pilih' options
-                    otherAddresses.forEach(address => {
-                        modalBody.appendChild(createAddressCard(address));
-                    });
-
-                    // Optionally, add a button or link to add new address
-                    const addNewAddressButton = document.createElement('button');
-                    addNewAddressButton.className = 'btn btn-outline-success w-100 mb-3';
-                    addNewAddressButton.textContent = 'Kelola Alamat';
-                    modalBody.prepend(addNewAddressButton);
-
-                    // Add the search bar back
-                    const searchBar = document.createElement('div');
-                    searchBar.className = 'mb-3 position-relative';
-                    searchBar.innerHTML = `
-                        <span class="position-absolute top-50 start-0 translate-middle-y ms-3">
-                            <i class="fa-solid fa-magnifying-glass text-muted"></i>
-                        </span>
-                        <input type="text" class="form-control ps-5" placeholder="Cari alamat yang dimiliki">
-                    `;
-                    modalBody.prepend(searchBar);
+                    addresses = data.data; // Store the addresses globally
+                    populateModal(addresses); // Populate modal with initial data
                 } else {
                     console.error('Failed to fetch addresses');
                 }
             })
             .catch(error => console.error('Error:', error));
     });
+
+    function populateModal(addresses) {
+        const modalBody = modalElement.querySelector('.modal-body');
+        let prioritizedAddress = null;
+        let otherAddresses = [];
+
+        // Loop through addresses to find the prioritized one and others
+        addresses.forEach(address => {
+            if (address.is_prioritize) {
+                prioritizedAddress = address;
+            } else {
+                otherAddresses.push(address);
+            }
+        });
+
+        // If there's no prioritized address, select the first one
+        if (!prioritizedAddress && addresses.length > 0) {
+            prioritizedAddress = addresses[0];
+            otherAddresses = addresses.slice(1);
+        }
+
+        // Function to create address card
+        const createAddressCard = (address, isPrioritized = false) => {
+            const card = document.createElement('div');
+            card.className = 'card mb-3 address-card';
+
+            // Customize card style based on priority
+            card.innerHTML = `
+                <div class="card-body" style="background-color: ${isPrioritized ? '#034d26' : '#1e1e1e'}; color: #fff;">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title mb-1">${address.label_name} ${isPrioritized ? '<span class="badge bg-warning text-dark">Utama</span>' : ''}</h6>
+                            <p class="card-text mb-1">${address.street_address}, ${address.city}, ${address.state}, ${address.postal_code}</p>
+                            <p class="card-text">${address.extra_note || ''}</p>
+                        </div>
+                        <div class="text-end">
+                            ${isPrioritized ? '<i class="fa-solid fa-check text-success" style="font-size: 24px;"></i>' : `<button type="button" class="btn btn-outline-success mb-2" onclick="selectAddress(${JSON.stringify(address).replace(/"/g, '&quot;')})">Pilih</button>`}
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="#" class="text-light"></a>
+                        <div>
+                            <a href="#" class="text-light me-3">Ubah Alamat</a>
+                            ${!isPrioritized ? '<a href="#" class="text-light me-3">Jadikan Alamat Utama & Pilih</a>' : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+            return card;
+        };
+
+        // Clear existing cards
+        modalBody.innerHTML = '';
+
+        // Add the prioritized address card first
+        if (prioritizedAddress) {
+            modalBody.appendChild(createAddressCard(prioritizedAddress, true));
+        }
+
+        // Add other address cards with 'Pilih' and 'Jadikan Alamat Utama & Pilih' options
+        otherAddresses.forEach(address => {
+            modalBody.appendChild(createAddressCard(address));
+        });
+
+        // Optionally, add a button or link to add a new address
+        const addNewAddressButton = document.createElement('button');
+        addNewAddressButton.className = 'btn btn-outline-success w-100 mb-3';
+        addNewAddressButton.textContent = 'Kelola Alamat';
+        modalBody.prepend(addNewAddressButton);
+
+        // Add the search bar back
+        const searchBar = document.createElement('div');
+        searchBar.className = 'mb-3 position-relative';
+        searchBar.innerHTML = `
+            <span class="position-absolute top-50 start-0 translate-middle-y ms-3">
+                <i class="fa-solid fa-magnifying-glass text-muted"></i>
+            </span>
+            <input type="text" class="form-control ps-5" placeholder="Cari alamat yang dimiliki">
+        `;
+        modalBody.prepend(searchBar);
+
+        // Search functionality
+        const searchInput = searchBar.querySelector('input');
+        searchInput.addEventListener('input', function() {
+            const query = searchInput.value.toLowerCase();
+            const filteredAddresses = addresses.filter(address => {
+                const fullAddress = `${address.street_address}, ${address.city}, ${address.state}, ${address.postal_code}`.toLowerCase();
+                return address.label_name.toLowerCase().includes(query) || fullAddress.includes(query);
+            });
+            populateModal(filteredAddresses); // Re-populate the modal with filtered results
+        });
+    }
 });
+
+// Function to select address and update the "Alamat:" field
+function selectAddress(address) {
+    const alamatField = document.querySelector('.card-body h6[style*="font-family: nunito;"][text^="Alamat:"]');
+    if (alamatField) {
+        alamatField.textContent = `${address.street_address}, ${address.city}, ${address.state}, ${address.postal_code}`;
+    }
+    const extraNoteField = document.querySelector('.card-body h6[style*="font-family: nunito;"][text^="Catatan:"]');
+    if (extraNoteField && address.extra_note) {
+        extraNoteField.textContent = address.extra_note;
+    }
+    const modalElement = document.getElementById('exampleModalCenter');
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+    modalInstance.hide();
+}
 
 
 

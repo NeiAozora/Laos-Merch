@@ -11,7 +11,7 @@ Router::getInstance()->addGlobalMiddleware(function () {
 Router::get("/api/products", invokeClass(ProductController::class, "list"));
 Router::get("/api/reviews", invokeClass(ReviewController::class, "getReviews"));
 Router::get("/api/reviews/product/{id}", invokeClass(ReviewController::class, "getReviewsByProductId"));
-Router::get("/api/user/addresses", invokeClass(CheckoutController::class, ))
+Router::get("/api/user/addresses", invokeClass(CheckoutController::class, 'getUserAddresses'));
 
 Router::get('/auth-process', invokeClass(LoginController::class, "processAuth"));
 

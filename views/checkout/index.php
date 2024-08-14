@@ -146,62 +146,8 @@ requireView("partials/navbar.php");
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <!-- Search bar -->
-        <div class="mb-3 position-relative">
-            <span class="position-absolute top-50 start-0 translate-middle-y ms-3">
-                <i class="fa-solid fa-magnifying-glass text-muted"></i>
-            </span>
-            <input type="text" class="form-control ps-5" placeholder="Cari alamat yang dimiliki">
-        </div>
-
-        <!-- Add new address button -->
-        <button type="button" class="btn btn-outline-success w-100 mb-3">Kelola Alamat</button>
-
-        <!-- First Address Card -->
-        <div class="card mb-3">
-          <div class="card-body" style="background-color: #034d26; color: #fff;">
-            <div class="d-flex justify-content-between">
-              <div>
-                <h6 class="card-title mb-1">Rumah <span class="badge bg-warning text-dark">Utama</span></h6>
-                <p class="card-text mb-1">Ahmad Fauzan</p>
-                <p class="card-text">6283199624458</p>
-                <p class="card-text">Perempatan puskesmas tembokrejo munca...</p>
-              </div>
-              <div>
-                <i class="fa-solid fa-check text-success" style="font-size: 24px;"></i>
-              </div>
-            </div>
-            <div class="d-flex justify-content-between mt-3">
-              <a href="#" class="text-light"></a>
-              <div>
-                <a href="#" class="text-light">Ubah Alamat</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Second Address Card -->
-        <div class="card mb-3">
-          <div class="card-body" style="background-color: #1e1e1e; color: #fff;">
-            <div class="d-flex justify-content-between">
-              <div>
-                <h6 class="card-title mb-1">Kos</h6>
-                <p class="card-text mb-1">Ahmad Fauzan</p>
-                <p class="card-text">6283199624458</p>
-                <p class="card-text">Jl. Kalimantan X, Gang X, Rumah no. 6...</p>
-              </div>
-              <div class="text-end">
-                <button type="button" class="btn btn-outline-success mb-2">Pilih</button>
-              </div>
-            </div>
-            <div class="d-flex justify-content-between mt-3">
-              <a href="#" class="text-light"></a>
-              <div>
-                <a href="#" class="text-light me-3">Ubah Alamat</a>
-                <a href="#" class="text-light me-3">Jadikan Alamat Utama & Pilih</a>
-              </div>
-            </div>
-          </div>
+        <div class="loading-bar-container">
+          <div class="moving-element"></div>
         </div>
       </div>
     </div>

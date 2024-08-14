@@ -59,7 +59,6 @@ class CheckoutController extends Controller {
                 // $shippingMethods = [$shippingMethods];
 
                 $shippingMethods = $this->shipmentMethodModel->getAll();
-
                 $paymentMethods = $this->paymentModel->getAll();
 
                 // Fetch user information (for example purposes)
@@ -71,9 +70,15 @@ class CheckoutController extends Controller {
                 }
 
                 
+                $address = [];
+
+                foreach(ShippingAddressModel::new()->get(['id_user', $user['id']]) as $addresses){
+                    
+                }
 
                 // Pass data to the view
                 $this->view('checkout/index', [
+                    'address' => $address,
                     'products' => $products,
                     'shipping_methods' => $shippingMethods,
                     'payment_methods' => $paymentMethods,
@@ -98,11 +103,14 @@ class CheckoutController extends Controller {
                 
         if(is_null($user)){
             header('HTTP/1.1 403 Forbidden');
-            echo json_encode(['error' => 'Forbidden']);
+            echo json_encode(['status' => 403, 'data' => []]);
             exit();
         }
 
+        $addresses = ShippingAddressModel::new()->get(['id_user', $user['id']]);
+        header('Content-Type: application/json');
         
+        echo json_encode(['status' => 200, 'data' => $addresses]);
 
     }
 
