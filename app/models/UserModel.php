@@ -64,7 +64,6 @@ class UserModel extends Model
         ');
         
         // Bind values to the placeholders
-        $this->db->bind(':id_user', $id_user, PDO::PARAM_INT);
         $this->db->bind(':id_firebase', $id_firebase, PDO::PARAM_STR);
         $this->db->bind(':username', $username);
         // $this->db->bind(':password', $password);
@@ -74,7 +73,8 @@ class UserModel extends Model
         $this->db->bind(':wa_number', $wa_number);
         // $this->db->bind(':id_role', $id_role, PDO::PARAM_INT);
         $this->db->bind(':profile_picture', $profile_picture);
-    
+        $this->db->bind(':id_user', $id_user, PDO::PARAM_INT);
+        
         // Execute the query
         return $this->db->execute();
     }

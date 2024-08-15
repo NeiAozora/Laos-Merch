@@ -30,18 +30,6 @@ class ProfileController extends Controller
         
         if ($id_user && $_SERVER['REQUEST_METHOD'] == 'POST') {
             // Mendapatkan data dari form
-            // $data = [
-            //     'id_user' => $_POST['id_user'],  // Menggunakan 'id' dari data yang diambil
-            //     'id_firebase' => $_POST['id_firebase'],  // Menggunakan 'uid' dari data yang diambil
-            //     'username' => $_POST['username'],
-            //     'password' => $_POST['password'],
-            //     'first_name' => $_POST['first_name'],
-            //     'last_name' => $_POST['last_name'],
-            //     'email' => $_POST['email'],
-            //     'wa_number' => $_POST['wa_number'],
-            //     'id_role' => $_POST['id_role'],  // Asumsikan 'id_role' diambil dari data user yang ada
-            //     'profile_picture' => $_POST['profile_picture']
-            // ];
             $id_firebase = $_POST['id_firebase'] ?? null;
             $username = $_POST['username'] ?? null;
             // $password = $_POST['password'] ?? null;

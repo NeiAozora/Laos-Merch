@@ -26,10 +26,10 @@
                <div class="col-md-4 text-center">
                   <img style="border-radius: 50%;" src="<?php echo htmlspecialchars($userData['profile_picture'] ?? 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'); ?>" alt="Profile Picture">
                   <?php if ($isEditMode): ?>
-                  <form>
+                  <form action="<?= BASEURL ?>user/<?= $userData['id']; ?>/profile/update" method="POST">
                      <div class="form-group">
                         <label for="formFile">Pilih Foto</label>
-                        <input class="form-control w-3" type="file" id="formFile">
+                        <input class="form-control w-3" type="file" name="profile_picture" id="formFile">
                      </div>
                   </form>
                   <?php endif; ?>
@@ -37,6 +37,7 @@
                <div class="col-md-8">
                   <?php if ($isEditMode): ?>
                   <form action="<?= BASEURL ?>user/<?= $userData['id']; ?>/profile/update" method="POST">
+                     <input type="hidden" name="id_user" value="<?= htmlspecialchars($userData['id']); ?>">
                      <div class="form-group mt-1">
                         <label for="username">Username</label>
                         <input type="text" class="form-control" name="username" id="username" placeholder="Masukkan username..." value="<?php echo htmlspecialchars($userData['username']); ?>" required>

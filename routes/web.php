@@ -57,11 +57,6 @@ Router::get('/purchase/order', function () {
 Router::get('/cart', invokeClass(CartController::class, "index"));
 Router::post('/cart/add', invokeClass(CartController::class, 'add'));
 Router::get('/cart/remove', invokeClass(CartController::class, 'removeItem'));
-// Router::post('/cart/update', function() {
-//     $id_cart_item = $_POST['id_cart_item'];
-//     $quantity = $_POST['quantity'];
-//     invokeClass(CartController::class, 'updateQuantity', [$id_cart_item, $quantity]);
-// });
 
 
 //Pesanan
@@ -69,6 +64,9 @@ Router::get('/order', invokeClass(OrderController::class, "index"));
 Router::post('/prepareOrder', invokeClass(OrderController::class, "prepareOrder"));
 Router::post('/order/updateStatus', invokeClass(OrderController::class, "updateStatus"));
 Router::get('/order/detail/{id}', invokeClass(OrderController::class, "detail"));
+
+//Atmin
+Router::get('/admin', invokeClass(AdminController::class, "index"));
 
 Router::get("/about/privacy-policy", function () {
     view("/about/privacy-policy/index");
