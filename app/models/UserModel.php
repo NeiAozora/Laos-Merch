@@ -57,27 +57,38 @@ class UserModel extends Model
         return $this->db->resultSet();
     }
 
-    public function updateUser($id_user, $id_firebase, $username, $first_name, $last_name, $email, $wa_number, $profile_picture)
+    public function updateUser($id_user, $username, $first_name, $last_name, $email, $wa_number, $profile_picture = null)
     {
-        $this->db->query('
-            UPDATE users SET id_firebase = :id_firebase, username = :username, first_name = :first_name, last_name = :last_name, email = :email, wa_number = :wa_number, profile_picture = :profile_picture WHERE id_user = :id_user
-        ');
-        
-        // Bind values to the placeholders
-        $this->db->bind(':id_user', $id_user, PDO::PARAM_INT);
-        $this->db->bind(':id_firebase', $id_firebase, PDO::PARAM_STR);
+        $query = 'UPDATE users SET 
+            username = :username, 
+            first_name = :first_name, 
+            last_name = :last_name, 
+            email = :email, 
+            wa_number = :wa_number';
+
+        if ($profile_picture) {
+            $query .= ', profile_picture = :profile_picture';
+        }
+
+        $query .= ' WHERE id_user = :id_user';
+
+        $this->db->query($query);
+
         $this->db->bind(':username', $username);
-        // $this->db->bind(':password', $password);
         $this->db->bind(':first_name', $first_name);
         $this->db->bind(':last_name', $last_name);
         $this->db->bind(':email', $email);
         $this->db->bind(':wa_number', $wa_number);
-        // $this->db->bind(':id_role', $id_role, PDO::PARAM_INT);
-        $this->db->bind(':profile_picture', $profile_picture);
-    
-        // Execute the query
+
+        if ($profile_picture) {
+            $this->db->bind(':profile_picture', $profile_picture);
+        }
+
+        $this->db->bind(':id_user', $id_user);
+
         return $this->db->execute();
     }
+
     
 
     // Delete a user

@@ -31,10 +31,14 @@ Router::get('/logout', invokeClass(LoginController::class, "logout"));
 Router::get('/', invokeClass(IndexController::class, "index"));
 // Product
 Router::get('/product/{id}', invokeClass(ProductController::class, "getProduct"));
+
 // UserProfile
 Router::get('/user/{id}/profile', invokeClass(ProfileController::class, "profileSettings"));
 //UpdateUser
 Router::post('/user/{id_user}/profile/update', invokeClass(ProfileController::class, "updateProfile"));
+//Update Address
+Router::post('/user/{id_user}/profile/updateShippingAddress', invokeClass(ProfileController::class, "updateShippingAddress"));
+
 // UserSettings
 Router::get('/user/{firebaseId}/settings', function () {
     view("/404/index");
@@ -60,11 +64,6 @@ Router::get('/purchase/order', function () {
 Router::get('/cart', invokeClass(CartController::class, "index"));
 Router::post('/cart/add', invokeClass(CartController::class, 'add'));
 Router::get('/cart/remove', invokeClass(CartController::class, 'removeItem'));
-// Router::post('/cart/update', function() {
-//     $id_cart_item = $_POST['id_cart_item'];
-//     $quantity = $_POST['quantity'];
-//     invokeClass(CartController::class, 'updateQuantity', [$id_cart_item, $quantity]);
-// });
 
 
 //Pesanan
@@ -72,6 +71,9 @@ Router::get('/order', invokeClass(OrderController::class, "index"));
 Router::post('/prepareOrder', invokeClass(OrderController::class, "prepareOrder"));
 Router::post('/order/updateStatus', invokeClass(OrderController::class, "updateStatus"));
 Router::get('/order/detail/{id}', invokeClass(OrderController::class, "detail"));
+
+//Atmin
+Router::get('/admin', invokeClass(AdminController::class, "index"));
 
 Router::get("/about/privacy-policy", function () {
     view("/about/privacy-policy/index");

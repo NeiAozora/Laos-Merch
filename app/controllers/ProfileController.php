@@ -3,9 +3,11 @@
 class ProfileController extends Controller
 {
     private $userModel;
+    private $shippingAddressModel;
 
     public function __construct(){
         $this->userModel = new UserModel();
+        $this->shippingAddressModel = new ShippingAddressModel();
     }
 
     public function profileSettings(){
@@ -20,54 +22,73 @@ class ProfileController extends Controller
             jsRedirect("Laos-Merch/login");
             // throw new ValueError('Userdata of the logged in person are null');
         }
-        $this->view("profile/biodata/index" , ["isEditMode"=> $editMode, 'userData' => $userData]);
+
+        $addresses = $this->shippingAddressModel->getShipAddressByUser($userData['id']);
+        
+        $this->view("profile/biodata/index" , ["isEditMode"=> $editMode, 'userData' => $userData, 'Addresses' => $addresses]);
     }    
 
-    public function updateProfile() {
-        // Mengambil data user yang sedang login
+   public function updateProfile($id_user)
+    {
         $id_user = $_SESSION['user']['id_user'] ?? null;
-        // $userData = AuthHelpers::getLoggedInUserData();
-        
-        if ($id_user && $_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Mendapatkan data dari form
-            // $data = [
-            //     'id_user' => $_POST['id_user'],  // Menggunakan 'id' dari data yang diambil
-            //     'id_firebase' => $_POST['id_firebase'],  // Menggunakan 'uid' dari data yang diambil
-            //     'username' => $_POST['username'],
-            //     'password' => $_POST['password'],
-            //     'first_name' => $_POST['first_name'],
-            //     'last_name' => $_POST['last_name'],
-            //     'email' => $_POST['email'],
-            //     'wa_number' => $_POST['wa_number'],
-            //     'id_role' => $_POST['id_role'],  // Asumsikan 'id_role' diambil dari data user yang ada
-            //     'profile_picture' => $_POST['profile_picture']
-            // ];
-            $id_firebase = $_POST['id_firebase'] ?? null;
+        if ($id_user && $_SERVER['REQUEST_METHOD'] === 'POST') {
             $username = $_POST['username'] ?? null;
-            // $password = $_POST['password'] ?? null;
             $first_name = $_POST['first_name'] ?? null;
             $last_name = $_POST['last_name'] ?? null;
             $email = $_POST['email'] ?? null;
             $wa_number = $_POST['wa_number'] ?? null;
-            // $id_role = $_POST['id_role'] ?? null;
-            $profile_picture = $_POST['profile_picture'] ?? null;
+            $profile_picture = $_FILES['profile_picture']['name'] ?? null;
 
-            // Melakukan update user
-            if($id_user && $id_firebase && $username && $first_name && $last_name && $email && $wa_number && $profile_picture){
-                if ($this->userModel->updateUser($id_user, $id_firebase, $username, $first_name, $last_name, $email, $wa_number, $profile_picture)) {
-                    header("Location: " . BASEURL . "user/$id_user/profile");
-                    exit;
-                } else {
-                    $_SESSION['error'] = 'error ygy';
-                }
-            }else{
-                $_SESSION['error']  = 'error jg ygy';
+            if ($profile_picture) {
+                $target_dir = "uploads/profile_pictures/";
+                $target_file = $target_dir . basename($profile_picture);
+                move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $target_file);
             }
+
+            $result = $this->userModel->updateUser($id_user,$username,$first_name,$last_name,$email,$wa_number,$profile_picture);
+
+            if ($result) {
+                $_SESSION['success'] = 'Berhasil Update.';
+            } else {
+                $_SESSION['error'] = 'Gagal Update.';
+            }
+
+            header("Location: " . BASEURL . "user/" . $id_user . "/profile");
+            exit;
         } else {
-            $_SESSION['error'] = 'masih error ygy';
+            $_SESSION['error'] = 'Unauthorized request or invalid request method.';
+            header("Location: " . BASEURL . "user/" . $id_user . "/profile");
+            exit;
         }
-        
-        header("Location: " . BASEURL . "user/$id_user/profile");
-        exit;
     }
+
+    public function updateShippingAddress($id_user)
+    {
+        $id_user = $_SESSION['user']['id_user'] ?? null;
+        if ($id_user && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id_shipping_address = $_POST['id_shipping_address'] ?? null;
+            $recipient_name = $_POST['recipient_name'] ?? null;
+            $street_address = $_POST['street_address'] ?? null;
+            $city = $_POST['city'] ?? null;
+            $state = $_POST['state'] ?? null;
+            $postal_code = $_POST['postal_code'] ?? null;
+            $extra_note = $_POST['extra_note'] ?? null;
+
+            $result = $this->shippingAddressModel->updateShipAddress($id_user,$id_shipping_address,$recipient_name,$street_address,$city,$state,$postal_code,$extra_note);
+
+            if ($result) {
+                $_SESSION['success'] = 'Berhasil Update.';
+            } else {
+                $_SESSION['error'] = 'Gagal Update.';
+            }
+
+            header("Location: " . BASEURL . "user/" . $id_user . "/profile");
+            exit;
+        } else {
+            $_SESSION['error'] = 'Unauthorized request or invalid request method.';
+            header("Location: " . BASEURL . "user/" . $id_user . "/profile");
+            exit;
+        }
+    }
+
 }
