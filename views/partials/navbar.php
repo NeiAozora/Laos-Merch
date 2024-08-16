@@ -1,9 +1,6 @@
 <!-- navbar -->
-<script type="module" src="<?= BASEURL ?>public/js/fbase.js"></script>
-<script src="<?= BASEURL ?>public/js/fbaseAuth.js" type="module"></script>
-
 <script>
-    
+var t;
 var baseUrl = "<?= BASEURL ?>";
 document.addEventListener('DOMContentLoaded', () => {
     // Check if there are any <footer> elements
@@ -20,6 +17,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2000); // Delay of 2 seconds (2000 milliseconds)
     }
 });
+
+function openHtmlContentToNewPage(htmlContent) {
+    // Make sure the HTML content is properly escaped
+    if (typeof htmlContent !== 'string') {
+        console.error('Invalid HTML content');
+        return;
+    }
+
+    // Create a Blob object with the HTML content
+    var blob = new Blob([htmlContent], { type: 'text/html' });
+
+    // Create a URL for the Blob
+    var url = URL.createObjectURL(blob);
+
+    // Open the Blob URL in a new tab
+    var newTab = window.open(url, '_blank');
+
+    // Check if the new tab was successfully created
+    if (!newTab) {
+        console.error('Failed to open new tab. Please ensure that pop-ups are allowed.');
+        return;
+    }
+
+    // Optionally, revoke the URL after some time to free up memory
+    setTimeout(function() {
+        URL.revokeObjectURL(url);
+    }, 10000); // 10 seconds
+}
+
 
 function formatPriceValue(value) {
     // Check if the value is a number and not null/undefined
@@ -56,6 +82,10 @@ function encodeBase64(data) {
 }
 
 </script>
+<script type="module" src="<?= BASEURL ?>public/js/fbase.js"></script>
+<script src="<?= BASEURL ?>public/js/fbaseAuth.js" type="module"></script>
+
+
 
 
 <style>

@@ -91,3 +91,8 @@ function jsRedirect(string $urlTarget){
     window.location.href = '$urlTarget'    
     </script>";
 }
+
+function getGlobalVar($varName) {
+    global $$varName;
+    return isset($$varName) ? $$varName : null;
+}

@@ -106,18 +106,179 @@ class OrderController extends Controller{
         exit;
     }
 
-    public function prepareOrder(){
+    public function prepareOrder() {
         $user = AuthHelpers::getLoggedInUserData();
-
-        // Check if the cart item belongs to the current user
-        if (empty($user)){
-            header('HTTP/1.1 403 Forbidden');
-            echo json_encode(['error' => 'Forbidden']);
-            exit();
-        }
-
-        OrderModel::new()->deleteOrdersByInterval($user['id_user'], '30m');
-
         
+        if (empty($user)) {
+            $this->sendError('Forbidden', 403);
+        }
+    
+        $requiredKeys = ['shippingMethodId', 'paymentMethodId', 'idShippingAddress', 'token', 'selectedProductsParameters'];
+        
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+    
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $this->sendError('Invalid JSON', 400);
+        }
+    
+        foreach ($requiredKeys as $key) {
+            if (empty($data[$key])) {
+                $this->sendError('Forbidden', 403);
+            }
+        }
+        
+        $shippingMethodId = $data['shippingMethodId'];
+        $paymentMethodId = $data['paymentMethodId'];
+        $idShippingAddress = $data['idShippingAddress'];
+        $token = $data['token'];
+        $selectedProductsParameters = $data['selectedProductsParameters'];
+    
+        $verifiedIdToken = AuthHelpers::verifyFBAcessIdToken($token);
+    
+        if (empty($verifiedIdToken)) {
+            $this->sendError('Forbidden', 403);
+        }
+        
+        function decode_obfuscated_data($data) {
+            return base64_decode($data);
+        }
+        
+        parse_str($selectedProductsParameters, $params);
+        
+        if (isset($params['p']) && isset($params['q'])) {
+            $productIdsEncoded = $params['p'];
+            $quantitiesEncoded = $params['q'];
+    
+            $productIds = explode(',', decode_obfuscated_data($productIdsEncoded));
+            $quantities = explode(',', decode_obfuscated_data($quantitiesEncoded));
+    
+            if (count($productIds) !== count($quantities)) {
+                $this->sendError('Invalid product parameters', 400);
+            }
+    
+            $productDetails = ProductModel::new()->getProductsByCombinations($productIds);
+    
+            $products = [];
+            $totalPrice = 0;
+    
+            foreach ($productDetails as $detail) {
+                $productId = $detail['id_product'];
+                $quantity = $quantities[array_search($productId, $productIds)];
+    
+                if ($quantity > 0) {
+                    $finalPrice = !empty($detail['discount_value']) && $detail['discount_value'] > 0
+                        ? $detail['price'] * (1 - ($detail['discount_value'] / 100))
+                        : $detail['price'];
+    
+                    $totalPrice += $quantity * $finalPrice;
+    
+                    $products[] = [
+                        'product_id' => $productId,
+                        'quantity' => $quantity,
+                        'product_name' => $detail['product_name'],
+                        'image_url' => $detail['product_image'],
+                        'selected_options' => $detail['selected_options'],
+                        'price' => $detail['price'],
+                        'discount_value' => $detail['discount_value'],
+                        'final_price' => $finalPrice
+                    ];
+                }
+            }
+    
+        } else {
+            $this->sendError('Missing product parameters', 400);
+        }
+    
+        OrderModel::new()->deleteOrdersByInterval($user['id'], '30m');
+    
+        $orderData = [
+            'id_user' => $user['id'],
+            'id_status' => 1,
+            'total_price' => $totalPrice,
+            'shipping_fee' => 0,
+            'service_fee' => 2.50,
+            'handling_fee' => 1.50,
+            'id_payment_method' => $paymentMethodId,
+            'id_shipping_address' => $idShippingAddress
+        ];
+    
+        $idOrder = OrderModel::new()->insertOrder($orderData);
+    
+        $response = [
+            'success' => true,
+            'snapToken' => '',
+            'redirect' => ''
+        ];
+    
+        if ($paymentMethodId == 2) {  // Transfer
+            $transactionDetails = [
+                'order_id' => $idOrder,
+                'service_fee' => 2500,
+                'handling_fee' => 1500,
+                'gross_amount' => (int) $totalPrice,
+            ];
+    
+            $itemDetails = [];
+    
+            foreach ($products as $product) {
+                $itemDetails[] = [
+                    'id' => $product['product_id'],
+                    'price' => (int)$product['final_price'],
+                    'quantity' => (int) $product['quantity'],
+                    'name' => $product['product_name']
+                ];
+            }
+    
+            $firebaseId = $verifiedIdToken->claims()->get("sub");
+            $user = UserModel::new()->get(['id_firebase', $firebaseId]);
+    
+            if (empty($user)) {
+                $this->sendError('User not found in local database', 404);
+            }
+    
+            $user = $user[0];
+    
+            $shippingAddress = ShippingAddressModel::new()->get($idShippingAddress);
+    
+            if (empty($shippingAddress)) {
+                $this->sendError('Shipping address not found', 404);
+            }
+    
+            $customerDetails = [
+                'first_name' => $user['first_name'],
+                'last_name' => $user['last_name'],
+                'address' => $shippingAddress['street_address'],
+                'city' => $shippingAddress['city'],
+                'state' => $shippingAddress['state'],
+                'postal_code' => $shippingAddress['postal_code'],
+                'Whatsapp number' => $user['wa_number'],
+                'country_code' => 'IDN'
+            ];
+    
+            $params = [
+                'transaction_details' => $transactionDetails,
+                'customer_details' => $customerDetails,
+                'item_details' => $itemDetails
+            ];
+    
+            $response['snapToken'] = \Midtrans\Snap::getSnapToken($params);
+    
+        } elseif ($paymentMethodId == 1) {  // COD
+            $response['redirect'] = BASEURL . 'order/detail/' . $idOrder;
+        }
+    
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
     }
+    
+    private function sendError($message, $statusCode) {
+        header("HTTP/1.1 $statusCode $message");
+        echo json_encode(['error' => $message]);
+        exit();
+    }
+    
+    
+    
 }

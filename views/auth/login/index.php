@@ -38,7 +38,12 @@ requireView("partials/head.php");
                                 <div id="bar-loader"></div>
                                 <div id="error-message"></div>
                             </div>
-                            
+
+                            <?php if(isset($_GET["message"])): ?>
+                            <div class="alert alert-warning" role="alert" id="verification">
+                                <?= $_GET["message"] ?>
+                            </div>
+                            <?php endif; ?>
 
                             <!-- Placeholder for success message -->
                             <?php if(isset($_GET["verificationSuccess"])): ?>

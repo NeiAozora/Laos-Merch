@@ -193,7 +193,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     let reviewsContainer = document.getElementById("reviews-container");
-    console.log(reviewsContainer);
     function fetchReviews(){
         injectLoader('reviews-container');
         fetch(`api/reviews`)

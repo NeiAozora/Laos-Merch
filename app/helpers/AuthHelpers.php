@@ -68,7 +68,7 @@ class AuthHelpers
 
 
     public static function getLoggedInUserData(): ?array {
-        
+
         if (!isset($_SESSION['user'])) {
             return null;
         }
@@ -93,7 +93,8 @@ class AuthHelpers
             </script>
             `;
         }
-        
+
+
 
         if ($verifiedIdToken) {
             $firebaseId = $verifiedIdToken->claims()->get('sub');

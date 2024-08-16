@@ -63,19 +63,16 @@ class CheckoutController extends Controller {
 
                 // Fetch user information (for example purposes)
                 $user = AuthHelpers::getLoggedInUserData();
-                
+
                 if(is_null($user)){
-                    header('Location: ' . BASEURL . ' /login');
+                    header('Location:' . BASEURL . 'login?message=' . urlencode("Tolong untuk login untuk melakukan pememesanan" . "&to=" . urlencode(getGlobalVar('url'))));
                     exit;
                 }
 
                 
-                $address = [];
-
-                foreach(ShippingAddressModel::new()->get(['id_user', $user['id']]) as $addresses){
-                    
-                }
-
+                $addresses = ShippingAddressModel::new()->get(['id_user', $user['id']]);
+                $address = array_reduce($addresses, fn($carry, $addr) => $addr['is_prioritize'] ? $addr : $carry, $addresses[0] ?? null);
+                
                 // Pass data to the view
                 $this->view('checkout/index', [
                     'address' => $address,

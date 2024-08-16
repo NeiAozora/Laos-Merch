@@ -20,7 +20,7 @@ class OrderModel extends Model {
             JOIN combination_details cd ON vc.id_combination = cd.id_combination
             JOIN variation_options vo ON cd.id_option = vo.id_option
             JOIN products p ON vc.id_product = p.id_product
-            JOIN product_images pi ON p.id_product = pi.id_product
+            LEFT JOIN product_images pi ON p.id_product = pi.id_product -- Updated to LEFT JOIN to handle cases where there may be no images
             WHERE o.id_user = :id_user
         ";
         if ($status !== null && $status !== 'Semua') {
@@ -47,18 +47,18 @@ class OrderModel extends Model {
     public function getOrderById($id, $id_user){
         $this->db->query("
             SELECT o.id_order, o.order_date, os.status_name, o.total_price, o.shipping_fee, o.service_fee, o.handling_fee, pm.method_name as payment_method,
-                   GROUP_CONCAT(sa.street_address, sa.city, sa.state, sa.postal_code SEPARATOR ',') as address, sa.recipient_name, u.wa_number, p.product_name, pi.image_url, 
+                   CONCAT_WS(', ', sa.street_address, sa.city, sa.state, sa.postal_code) as address, sa.label_name as recipient_name, u.wa_number, p.product_name, pi.image_url, 
                    oi.quantity, oi.price, GROUP_CONCAT(vo.option_name SEPARATOR ',') as option_names
             FROM orders o
             JOIN order_statuses os ON o.id_status = os.id_status
-            JOIN shipments s ON o.id_order = s.id_order
+            LEFT JOIN shipments s ON o.id_order = s.id_order
             JOIN users u ON o.id_user = u.id_user
-            JOIN carriers c ON s.id_carrier = c.id_carrier
+            LEFT JOIN carriers c ON s.id_carrier = c.id_carrier
             LEFT JOIN shipping_addresses sa ON sa.id_shipping_address = o.id_shipping_address
             JOIN order_items oi ON o.id_order = oi.id_order
             JOIN variation_combinations vc ON oi.id_combination = vc.id_combination
             JOIN products p ON vc.id_product = p.id_product
-            JOIN product_images pi ON p.id_product = pi.id_product
+            LEFT JOIN product_images pi ON p.id_product = pi.id_product -- Updated to LEFT JOIN to handle cases where there may be no images
             JOIN combination_details cd ON vc.id_combination = cd.id_combination
             JOIN variation_options vo ON cd.id_option = vo.id_option
             JOIN payment_methods pm ON o.id_payment_method = pm.id_payment_method
@@ -134,5 +134,36 @@ class OrderModel extends Model {
             return false;
         }
     }
+
+    public function insertOrder($orderData) {
+        try {
+            // Insert into the orders table
+            $orderQuery = "
+                INSERT INTO orders (id_user, id_status, total_price, shipping_fee, service_fee, handling_fee, id_payment_method, id_shipping_address)
+                VALUES (:id_user, :id_status, :total_price, :shipping_fee, :service_fee, :handling_fee, :id_payment_method, :id_shipping_address)
+            ";
+            $this->db->query($orderQuery);
+            $this->db->bind(':id_user', $orderData['id_user']);
+            $this->db->bind(':id_status', $orderData['id_status']);
+            $this->db->bind(':total_price', $orderData['total_price']);
+            $this->db->bind(':shipping_fee', $orderData['shipping_fee']);
+            $this->db->bind(':service_fee', $orderData['service_fee']);
+            $this->db->bind(':handling_fee', $orderData['handling_fee']);
+            $this->db->bind(':id_payment_method', $orderData['id_payment_method']);
+            $this->db->bind(':id_shipping_address', $orderData['id_shipping_address']);
+    
+            if (!$this->db->execute()) {
+                throw new Exception('Failed to insert order.');
+            }
+    
+            // Assuming you have an auto-increment column for `id_order`
+            $id_order = $this->db->dbh->lastInsertId();
+    
+            return $id_order;
+        } catch (Exception $e) {
+            // Handle any exceptions here, such as logging errors
+            return false;
+        }
+    }
+    
 }
-?>

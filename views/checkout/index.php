@@ -8,37 +8,55 @@ requireView("partials/navbar.php");
         <h5>Checkout</h5>
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-10 col-sm-12">
-                <div class="card mb-3">
-                    <div class="card-body row justify-content-between align-items-center">
-                        <div class="col-lg-6 col-md-6 col-12 d-flex align-items-start">
-                            <div class="ms-3">
-                                <h5 class="title-detail mb-2">Info Pembeli:</h5>
-                                <div style="display: flex;">
-                                    <div class="me-3">
-                                        <h6>Nama:</h6>
-                                        <h6>No.Telepon:</h6>
-                                        <h6>Alamat:</h6>
-                                    </div>
-                                    <div class="me-3">
-                                        <h6 style="font-family: nunito; font-weight:lighter;"><?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></h6>
-                                        <h6 style="font-family: nunito; font-weight:lighter;"><?php echo htmlspecialchars($user['wa_number']); ?></h6>
-                                        <h6 style="font-family: nunito; font-weight:lighter;"><?php echo htmlspecialchars($user['picture']); // Adjust this if it's not an address ?></h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-12 text-end">
-                        <div class="position-top-right">
-                            <a href="#" class="me-3 decoration-none" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
-                                Ubah Alamat
-                                <i class="fa-solid fa-pen-to-square ms-2" style="color: gold;"></i>
-                            </a>
-                        </div>
+              <div class="card mb-3">
+                  <div class="card-body row d-flex align-items-center">
+                      <div class="flex-grow-1 d-flex align-items-start">
+                          <div class="ms-3">
+                              <h5 class="title-detail mb-2">Info Pembeli:</h5>
+                              <div style="display: flex;">
+                                  <div class="me-3">
+                                      <h6>Nama:</h6>
+                                      <h6>No.Telepon:</h6>
+                                      <h6>Alamat:</h6>
+                                  </div>
+                                  <div>
+                                      <h6 style="font-family: nunito; font-weight:lighter;">
+                                          <?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?>
+                                      </h6>
+                                      <h6 style="font-family: nunito; font-weight:lighter;">
+                                          <?= htmlspecialchars($user['wa_number']); ?>
+                                      </h6>
+                                      <?php if (isset($address)) : ?>
+                                          <div >
+                                              <h6 style="font-family: nunito; font-weight:lighter;">
+                                                  <?= htmlspecialchars($address['street_address'] . ', Kota ' . $address['city'] . ', ' . $address['state']); ?>
+                                              </h6>
+                                              <?php if (!empty($address['extra_note'])) : ?>
+                                                <p style="font-family: nunito; font-weight:lighter;">
+                                                  <span>
+                                                      <?= htmlspecialchars(strlen($address['extra_note']) > 60 ? substr($address['extra_note'], 0, 60) . '...' : $address['extra_note']); ?>
+                                                  </span>
+                                              </p>
+                                              <?php endif; ?>
+                                          </div>
+                                      <?php else : ?>
+                                          <div class="alert alert-warning" role="alert" style="font-family: nunito;">
+                                              Alamat belum diatur. Silakan tambahkan alamat Anda terlebih dahulu.
+                                          </div>
+                                      <?php endif; ?>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6 col-12 text-end">
+                          <a href="#" class="me-3 decoration-none" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" style="position: absolute; top: 10px; right: 15px;">
+                              Ubah Alamat
+                              <i class="fa-solid fa-pen-to-square ms-2" style="color: gold;"></i>
+                          </a>
+                      </div>
+                  </div>
+              </div>
 
-
-                        </div>
-                    </div>
-                </div>
 
                 <div class="card mb-3">
                     <div class="card-body">
@@ -188,7 +206,10 @@ requireView("partials/navbar.php");
 
 <script>
     const selected = '<?= "p=" . $_GET['p'] . "&q=" . $_GET['q'] ?>';
+    const uid = <?= $user['id'] ?>;
+    var said = <?= (isset($address)) ? $address['id_shipping_address'] : 0 ?>
 </script>
+<script src="<?= BASEURL ?>public/js/components/loadingAnimation.js"></script>
 <script type="text/javascript" 
     src="https://app.sandbox.midtrans.com/snap/snap.js"
     data-client-key="Mid-client-VVa8MqsfFdh9WpVr"></script>

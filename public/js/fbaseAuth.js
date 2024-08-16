@@ -53,6 +53,7 @@ function fetchWithRetry(url, retries) {
 auth.onIdTokenChanged(function (user) {
   if (user) {
     user.getIdToken(true).then(function (token) {
+      t = token;
       let url =
         baseUrl + "auth-process?fr=" + token + "&br=" + user.uid;
 

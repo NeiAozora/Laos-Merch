@@ -12,6 +12,9 @@ Router::get("/api/products", invokeClass(ProductController::class, "list"));
 Router::get("/api/reviews", invokeClass(ReviewController::class, "getReviews"));
 Router::get("/api/reviews/product/{id}", invokeClass(ReviewController::class, "getReviewsByProductId"));
 Router::get("/api/user/addresses", invokeClass(CheckoutController::class, 'getUserAddresses'));
+Router::get("/api/user/addresses/{uid}/update", invokeClass(CheckoutController::class, 'getUserAddresses'));
+Router::post("/api/prepare-order", invokeClass(OrderController::class, 'prepareOrder'));
+
 
 Router::get('/auth-process', invokeClass(LoginController::class, "processAuth"));
 
@@ -86,11 +89,10 @@ Router::get("/notfound", function () {
 });
 
 Router::get("/error", function () {
-    http_response_code(500);
-
     if (!isset($_GET["code"]) && !isset($_GET["message"]) && !isset($_GET["detailMessage"])) {
         jsRedirect("/notfound");
     }
+    http_response_code($_GET['code']);
     view("/customerror/index", ['errorCode' => $_GET['code'], 'errorMessage' => $_GET['message'], 'detailMessage' => ($_GET["detailMessage"])]);
 });
 // Custom 404 Not Found handler

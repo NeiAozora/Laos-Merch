@@ -406,6 +406,14 @@ h3.notfound{
   vertical-align: top;
 }
 
+.loaderV2 {
+    padding-top: 3px;
+    margin: 0 auto 1em;
+    display: inline-block;
+    vertical-align: top;
+  }
+  
+
 svg.star path,
 svg.star rect {
   fill: #FF6700;

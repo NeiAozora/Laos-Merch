@@ -52,9 +52,9 @@ class CartController extends Controller
                 $this->cartItemModel->addCartItem($id_user, $id_combination, $quantity);
             }
     
-            header('Location: ' . BASEURL . 'cart');
+            header('Location:' . BASEURL . 'cart');
         } else {
-            view('404/index');
+            header('Location:' . BASEURL . 'login?message=' . urlencode("Tolong untuk login untuk memasukan produk ke keranjang"));
         }
     }
     
