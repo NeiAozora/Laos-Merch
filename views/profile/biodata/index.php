@@ -26,7 +26,7 @@
                <div class="col-md-4 text-center">
                   <img style="border-radius: 50%;" src="<?php echo htmlspecialchars($userData['profile_picture'] ?? 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'); ?>" alt="Profile Picture">
                   <?php if ($isEditMode): ?>
-                  <form action="<?= BASEURL ?>user/<?= $userData['id']; ?>/profile/update" method="POST">
+                  <form action="<?= BASEURL ?>user/<?= $userData['id']; ?>/profile/update" method="POST" enctype="multipart/form-data">
                      <div class="form-group">
                         <label for="formFile">Pilih Foto</label>
                         <input class="form-control w-3" type="file" name="profile_picture" id="formFile">
@@ -132,7 +132,7 @@ $addresses = [
       <h5>Alamat <?php echo $address['id']; ?></h5>
       <div class="address-form">
          <!-- Form fields for editing address -->
-         <form method="POST" action="update_address.php" data-address-id="<?php echo $address['id']; ?>">
+         <form method="POST" action="<?= BASEURL ?>user/<?= $userData['id']; ?>/profile/updateShippingAddress" data-address-id="<?php echo $address['id']; ?>">
             <input type="hidden" name="id_shipping_address" value="<?php echo $address['id']; ?>">
             <div class="form-group mt-2">
                <label for="street_address_<?php echo $address['id']; ?>">Alamat Jalan</label>
