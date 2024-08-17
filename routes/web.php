@@ -38,7 +38,7 @@ Router::get('/user/{id}/profile', invokeClass(ProfileController::class, "profile
 //UpdateUser
 Router::post('/user/{id_user}/profile/update', invokeClass(ProfileController::class, "updateProfile"));
 //Add Address
-//Router::post('/user/{id_user}/profile/addAddress', invokeClass(ProfileController::class, "addShippingAddress"));
+Router::post('/user/{id_user}/profile/addAddress', invokeClass(ProfileController::class, "addShippingAddress"));
 //Update Address
 Router::post('/user/{id_user}/profile/updateAddress', invokeClass(ProfileController::class, "updateShippingAddress"));
 

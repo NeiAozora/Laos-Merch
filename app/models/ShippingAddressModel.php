@@ -18,8 +18,8 @@ class ShippingAddressModel extends Model {
 
     public function addShipAddress($id_user,$label_name,$street_address,$city,$state,$postal_code,$extra_note,$is_prioritize,$is_temporary){
         $this->db->query('
-            INSERT INTO shipping_addresses (id_user,label_name,street_address,city,state,postal_code,extra_note) 
-            VALUES (:id_shipping_address,:id_user,:label_name,:street_address,:city,:state,:postal_code,:extra_note)
+            INSERT INTO shipping_addresses (id_user,label_name,street_address,city,state,postal_code,extra_note,is_prioritize,is_temporary) 
+            VALUES (:id_user,:label_name,:street_address,:city,:state,:postal_code,:extra_note,:is_prioritize,:is_temporary)
         ');
 
         $this->db->bind(':id_user', $id_user, PDO::PARAM_INT);
@@ -29,6 +29,8 @@ class ShippingAddressModel extends Model {
         $this->db->bind('state', $state);
         $this->db->bind(':postal_code', $postal_code, PDO::PARAM_INT);
         $this->db->bind(':extra_note', $extra_note);
+        $this->db->bind(':is_prioritize', $is_prioritize, PDO::PARAM_INT);
+        $this->db->bind(':is_temporary', $is_temporary, PDO::PARAM_INT);
         
         $this->db->execute();
     }

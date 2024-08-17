@@ -100,7 +100,7 @@ class AuthHelpers
             $firebaseId = $verifiedIdToken->claims()->get('sub');
             $email = $verifiedIdToken->claims()->get('email');
             $username = $verifiedIdToken->claims()->get('name');
-            $picture = $verifiedIdToken->claims()->get('picture');
+            $profile_picture = $verifiedIdToken->claims()->get('profile_picture');
 
             $userModel = new UserModel();
             $user = $userModel->getUserByFirebaseId($firebaseId);
@@ -120,7 +120,7 @@ class AuthHelpers
                 'first_name' => $firstName,
                 'last_name' => $lastName,
                 'wa_number' => $user['wa_number'],
-                'picture' => $user["profile_picture"]
+                'profile_picture' => $user["profile_picture"]
             ];
         }
 

@@ -57,7 +57,7 @@ class UserModel extends Model
         return $this->db->resultSet();
     }
 
-    public function updateUser($id_user, $username, $first_name, $last_name, $email, $wa_number, $profile_picture = null)
+    public function updateUser($id_user, $username, $first_name, $last_name, $email, $wa_number, $profile_picture)
     {
         $query = 'UPDATE users SET 
             username = :username, 
