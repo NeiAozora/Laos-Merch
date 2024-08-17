@@ -65,7 +65,7 @@ class CheckoutController extends Controller {
                 $user = AuthHelpers::getLoggedInUserData();
 
                 if(is_null($user)){
-                    header('Location:' . BASEURL . 'login?message=' . urlencode("Tolong untuk login untuk melakukan pememesanan" . "&to=" . urlencode(getGlobalVar('url'))));
+                    header('Location:' . BASEURL . 'login?to=' . urlencode(getGlobalVar('url')) . '&message=' . urlencode("Tolong untuk login untuk melakukan pememesanan"));
                     exit;
                 }
 

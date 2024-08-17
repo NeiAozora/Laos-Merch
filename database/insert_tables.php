@@ -175,9 +175,9 @@ VALUES
     (1, NOW(), 120000.00, 2, 1, 10000.00, 5000.00, 2000.00, 1);
 
 -- Insert Order Items
-INSERT INTO order_items (id_order, quantity, id_combination, id_discount, price)
+INSERT INTO order_items (id_order, quantity, id_combination, discount_value, price)
 VALUES
-    (1, 1, 1, 1, 700000.00);  -- Pesanan 1: Smartphone dengan diskon 10%
+    (1, 1, 1, 10.00, 700000.00);  -- Pesanan 1: Smartphone dengan diskon 10%
 
 -- Insert Shipment Companies
 INSERT INTO shipment_companies (company_name, company_email, company_website)

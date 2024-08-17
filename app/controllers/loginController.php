@@ -19,12 +19,13 @@ class LoginController extends Controller{
     public function processAuth()
     {
         $idToken = $_GET["fr"] ?? null;
+        $url = $_GET['to'] ?? BASEURL;
         
         if ($idToken) {
 
     
             // Verify the Firebase ID token
-            $verifiedIdToken = AuthHelpers::verifyFBAcessIdToken($idToken);
+            $verifiedIdToken = AuthHelpers::verifyFBAccessIdToken($idToken);
             
             if ($verifiedIdToken) {
                 $firebaseId = $verifiedIdToken->claims()->get("sub");
@@ -51,7 +52,7 @@ class LoginController extends Controller{
                     'id_user' => $userId
                 ];
     
-                echo json_encode(['status' => 'success']);
+                echo json_encode(['status' => 'success', 'redirect' => $url]);
             } else {
                 session_destroy();
                 http_response_code(401);

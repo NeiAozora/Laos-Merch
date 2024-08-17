@@ -2,8 +2,10 @@
 
 function dd(...$data)
 {
-    d($data);
+    foreach($data as $d){
+    d($d);
     die;
+    }
 }
 
 function view($view, $data = [])

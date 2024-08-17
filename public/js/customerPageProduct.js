@@ -184,7 +184,8 @@ document.querySelector('#buy-button').addEventListener('click', (event) => {
     if (selectedData) {
         const encodedProductIds = encodeBase64(selectedData.combinationId.toString());
         const encodedQuantities = encodeBase64(selectedData.quantity.toString());
-        window.location.href = baseUrl + `checkout?p=${encodedProductIds}&q=${encodedQuantities}`;
+        const encodedIdCartItem = encodeBase64('x');
+        window.location.href = baseUrl + `checkout?p=${encodedProductIds}&q=${encodedQuantities}&ici=${encodedIdCartItem}`;
     }
 });
 

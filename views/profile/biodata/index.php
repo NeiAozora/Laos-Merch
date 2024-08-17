@@ -58,7 +58,7 @@
                      </div>
                      <div class="form-group mt-2">
                         <label for="wa_number">Nomor WhatsApp</label>
-                        <input type="number" class="form-control" name="wa_number" id="wa_number" value="<?php echo htmlspecialchars($userData['wa_number']); ?>" required>
+                        <input type="text" class="form-control" name="wa_number" id="wa_number" value="<?php echo htmlspecialchars($userData['wa_number']); ?>" required>
                      </div>
                      <div class="d-flex justify-content-end flex-wrap">
                         <a href="#" class="btn btn-danger mt-3 mb-3 me-2" data-bs-toggle="modal" data-bs-target="#cancelModal">
@@ -105,58 +105,47 @@
                </div>
                <?php endif; ?>
             </div>
-            
+         
 
-            <?php
-// Sample data for demonstration purposes. Replace with your database fetching logic.
-$addresses = [
-    [
-        'id' => 1,
-        'recipient_name' => 'John Doe',
-        'street_address' => '1234 Elm Street',
-        'city' => 'Springfield',
-        'state' => 'IL',
-        'postal_code' => '62704',
-        'extra_note' => 'Near the big oak tree',
-    ],
-    // Add more addresses as needed
-];
-?>
+<?php $i = 1; ?>
 
 <!-- Addresses List -->
 <div id="address-list">
    <?php if ($isEditMode): ?>
    <?php foreach ($addresses as $address): ?>
    <!-- Address entry for editing -->
-   <div class="address-entry" id="address-<?php echo $address['id']; ?>">
-      <h5>Alamat <?php echo $address['id']; ?></h5>
+   <div class="address-entry" data-id="<?php echo $address['id_shipping_address']; ?>">
+   <div class="d-flex justify-content-between align-items-center">
+      <h5>Alamat <?= $i ?></h5>
+      <button type="button" id="remove-address" class="btn btn-danger">Hapus</button>
+   </div>
       <div class="address-form">
          <!-- Form fields for editing address -->
-         <form method="POST" action="<?= BASEURL ?>user/<?= $userData['id']; ?>/profile/updateShippingAddress" data-address-id="<?php echo $address['id']; ?>">
-            <input type="hidden" name="id_shipping_address" value="<?php echo $address['id']; ?>">
+         <form method="POST" action="<?= BASEURL ?>user/<?= $userData['id']; ?>/profile/update-shipping-address" data-address-id="<?php echo $address['id_user']; ?>">
+            <input type="hidden" name="id_shipping_address" value="<?php echo $address['id_user']; ?>">
             <div class="form-group mt-2">
-               <label for="street_address_<?php echo $address['id']; ?>">Alamat Jalan</label>
-               <input type="text" class="form-control" name="street_address" id="street_address_<?php echo $address['id']; ?>" value="<?php echo htmlspecialchars($address['street_address']); ?>" placeholder="Alamat Jalan" data-address-form-field="street_address_<?php echo $address['id']; ?>">
+               <label for="street_address">Alamat Jalan</label>
+               <input type="text" class="form-control" name="street_address" id="street_address" value="<?php echo htmlspecialchars($address['street_address']); ?>" placeholder="Alamat Jalan" data-address-form-field="street_address">
             </div>
             <div class="form-group mt-2">
-               <label for="city_<?php echo $address['id']; ?>">Kota</label>
-               <input type="text" class="form-control" name="city" id="city_<?php echo $address['id']; ?>" value="<?php echo htmlspecialchars($address['city']); ?>" placeholder="Kota" data-address-form-field="city_<?php echo $address['id']; ?>">
+               <label for="city">Kota</label>
+               <input type="text" class="form-control" name="city" id="city" value="<?php echo htmlspecialchars($address['city']); ?>" placeholder="Kota" data-address-form-field="city">
             </div>
             <div class="form-group mt-2">
-               <label for="state_<?php echo $address['id']; ?>">Provinsi</label>
-               <input type="text" class="form-control" name="state" id="state_<?php echo $address['id']; ?>" value="<?php echo htmlspecialchars($address['state']); ?>" placeholder="Provinsi" data-address-form-field="state_<?php echo $address['id']; ?>">
+               <label for="state">Provinsi</label>
+               <input type="text" class="form-control" name="state" id="state" value="<?php echo htmlspecialchars($address['state']); ?>" placeholder="Provinsi" data-address-form-field="state">
             </div>
             <div class="form-group mt-2">
-               <label for="postal_code_<?php echo $address['id']; ?>">Kode Pos</label>
-               <input type="text" class="form-control" name="postal_code" id="postal_code_<?php echo $address['id']; ?>" value="<?php echo htmlspecialchars($address['postal_code']); ?>" placeholder="Kode Pos" data-address-form-field="postal_code_<?php echo $address['id']; ?>">
+               <label for="postal_code">Kode Pos</label>
+               <input type="text" class="form-control" name="postal_code" id="postal_code" value="<?php echo htmlspecialchars($address['postal_code']); ?>" placeholder="Kode Pos" data-address-form-field="postal_code">
             </div>
             <div class="form-group mt-2">
-               <label for="extra_note_<?php echo $address['id']; ?>">Catatan Tambahan</label>
-               <textarea class="form-control" name="extra_note" id="extra_note_<?php echo $address['id']; ?>" placeholder="Catatan Tambahan" data-address-form-field="extra_note_<?php echo $address['id']; ?>"><?php echo htmlspecialchars($address['extra_note']); ?></textarea>
+               <label for="extra_note">Catatan Tambahan</label>
+               <textarea class="form-control" name="extra_note" id="extra_note" placeholder="Catatan Tambahan" data-address-form-field="extra_note"><?php echo htmlspecialchars($address['extra_note']); ?></textarea>
             </div>
-            <button type="submit" class="btn btn-primary mt-2">Update</button>
          </form>
       </div>
+      <?php $i++; ?>
     <?php endforeach; ?>
    <?php else: ?>
       <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
@@ -176,18 +165,19 @@ $addresses = [
    <!-- Display addresses when not in edit mode -->
    <?php foreach ($addresses as $address): ?>
    <div class="address-entry">
-      <h5>Alamat <?php echo $address['id']; ?></h5>
-      <div class="card">
-         <div class="card-body">
-
-            <p class="mb-0"><strong>Nama Penerima:</strong> <?php echo htmlspecialchars($address['recipient_name']); ?></p>
-            <p class="mb-0"><strong>Alamat Jalan:</strong> <?php echo htmlspecialchars($address['street_address']); ?></p>
-            <p class="mb-0"><strong>Kota:</strong> <?php echo htmlspecialchars($address['city']); ?></p>
-            <p class="mb-0"><strong>Provinsi:</strong> <?php echo htmlspecialchars($address['state']); ?></p>
-            <p class="mb-0"><strong>Kode Pos:</strong> <?php echo htmlspecialchars($address['postal_code']); ?></p>
-            <p class="mb-0"><strong>Catatan Tambahan:</strong> <?php echo htmlspecialchars($address['extra_note']); ?></p>
+   <?php $index = 1; // Example iteration index; replace as needed ?>
+      <h5>Alamat <?php echo $index; ?></h5>
+         <div class="card">
+            <div class="card-body">
+               <p class="mb-0"><strong>Label:</strong> <?php echo htmlspecialchars($address['label_name']); ?></p>
+               <p class="mb-0"><strong>Alamat Jalan:</strong> <?php echo htmlspecialchars($address['street_address']); ?></p>
+               <p class="mb-0"><strong>Kota:</strong> <?php echo htmlspecialchars($address['city']); ?></p>
+               <p class="mb-0"><strong>Provinsi:</strong> <?php echo htmlspecialchars($address['state']); ?></p>
+               <p class="mb-0"><strong>Kode Pos:</strong> <?php echo htmlspecialchars($address['postal_code']); ?></p>
+               <p class="mb-0"><strong>Catatan Tambahan:</strong> <?php echo htmlspecialchars($address['extra_note']); ?></p>
+               <p class="mb-0"><strong>Prioritas:</strong> <?php echo $address['is_prioritize'] ? 'Ya' : 'Tidak'; ?></p>
+            </div>
          </div>
-      </div>
    </div>
    <?php endforeach; ?>
    <?php endif; ?>
@@ -195,11 +185,15 @@ $addresses = [
 
 <!-- Template for adding new address form -->
 <div id="new-address-form" class="mt-3 d-none">
-   <div class="">
-      <h5 class="pt-3 ">Tambah Alamat Baru</h5>
+   <div class="d-flex justify-content-between align-items-center">
+      <h5 class="pt-3">Tambah Alamat Baru</h5>
       <button type="button" id="remove-new-address" class="btn btn-danger">Hapus</button>
    </div>
    <form method="POST" action="add_address.php" data-address-form="template">
+      <div class="form-group mt-2">
+         <label for="new_label_name">Label Nama</label>
+         <input type="text" class="form-control" name="label_name" id="new_label_name" placeholder="Label Nama">
+      </div>
       <div class="form-group mt-2">
          <label for="new_street_address">Alamat Jalan</label>
          <input type="text" class="form-control" name="street_address" id="new_street_address" placeholder="Alamat Jalan">
@@ -219,6 +213,10 @@ $addresses = [
       <div class="form-group mt-2">
          <label for="new_extra_note">Catatan Tambahan</label>
          <textarea class="form-control" name="extra_note" id="new_extra_note" placeholder="Catatan Tambahan"></textarea>
+      </div>
+      <div class="form-group mt-2">
+         <label for="new_is_prioritize">Prioritaskan</label>
+         <input type="checkbox" class="form-control" name="is_prioritize" id="new_is_prioritize">
       </div>
       <button type="submit" class="btn btn-primary mt-2">Tambah</button>
    </form>
@@ -252,7 +250,6 @@ $addresses = [
 </section>
 <!-- JavaScript for Address Management -->
 <?php if ($isEditMode): ?>
-
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -290,11 +287,32 @@ document.addEventListener('DOMContentLoaded', function() {
            formCount++;
        });
    }
+
+    
+   const addressList = document.getElementById('address-list');
+
+   // Delegate the click event to the address list container
+   if (addressList) {
+      addressList.addEventListener('click', function(event) {
+         // Check if the clicked element is a delete button with the class remove-address
+         if (event.target && event.target.matches('button.remove-address')) {
+               // Prevent default action
+               event.preventDefault();
+
+               // Find the closest address entry div
+               const addressEntry = event.target.closest('.address-entry');
+
+               // Confirm deletion with the user
+               if (confirm('Apakah Anda yakin ingin menghapus alamat ini?')) {
+                  // Remove the address entry from the DOM
+                  addressEntry.remove();
+               }
+         }
+      });
+   }
+
 });
 </script>
-
-
-
 
 <?php endif; ?>
 

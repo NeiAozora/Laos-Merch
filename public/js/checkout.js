@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Function to make an address primary and select it
     window.makePrimaryAddress = function(id_shipping_address) {
-        fetch(apiUrl + '/' + id_shipping_address + '/setPrimary', {
+        fetch(apiUrl + '/' + id_shipping_address + '/set-primary', {
             method: 'GET'
         })
         .then(response => response.json())
@@ -308,7 +308,30 @@ function submitOrder() {
             snap.pay(response.snapToken, {
                 onSuccess: function(result) {
                     console.log('Payment Success:', result);
-                    revertButton();
+        
+                    // Prepare data to be sent to finalizeTransferOrder
+                    const data = {
+                        idOrder: response.idOrder,
+                        token: t, // Replace with actual token
+                        cartItems: response.cartItems,
+                        products: response.products
+                    };
+        
+                    fetch(baseUrl + 'api/finalize-transfer-order', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                        // Handle success response from finalizeTranferOrder
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
                 },
                 onPending: function(result) {
                     console.log('Payment Pending:', result);
@@ -322,6 +345,7 @@ function submitOrder() {
         } else if (response.redirect) {
             window.location.href = response.redirect;
         }
+        
 
         revertButton();
     });

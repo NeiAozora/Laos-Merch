@@ -276,25 +276,30 @@ function incrementQuantity(button) {
         let selectedItems = document.querySelectorAll('.checkbox-item:checked');
         let productIds = [];
         let quantities = [];
+        let cartItemIds = [];
 
         selectedItems.forEach(item => {
             let productId = item.getAttribute('data-id');
             let quantity = parseInt(item.closest('.card-body').querySelector('input[name="quantity"]').value);
+            let cartItemId = parseInt(item.closest('.card-body').querySelector('input[name="id_cart_item"]').value);
             productIds.push(productId);
             quantities.push(quantity);
+            cartItemIds.push(cartItemId);
         });
 
         if (productIds.length > 0) {
             // Join the arrays into comma-separated strings
             const productIdsString = productIds.join(',');
             const quantitiesString = quantities.join(',');
+            const cartItemIdsString = cartItemIds.join(',');
 
             // Encode the comma-separated strings using Base64
             const encodedProductIds = encodeBase64(productIdsString);
             const encodedQuantities = encodeBase64(quantitiesString);
+            const encodedcartItemIds = encodeBase64(cartItemIdsString);
 
             // Construct the query string with the encoded parameters
-            let url = baseUrl + `checkout?p=${encodedProductIds}&q=${encodedQuantities}`;
+            let url = baseUrl + `checkout?p=${encodedProductIds}&q=${encodedQuantities}&ici=${encodedcartItemIds}`;
             window.location.href = url;
         } else {
             alert('Please select at least one item to proceed.');

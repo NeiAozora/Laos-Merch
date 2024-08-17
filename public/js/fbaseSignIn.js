@@ -73,7 +73,7 @@ document
     return fetch(url, { method: "GET" })
       .then((result) => {
         if (result.status === 200) {
-          window.location = baseUrl;
+          window.location = result.redirect;
         } else {
           throw new Error(result.statusText);
         }

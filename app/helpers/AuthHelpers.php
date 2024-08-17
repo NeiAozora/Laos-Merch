@@ -17,7 +17,7 @@ class AuthHelpers
         return $auth;
     }
 
-    public static function verifyFBAcessIdToken($token) {
+    public static function verifyFBAccessIdToken($token) {
         $auth = self::getFirebaseAuth();
         try {
             return $auth->verifyIdToken($token);
@@ -44,7 +44,7 @@ class AuthHelpers
         }
 
         $idToken = $_SESSION["user"]['fr'];
-        $verifiedIdToken = self::verifyFBAcessIdToken($idToken);
+        $verifiedIdToken = self::verifyFBAccessIdToken($idToken);
         
         if ($verifiedIdToken) {
             $firebaseId = $verifiedIdToken->claims()->get('sub');
@@ -78,7 +78,7 @@ class AuthHelpers
         }
 
         $idToken = $_SESSION['user']['fr'];
-        $verifiedIdToken = self::verifyFBAcessIdToken($idToken);
+        $verifiedIdToken = self::verifyFBAccessIdToken($idToken);
         if (is_null($verifiedIdToken)){
             echo `
             <script>

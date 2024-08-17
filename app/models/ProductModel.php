@@ -165,6 +165,7 @@ class ProductModel extends Model {
         $this->db->query("
             SELECT 
                 vc.id_combination,
+                vc.stock,
                 p.id_product,
                 p.product_name,
                 p.description,
@@ -175,7 +176,8 @@ class ProductModel extends Model {
                 GROUP_CONCAT(DISTINCT t.tag_name ORDER BY t.tag_name SEPARATOR ', ') AS tags,
                 MIN(pi.image_url) AS product_image,
                 MIN(vc.price) AS price,
-                COALESCE(MAX(d.discount_value), 0) AS discount_value
+                COALESCE(MAX(d.discount_value), 0) AS discount_value,
+                d.id_discount
             FROM variation_combinations vc
             JOIN products p ON vc.id_product = p.id_product
             JOIN combination_details cd ON cd.id_combination = vc.id_combination

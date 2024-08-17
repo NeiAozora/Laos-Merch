@@ -24,8 +24,9 @@ class ProfileController extends Controller
         }
 
         $addresses = $this->shippingAddressModel->getShipAddressByUser($userData['id']);
+        // dd($addresses);
         
-        $this->view("profile/biodata/index" , ["isEditMode"=> $editMode, 'userData' => $userData, 'Addresses' => $addresses]);
+        $this->view("profile/biodata/index" , ["isEditMode"=> $editMode, 'userData' => $userData, 'addresses' => $addresses]);
     }    
 
    public function updateProfile($id_user)
@@ -90,5 +91,40 @@ class ProfileController extends Controller
             exit;
         }
     }
+
+    public function updateShippingAddressPriority($id_shipping_address) {
+        $user = AuthHelpers::getLoggedInUserData();
+        
+        if (empty($user)) {
+            $this->sendError('Forbidden', 403);
+        }
+
+        // Update shipping address priority
+        $shippingAddressModel = ShippingAddressModel::new();
+        try {
+            $result = $shippingAddressModel->updateShippingAddressPriority($user['id_user'], $id_shipping_address, true);
+            if ($result) {
+                $this->sendResponse(['message' => 'Shipping address priority updated successfully'], 200);
+            } else {
+                $this->sendError('Failed to update priority', 500);
+            }
+        } catch (Exception $e) {
+            $this->sendError($e->getMessage(), 500);
+        }
+    }
+
+    private function sendError($message, $statusCode) {
+        http_response_code($statusCode);
+        echo json_encode(['error' => $message]);
+        exit;
+    }
+
+    private function sendResponse($data, $statusCode) {
+        http_response_code($statusCode);
+        echo json_encode($data);
+        exit;
+    }
+
+
 
 }
