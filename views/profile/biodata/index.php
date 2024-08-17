@@ -107,52 +107,41 @@
             </div>
             
 
-            <?php
-// Sample data for demonstration purposes. Replace with your database fetching logic.
-$addresses = [
-    [
-        'id' => 1,
-        'recipient_name' => 'John Doe',
-        'street_address' => '1234 Elm Street',
-        'city' => 'Springfield',
-        'state' => 'IL',
-        'postal_code' => '62704',
-        'extra_note' => 'Near the big oak tree',
-    ],
-    // Add more addresses as needed
-];
-?>
 
 <!-- Addresses List -->
 <div id="address-list">
    <?php if ($isEditMode): ?>
    <?php foreach ($addresses as $address): ?>
    <!-- Address entry for editing -->
-   <div class="address-entry" id="address-<?php echo $address['id']; ?>">
-      <h5>Alamat <?php echo $address['id']; ?></h5>
+   <div class="address-entry" id="address-<?php echo $address['id_shipping_address']; ?>">
+      <h5>Alamat <?php echo $address['id_shipping_address']; ?></h5>
       <div class="address-form">
          <!-- Form fields for editing address -->
-         <form method="POST" action="<?= BASEURL ?>user/<?= $userData['id']; ?>/profile/updateShippingAddress" data-address-id="<?php echo $address['id']; ?>">
-            <input type="hidden" name="id_shipping_address" value="<?php echo $address['id']; ?>">
+         <form method="POST" action="<?= BASEURL ?>user/<?= $address['id_user']; ?>/profile/updateAddress" data-address-id="<?php echo $address['id_shipping_address']; ?>">
+            <input type="hidden" name="id_shipping_address" value="<?php echo $address['id_shipping_address']; ?>">
             <div class="form-group mt-2">
-               <label for="street_address_<?php echo $address['id']; ?>">Alamat Jalan</label>
-               <input type="text" class="form-control" name="street_address" id="street_address_<?php echo $address['id']; ?>" value="<?php echo htmlspecialchars($address['street_address']); ?>" placeholder="Alamat Jalan" data-address-form-field="street_address_<?php echo $address['id']; ?>">
+               <label for="label_name_<?php echo $address['id_shipping_address']; ?>">Label Tempat</label>
+               <input type="text" class="form-control" name="label_name" id="label_name_<?php echo $address['id_shipping_address']; ?>" value="<?php echo htmlspecialchars($address['label_name']); ?>" placeholder="Label Tempat" data-address-form-field="label_name_<?php echo $address['id_shipping_address']; ?>">
             </div>
             <div class="form-group mt-2">
-               <label for="city_<?php echo $address['id']; ?>">Kota</label>
-               <input type="text" class="form-control" name="city" id="city_<?php echo $address['id']; ?>" value="<?php echo htmlspecialchars($address['city']); ?>" placeholder="Kota" data-address-form-field="city_<?php echo $address['id']; ?>">
+               <label for="street_address_<?php echo $address['id_shipping_address']; ?>">Alamat Jalan</label>
+               <input type="text" class="form-control" name="street_address" id="street_address_<?php echo $address['id_shipping_address']; ?>" value="<?php echo htmlspecialchars($address['street_address']); ?>" placeholder="Alamat Jalan" data-address-form-field="street_address_<?php echo $address['id_shipping_address']; ?>">
             </div>
             <div class="form-group mt-2">
-               <label for="state_<?php echo $address['id']; ?>">Provinsi</label>
-               <input type="text" class="form-control" name="state" id="state_<?php echo $address['id']; ?>" value="<?php echo htmlspecialchars($address['state']); ?>" placeholder="Provinsi" data-address-form-field="state_<?php echo $address['id']; ?>">
+               <label for="city_<?php echo $address['id_shipping_address']; ?>">Kota</label>
+               <input type="text" class="form-control" name="city" id="city_<?php echo $address['id_shipping_address']; ?>" value="<?php echo htmlspecialchars($address['city']); ?>" placeholder="Kota" data-address-form-field="city_<?php echo $address['id_shipping_address']; ?>">
             </div>
             <div class="form-group mt-2">
-               <label for="postal_code_<?php echo $address['id']; ?>">Kode Pos</label>
-               <input type="text" class="form-control" name="postal_code" id="postal_code_<?php echo $address['id']; ?>" value="<?php echo htmlspecialchars($address['postal_code']); ?>" placeholder="Kode Pos" data-address-form-field="postal_code_<?php echo $address['id']; ?>">
+               <label for="state_<?php echo $address['id_shipping_address']; ?>">Provinsi</label>
+               <input type="text" class="form-control" name="state" id="state_<?php echo $address['id_shipping_address']; ?>" value="<?php echo htmlspecialchars($address['state']); ?>" placeholder="Provinsi" data-address-form-field="state_<?php echo $address['id_shipping_address']; ?>">
             </div>
             <div class="form-group mt-2">
-               <label for="extra_note_<?php echo $address['id']; ?>">Catatan Tambahan</label>
-               <textarea class="form-control" name="extra_note" id="extra_note_<?php echo $address['id']; ?>" placeholder="Catatan Tambahan" data-address-form-field="extra_note_<?php echo $address['id']; ?>"><?php echo htmlspecialchars($address['extra_note']); ?></textarea>
+               <label for="postal_code_<?php echo $address['id_shipping_address']; ?>">Kode Pos</label>
+               <input type="number" class="form-control" name="postal_code" id="postal_code_<?php echo $address['id_shipping_address']; ?>" value="<?php echo htmlspecialchars($address['postal_code']); ?>" placeholder="Kode Pos" data-address-form-field="postal_code_<?php echo $address['id_shipping_address']; ?>">
+            </div>
+            <div class="form-group mt-2">
+               <label for="extra_note_<?php echo $address['id_shipping_address']; ?>">Catatan Tambahan</label>
+               <textarea class="form-control" name="extra_note" id="extra_note_<?php echo $address['id_shipping_address']; ?>" placeholder="Catatan Tambahan" data-address-form-field="extra_note_<?php echo $address['id_shipping_address']; ?>"><?php echo htmlspecialchars($address['extra_note']); ?></textarea>
             </div>
             <button type="submit" class="btn btn-primary mt-2">Update</button>
          </form>
@@ -176,11 +165,11 @@ $addresses = [
    <!-- Display addresses when not in edit mode -->
    <?php foreach ($addresses as $address): ?>
    <div class="address-entry">
-      <h5>Alamat <?php echo $address['id']; ?></h5>
+      <h5>Alamat <?php echo $address['id_shipping_address']; ?></h5>
       <div class="card">
          <div class="card-body">
 
-            <p class="mb-0"><strong>Nama Penerima:</strong> <?php echo htmlspecialchars($address['recipient_name']); ?></p>
+            <p class="mb-0"><strong>Label Tempat:</strong> <?php echo htmlspecialchars($address['label_name']); ?></p>
             <p class="mb-0"><strong>Alamat Jalan:</strong> <?php echo htmlspecialchars($address['street_address']); ?></p>
             <p class="mb-0"><strong>Kota:</strong> <?php echo htmlspecialchars($address['city']); ?></p>
             <p class="mb-0"><strong>Provinsi:</strong> <?php echo htmlspecialchars($address['state']); ?></p>
@@ -193,13 +182,18 @@ $addresses = [
    <?php endif; ?>
 </div>
 
+<?php if($isEditMode): ?>
 <!-- Template for adding new address form -->
 <div id="new-address-form" class="mt-3 d-none">
    <div class="">
       <h5 class="pt-3 ">Tambah Alamat Baru</h5>
       <button type="button" id="remove-new-address" class="btn btn-danger">Hapus</button>
    </div>
-   <form method="POST" action="add_address.php" data-address-form="template">
+   <form method="POST" action="" data-address-form="template">
+      <div class="form-group mt-2">
+         <label for="new_label_name">Label Tempat</label>
+         <input type="text" class="form-control" name="label_name" id="new_label_name" placeholder="Label Tempat">
+      </div>
       <div class="form-group mt-2">
          <label for="new_street_address">Alamat Jalan</label>
          <input type="text" class="form-control" name="street_address" id="new_street_address" placeholder="Alamat Jalan">
@@ -223,7 +217,7 @@ $addresses = [
       <button type="submit" class="btn btn-primary mt-2">Tambah</button>
    </form>
 </div>
-
+<?php endif; ?>
 
 
 
@@ -244,7 +238,7 @@ $addresses = [
             </div>
             <div class="modal-footer">
                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
-               <button type="button" class="btn btn-danger" onclick="clearUrlParams()">Ya, hapus</button>
+               <button type="button" class="btn btn-danger" onclick="clearUrlParams()">Ya, batalkan</button>
             </div>
          </div>
       </div>
