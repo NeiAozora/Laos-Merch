@@ -16,34 +16,40 @@ class ShippingAddressModel extends Model {
         return $this->db->resultSet();
     }
 
-    public function updateShipAddress($id_user, $id_shipping_address, $label_name, $street_address, $city, $state, $postal_code, $extra_note, $is_prioritize, $is_temporary){
+    public function addShipAddress($id_user,$label_name,$street_address,$city,$state,$postal_code,$extra_note,$is_prioritize,$is_temporary){
         $this->db->query('
-            UPDATE shipping_addresses 
-            SET 
-                id_shipping_address = :id_shipping_address, 
-                label_name = :label_name, 
-                street_address = :street_address, 
-                city = :city, 
-                state = :state, 
-                postal_code = :postal_code, 
-                extra_note = :extra_note, 
-                is_prioritize = :is_prioritize, 
-                is_temporary = :is_temporary
-            WHERE 
-                id_user = :id_user AND id_shipping_address = :id_shipping_address
+            INSERT INTO shipping_addresses (id_user,label_name,street_address,city,state,postal_code,extra_note,is_prioritize,is_temporary) 
+            VALUES (:id_user,:label_name,:street_address,:city,:state,:postal_code,:extra_note,:is_prioritize,:is_temporary)
         ');
 
-        $this->db->bind(':id_shipping_address', $id_shipping_address);
+        $this->db->bind(':id_user', $id_user, PDO::PARAM_INT);
+        $this->db->bind(':label_name', $label_name);
+        $this->db->bind(':street_address', $street_address);
+        $this->db->bind(':city', $city);
+        $this->db->bind('state', $state);
+        $this->db->bind(':postal_code', $postal_code, PDO::PARAM_INT);
+        $this->db->bind(':extra_note', $extra_note);
+        $this->db->bind(':is_prioritize', $is_prioritize, PDO::PARAM_INT);
+        $this->db->bind(':is_temporary', $is_temporary, PDO::PARAM_INT);
+        
+        $this->db->execute();
+    }
+
+    public function updateShipAddress($id_user, $id_shipping_address, $label_name, $street_address, $city, $state, $postal_code, $extra_note){
+        $this->db->query('
+            UPDATE shipping_addresses SET label_name = :label_name, street_address = :street_address, city = :city, state = :state, postal_code = :postal_code, extra_note = :extra_note 
+            WHERE id_user = :id_user AND id_shipping_address = :id_shipping_address
+        ');
+
+        $this->db->bind(':id_user', $id_user, PDO::PARAM_INT);
+        $this->db->bind(':id_shipping_address', $id_shipping_address, PDO::PARAM_INT);
         $this->db->bind(':label_name', $label_name);
         $this->db->bind(':street_address', $street_address);
         $this->db->bind(':city', $city);
         $this->db->bind(':state', $state);
-        $this->db->bind(':postal_code', $postal_code);
+        $this->db->bind(':postal_code', $postal_code, PDO::PARAM_INT);
         $this->db->bind(':extra_note', $extra_note);
-        $this->db->bind(':is_prioritize', $is_prioritize);
-        $this->db->bind(':is_temporary', $is_temporary);
-        $this->db->bind(':id_user', $id_user);
-
+        
         return $this->db->execute();
     }
 

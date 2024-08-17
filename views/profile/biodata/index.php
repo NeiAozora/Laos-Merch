@@ -29,7 +29,7 @@
                   <form action="<?= BASEURL ?>user/<?= $userData['id']; ?>/profile/update" method="POST" enctype="multipart/form-data">
                      <div class="form-group">
                         <label for="formFile">Pilih Foto</label>
-                        <input class="form-control w-3" type="file" name="profile_picture" id="formFile">
+                        <input class="form-control w-3" type="file" name="profile_picture" id="formFile" value="<?= htmlspecialchars($userData['profile_picture'])?>">
                      </div>
                   </form>
                   <?php endif; ?>
@@ -183,13 +183,18 @@
    <?php endif; ?>
 </div>
 
+
 <!-- Template for adding new address form -->
 <div id="new-address-form" class="mt-3 d-none">
    <div class="d-flex justify-content-between align-items-center">
       <h5 class="pt-3">Tambah Alamat Baru</h5>
       <button type="button" id="remove-new-address" class="btn btn-danger">Hapus</button>
    </div>
-   <form method="POST" action="add_address.php" data-address-form="template">
+   <form method="POST" action="<?= BASEURL?>user/<?= $address['id_user']; ?>/profile/addAddress" data-address-form="template">
+      <div class="form-group mt-2">
+         <label for="new_label_name">Label Tempat</label>
+         <input type="text" class="form-control" name="label_name" id="new_label_name" placeholder="Label Tempat">
+      </div>
       <div class="form-group mt-2">
          <label for="new_label_name">Label Nama</label>
          <input type="text" class="form-control" name="label_name" id="new_label_name" placeholder="Label Nama">
@@ -208,7 +213,7 @@
       </div>
       <div class="form-group mt-2">
          <label for="new_postal_code">Kode Pos</label>
-         <input type="text" class="form-control" name="postal_code" id="new_postal_code" placeholder="Kode Pos">
+         <input type="number" class="form-control" name="postal_code" id="new_postal_code" placeholder="Kode Pos">
       </div>
       <div class="form-group mt-2">
          <label for="new_extra_note">Catatan Tambahan</label>
@@ -238,11 +243,11 @@
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-               Yakin untuk membuang perubahan yang telah dibuat?!
+               Yakin untuk membatalkan perubahan yang telah dibuat?!
             </div>
             <div class="modal-footer">
                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
-               <button type="button" class="btn btn-danger" onclick="clearUrlParams()">Ya, hapus</button>
+               <button type="button" class="btn btn-danger" onclick="clearUrlParams()">Ya, batalkan</button>
             </div>
          </div>
       </div>
