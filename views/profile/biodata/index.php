@@ -24,12 +24,12 @@
          <div class="tab-pane fade show active" id="biodata" role="tabpanel" aria-labelledby="biodata-tab">
             <div class="row">
                <div class="col-md-4 text-center">
-                  <img style="border-radius: 50%;" src="<?php echo htmlspecialchars($userData['profile_picture'] ?? 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'); ?>" alt="Profile Picture">
+                  <img style="border-radius: 50%;" src="<?php echo htmlspecialchars($userData['picture'] ?? 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'); ?>" alt="Profile Picture">
                   <?php if ($isEditMode): ?>
                   <form action="<?= BASEURL ?>user/<?= $userData['id']; ?>/profile/update" method="POST" enctype="multipart/form-data">
                      <div class="form-group">
                         <label for="formFile">Pilih Foto</label>
-                        <input class="form-control w-3" type="file" name="profile_picture" id="formFile" value="<?= htmlspecialchars($userData['profile_picture'])?>">
+                        <input class="form-control w-3" type="file" name="profile_picture" id="formFile">
                      </div>
                   </form>
                   <?php endif; ?>
@@ -165,7 +165,7 @@
    <!-- Display addresses when not in edit mode -->
    <?php foreach ($addresses as $address): ?>
    <div class="address-entry">
-      <h5>Alamat <?php echo $address['id_shipping_address']; ?></h5>
+      <h5 class="mt-3">Alamat <?php echo $address['id_shipping_address']; ?></h5>
       <div class="card">
          <div class="card-body">
 
