@@ -75,7 +75,7 @@ class ProfileController extends Controller
             $state = $_POST['state'];
             $postal_code = $_POST['postal_code'];
             $extra_note = $_POST['extra_note'];
-            $is_prioritize = 0;
+            $is_prioritize = $_POST['is_prioritize'];
             $is_temporary = 0;
             $result = $this->shippingAddressModel->addShipAddress($id_user,$label_name,$street_address,$city,$state,$postal_code,$extra_note,$is_prioritize,$is_temporary);
             if ($result) {

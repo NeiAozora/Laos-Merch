@@ -163,9 +163,9 @@
    </div>
 
    <!-- Display addresses when not in edit mode -->
+   <?php $index = 1; // Example iteration index; replace as needed ?>
    <?php foreach ($addresses as $address): ?>
    <div class="address-entry">
-   <?php $index = 1; // Example iteration index; replace as needed ?>
       <h5 class="mt-3">Alamat <?php echo $index; ?></h5>
          <div class="card">
             <div class="card-body">
@@ -179,6 +179,7 @@
             </div>
          </div>
    </div>
+   <?php $index++; ?>
    <?php endforeach; ?>
    <?php endif; ?>
 </div>
