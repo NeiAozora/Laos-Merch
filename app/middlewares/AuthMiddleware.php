@@ -12,7 +12,7 @@ class AuthMiddleware extends Middleware
 
         $accessToken = $_SESSION["fr"];
         $uid = $_SESSION["br"];
-        if (!AuthHelpers::verifyFBAcessIdToken($accessToken)){
+        if (!AuthHelpers::verifyFBAccessIdToken($accessToken)){
             jsRedirect(BASEURL . "/process-auth?fr=" . $accessToken . "&br=" . $uid);
         }
     }

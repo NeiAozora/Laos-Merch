@@ -143,8 +143,20 @@ requireView("partials/navbar.php");
                         <h6 id="selected_payment_method">Pilih Metode Pembayaran</h6>
                         <h5 class="me20 mt-3">Jenis Pengiriman:</h5>
                         <h6 id="selected_shipping_method">Pilih Metode Pengiriman</h6>
-                        <h5 class="mt-5 me20">Total:</h5>
+                        <table class="mt-5">
+    <h6>Biaya Layanan</h6>
+        <h6>: Rp. 500</h6>
+    
+    
+        <h6>Biaya Penanganan</h6>
+        <h6>: Rp. 1000</h6>
+    
+                        <h5 class="mt-2 me20">Total Barang:</h5>
                         <h6 id="total_amount">Rp. <?php echo number_format($total_price, 2); ?></h6>
+
+
+                        <h5 class="mt-5 me20">SubTotal:</h5>
+                        <h6>Rp. <?php echo number_format($total_price + 500 + 1000, 2); ?></h6>
                     </div>
                     <div class="mt-2 text-center mb-3">
                         <button class="btn btn-success" style="width: 12rem;" id="submitOrderButton">Lanjut Bayar</button>
@@ -205,7 +217,7 @@ requireView("partials/navbar.php");
 
 
 <script>
-    const selected = '<?= "p=" . $_GET['p'] . "&q=" . $_GET['q'] ?>';
+    const selected = '<?= "p=" . $_GET['p'] . "&q=" . $_GET['q'] . "&ici=" . $_GET['ici']?>';
     const uid = <?= $user['id'] ?>;
     var said = <?= (isset($address)) ? $address['id_shipping_address'] : 0 ?>
 </script>

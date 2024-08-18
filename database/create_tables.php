@@ -236,11 +236,10 @@ CREATE TABLE order_items (
   id_order BIGINT,
   quantity INT,
   id_combination BIGINT NOT NULL,
-  id_discount BIGINT,
+  discount_value DECIMAL(10, 2),
   price DECIMAL(10, 2) NOT NULL, -- Price for the individual item
   FOREIGN KEY (id_combination) REFERENCES variation_combinations(id_combination) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY (id_order) REFERENCES orders(id_order) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY (id_discount) REFERENCES discounts(id_discount) ON UPDATE CASCADE ON DELETE SET NULL
+  FOREIGN KEY (id_order) REFERENCES orders(id_order) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE shipment_companies (

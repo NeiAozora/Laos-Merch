@@ -9,8 +9,8 @@ class OrderItemModel extends Model {
         try {
             // Insert into the order_items table
             $orderItemQuery = "
-            INSERT INTO order_items (id_order, id_combination, quantity, price, id_discount)
-            VALUES (:id_order, :id_combination, :quantity, :price, :id_discount)
+            INSERT INTO order_items (id_order, id_combination, quantity, price, discount_value)
+            VALUES (:id_order, :id_combination, :quantity, :price, :discount_value)
         ";
         $this->db->query($orderItemQuery);
 
@@ -20,11 +20,11 @@ class OrderItemModel extends Model {
             $this->db->bind(':quantity', $item['quantity']);
             $this->db->bind(':price', $item['price']);
 
-            // Handle the optional id_discount
-            if (isset($item['id_discount'])) {
-                $this->db->bind(':id_discount', $item['id_discount']);
+            // Handle the optional discount_value
+            if (isset($item['discount_value'])) {
+                $this->db->bind(':discount_value', $item['discount_value']);
             } else {
-                $this->db->bind(':id_discount', null);
+                $this->db->bind(':discount_value', null);
             }
 
             if (!$this->db->execute()) {

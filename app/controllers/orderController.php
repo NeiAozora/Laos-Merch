@@ -134,7 +134,7 @@ class OrderController extends Controller{
         $token = $data['token'];
         $selectedProductsParameters = $data['selectedProductsParameters'];
     
-        $verifiedIdToken = AuthHelpers::verifyFBAcessIdToken($token);
+        $verifiedIdToken = AuthHelpers::verifyFBAccessIdToken($token);
     
         if (empty($verifiedIdToken)) {
             $this->sendError('Forbidden', 403);
@@ -146,14 +146,16 @@ class OrderController extends Controller{
         
         parse_str($selectedProductsParameters, $params);
         
-        if (isset($params['p']) && isset($params['q'])) {
+        if (isset($params['p']) && isset($params['q']) && isset($params['ici'])) {
             $productIdsEncoded = $params['p'];
             $quantitiesEncoded = $params['q'];
+            $cartItemIdsEncoded = $params['ici'];
     
             $productIds = explode(',', decode_obfuscated_data($productIdsEncoded));
             $quantities = explode(',', decode_obfuscated_data($quantitiesEncoded));
+            $cartItemIds = explode(',', decode_obfuscated_data($cartItemIdsEncoded));
     
-            if (count($productIds) !== count($quantities)) {
+            if (count($productIds) !== count($quantities) || count($productIds) !== count($cartItemIds)) {
                 $this->sendError('Invalid product parameters', 400);
             }
     
@@ -161,10 +163,16 @@ class OrderController extends Controller{
     
             $products = [];
             $totalPrice = 0;
-    
+            $cartItems = [];
+
             foreach ($productDetails as $detail) {
                 $productId = $detail['id_product'];
                 $quantity = $quantities[array_search($productId, $productIds)];
+                $cartItemId = $cartItemIds[array_search($productId, $productIds)];
+    
+                if ($cartItemId !== 'x') {
+                    $cartItems[] = ['id' => $cartItemId, 'quantity' => $quantity];
+                }
     
                 if ($quantity > 0) {
                     $finalPrice = !empty($detail['discount_value']) && $detail['discount_value'] > 0
@@ -175,13 +183,16 @@ class OrderController extends Controller{
     
                     $products[] = [
                         'product_id' => $productId,
+                        'combination_id' => $detail['id_combination'],
                         'quantity' => $quantity,
                         'product_name' => $detail['product_name'],
                         'image_url' => $detail['product_image'],
                         'selected_options' => $detail['selected_options'],
                         'price' => $detail['price'],
                         'discount_value' => $detail['discount_value'],
-                        'final_price' => $finalPrice
+                        'discount_id' => $detail['id_discount'],
+                        'final_price' => $finalPrice,
+                        'stock' => $detail['stock']
                     ];
                 }
             }
@@ -194,11 +205,11 @@ class OrderController extends Controller{
     
         $orderData = [
             'id_user' => $user['id'],
-            'id_status' => 1,
+            'id_status' => $paymentMethodId == 2 ? 1 : 2,
             'total_price' => $totalPrice,
             'shipping_fee' => 0,
-            'service_fee' => 2.50,
-            'handling_fee' => 1.50,
+            'service_fee' => 500,
+            'handling_fee' => 1000,
             'id_payment_method' => $paymentMethodId,
             'id_shipping_address' => $idShippingAddress
         ];
@@ -208,14 +219,17 @@ class OrderController extends Controller{
         $response = [
             'success' => true,
             'snapToken' => '',
-            'redirect' => ''
+            'redirect' => '',
+            'idOrder' => $idOrder,
+            'cartItems' => [],
+            'products' => []
         ];
     
         if ($paymentMethodId == 2) {  // Transfer
             $transactionDetails = [
                 'order_id' => $idOrder,
-                'service_fee' => 2500,
-                'handling_fee' => 1500,
+                // 'service_fee' => 2500,
+                // 'handling_fee' => 1500,
                 'gross_amount' => (int) $totalPrice,
             ];
     
@@ -229,6 +243,22 @@ class OrderController extends Controller{
                     'name' => $product['product_name']
                 ];
             }
+
+            // Perform manual beacuse the Midtrans doesnt support it
+            $itemDetails[] = [
+                'id' => 'S1',
+                'price' => 500,
+                'quantity' => 1,
+                'name' => 'Biaya Layanan'
+            ];
+
+            $itemDetails[] = [
+                'id' => 'H2',
+                'price' => 1000,
+                'quantity' => 1,
+                'name' => 'Biaya Penanganan'
+            ];
+            
     
             $firebaseId = $verifiedIdToken->claims()->get("sub");
             $user = UserModel::new()->get(['id_firebase', $firebaseId]);
@@ -252,7 +282,7 @@ class OrderController extends Controller{
                 'city' => $shippingAddress['city'],
                 'state' => $shippingAddress['state'],
                 'postal_code' => $shippingAddress['postal_code'],
-                'Whatsapp number' => $user['wa_number'],
+                'whatsapp_number' => $user['wa_number'],
                 'country_code' => 'IDN'
             ];
     
@@ -263,8 +293,11 @@ class OrderController extends Controller{
             ];
     
             $response['snapToken'] = \Midtrans\Snap::getSnapToken($params);
+            $response['cardItems'] = $cartItems;
+            $response['products'] = $products;
     
         } elseif ($paymentMethodId == 1) {  // COD
+            $this->fillOrderItems($idOrder, $products);
             $response['redirect'] = BASEURL . 'order/detail/' . $idOrder;
         }
     
@@ -273,11 +306,103 @@ class OrderController extends Controller{
         exit();
     }
     
-    private function sendError($message, $statusCode) {
-        header("HTTP/1.1 $statusCode $message");
-        echo json_encode(['error' => $message]);
-        exit();
+    public function finalizeTranferOrder() {
+        $requiredKeys = ['idOrder', 'token', 'cartItems', 'products'];
+    
+        // Read and decode the JSON input
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+    
+        // Check for JSON errors
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $this->sendError('Invalid JSON format', 400);
+        }
+    
+        // Validate required keys
+        foreach ($requiredKeys as $key) {
+            if (empty($data[$key])) {
+                $this->sendError('Missing required field: ' . $key, 400);
+            }
+        }
+    
+        // Verify token
+        $verifiedIdToken = AuthHelpers::verifyFBAccessIdToken($data['token']);
+        if (empty($verifiedIdToken)) {
+            $this->sendError('Invalid or expired token', 403);
+        }
+    
+        // Process cart items
+        $cartItems = $data['cartItems'];
+        foreach ($cartItems as $cartItem) {
+            if (!isset($cartItem['cartItemId'], $cartItem['quantity'])) {
+                $this->sendError('Invalid cart item data', 400);
+            }
+    
+            $cartItemId = $cartItem['cartItemId'];
+            $quantity = $cartItem['quantity'];
+            $cartItemModel = CartItemModel::new()->getCartItemById($cartItemId);
+    
+            if ($cartItemModel) {
+                $newQuantity = $cartItemModel['quantity'] - $quantity;
+    
+                if ($newQuantity > 0) {
+                    CartItemModel::new()->updateCartItem($cartItemId, $newQuantity);
+                } else {
+                    CartItemModel::new()->removeCartItem($cartItemId);
+                }
+            } else {
+                $this->sendError('Cart item not found: ' . $cartItemId, 404);
+            }
+        }
+    
+        // Process order items
+        $this->fillOrderItems($data['idOrder'], $data['products']);
+    
+        // Send success response
+        $this->sendSuccess('Order processed successfully');
     }
+    
+    private function fillOrderItems($idOrder, $products) {
+        if (!is_array($products)) {
+            $this->sendError('Invalid products data', 400);
+        }
+    
+        $items = [];
+        foreach ($products as $product) {
+            if (!isset($product['combination_id'], $product['price'], $product['stock'], $product['quantity'])) {
+                $this->sendError('Invalid product data', 400);
+            }
+    
+            VariationCombinationModel::new()->updateVariationCombination(
+                $product['combination_id'],
+                $product['price'],
+                ((int)$product['stock']) - ((int)$product['quantity'])
+            );
+    
+            $items[] = [
+                'id_order' => $idOrder,
+                'id_combination' => $product['combination_id'],
+                'discount_value' => $product['discount_value'] ?? 0, // Default to 0 if not provided
+                'quantity' => $product['quantity'],
+                'price' => $product['price']
+            ];
+        }
+    
+        OrderItemModel::new()->insertItems($items);
+    }
+    
+    private function sendError($message, $statusCode) {
+        http_response_code($statusCode);
+        echo json_encode(['success' => false, 'message' => $message]);
+        exit;
+    }
+    
+    private function sendSuccess($message) {
+        http_response_code(200);
+        echo json_encode(['success' => true, 'message' => $message]);
+        exit;
+    }
+    
     
     
     

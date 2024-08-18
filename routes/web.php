@@ -14,7 +14,8 @@ Router::get("/api/reviews/product/{id}", invokeClass(ReviewController::class, "g
 Router::get("/api/user/addresses", invokeClass(CheckoutController::class, 'getUserAddresses'));
 Router::get("/api/user/addresses/{uid}/update", invokeClass(CheckoutController::class, 'getUserAddresses'));
 Router::post("/api/prepare-order", invokeClass(OrderController::class, 'prepareOrder'));
-
+Router::get("/api/user/addresses/{id}/set-primary", invokeClass(ProfileController::class, 'updateShippingAddressPriority'));
+Router::post('api/finalize-transfer-order', invokeClass(OrderController::class, 'finalizeTranferOrder'));
 
 Router::get('/auth-process', invokeClass(LoginController::class, "processAuth"));
 

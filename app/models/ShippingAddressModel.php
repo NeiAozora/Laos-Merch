@@ -52,5 +52,49 @@ class ShippingAddressModel extends Model {
         
         return $this->db->execute();
     }
-}
 
+    public function updateShippingAddressPriority($id_user, $id_shipping_address, $prioritize) {
+        // Get all addresses for the user
+        $addresses = $this->getShipAddressByUser($id_user);
+
+        if (count($addresses) < 1) {
+            throw new Exception('No shipping addresses found for the user.');
+        }
+
+        // Check if the target address exists
+        $targetAddress = null;
+        foreach ($addresses as $address) {
+            if ($address['id_shipping_address'] == $id_shipping_address) {
+                $targetAddress = $address;
+                break;
+            }
+        }
+
+        if ($targetAddress === null) {
+            throw new Exception('Shipping address not found.');
+        }
+
+        // Reset the priority for all addresses of the user
+        $resetDb = new Database();
+        $resetDb->query('
+            UPDATE shipping_addresses 
+            SET is_prioritize = FALSE 
+            WHERE id_user = :id_user
+        ');
+        $resetDb->bind(':id_user', $id_user);
+        $resetDb->execute();
+
+        // Set is_prioritize to true for the target address
+        $updateDb = new Database();
+        $updateDb->query('
+            UPDATE shipping_addresses 
+            SET is_prioritize = :prioritize 
+            WHERE id_user = :id_user AND id_shipping_address = :id_shipping_address
+        ');
+        $updateDb->bind(':prioritize', $prioritize);
+        $updateDb->bind(':id_user', $id_user);
+        $updateDb->bind(':id_shipping_address', $id_shipping_address);
+
+        return $updateDb->execute();
+    }
+}
