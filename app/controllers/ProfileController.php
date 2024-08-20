@@ -38,7 +38,15 @@ class ProfileController extends Controller
             $last_name = $_POST['last_name'] ?? null;
             $email = $_POST['email'] ?? null;
             $wa_number = $_POST['wa_number'] ?? null;
-            $profile_picture = $_POST['profile_picture'] ?? null;
+           
+            $profile_picture = $_FILES['profile_picture']['name'] ?? null;
+
+            if ($profile_picture) {
+                $target_dir = BASEURL . "public/storage";
+                $target_file = $target_dir . basename($profile_picture);
+                move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $target_file);
+            }
+
 
             $result = $this->userModel->updateUser($id_user,$username,$first_name,$last_name,$email,$wa_number,$profile_picture);
 
