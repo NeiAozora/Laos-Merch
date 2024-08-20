@@ -38,17 +38,48 @@ class ProfileController extends Controller
             $last_name = $_POST['last_name'] ?? null;
             $email = $_POST['email'] ?? null;
             $wa_number = $_POST['wa_number'] ?? null;
-           
-            $profile_picture = $_FILES['profile_picture']['name'] ?? null;
-
-            if ($profile_picture) {
-                $target_dir = BASEURL . "public/storage";
-                $target_file = $target_dir . basename($profile_picture);
-                move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $target_file);
+            $profile_picture = $_FILES['profile_picture'] ?? null;
+            $profile_picture_url = null;
+    
+            if ($profile_picture && $profile_picture['error'] === UPLOAD_ERR_OK) {
+                $target_dir = "public/storage/profile_pictures/";
+                $target_file = $target_dir . basename($profile_picture['name']);
+                $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+    
+                // Cek Image
+                $check = getimagesize($profile_picture['tmp_name']);
+                if ($check === false) {
+                    $_SESSION['error'] = 'File is not an image.';
+                    header("Location: " . BASEURL . "user/" . $id_user . "/profile");
+                    exit;
+                }
+    
+                // Cek Ukuran File
+                if ($profile_picture['size'] > 5000000) {
+                    $_SESSION['error'] = 'File size is too large.';
+                    header("Location: " . BASEURL . "user/" . $id_user . "/profile");
+                    exit;
+                }
+    
+                // Cek Ekstensi File
+                if (!in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
+                    $_SESSION['error'] = 'Only JPG, JPEG, PNG & GIF files are allowed.';
+                    header("Location: " . BASEURL . "user/" . $id_user . "/profile");
+                    exit;
+                }
+    
+                // Move the uploaded file to the target directory
+                if (move_uploaded_file($profile_picture['tmp_name'], $target_file)) {
+                    $profile_picture_url = BASEURL . "public/storage/profile_pictures/" . basename($profile_picture['name']);
+                } else {
+                    $_SESSION['error'] = 'Error uploading file.';
+                    header("Location: " . BASEURL . "user/" . $id_user . "/profile");
+                    exit;
+                }
             }
 
 
-            $result = $this->userModel->updateUser($id_user,$username,$first_name,$last_name,$email,$wa_number,$profile_picture);
+            $result = $this->userModel->updateUser($id_user,$username,$first_name,$last_name,$email,$wa_number,$profile_picture_url);
 
             if ($result) {
                 $_SESSION['success'] = 'Berhasil Update.';
