@@ -97,4 +97,33 @@ class ShippingAddressModel extends Model {
 
         return $updateDb->execute();
     }
+
+    public function deleteShipAddress($id_user, $id_shipping_address) {
+        // Ensure the address exists
+        $address = $this->getShipAddressByUser($id_user);
+        $addressExists = false;
+        
+        foreach ($address as $addr) {
+            if ($addr['id_shipping_address'] == $id_shipping_address) {
+                $addressExists = true;
+                break;
+            }
+        }
+    
+        if (!$addressExists) {
+            throw new Exception('Shipping address not found.');
+        }
+    
+        // Delete the address
+        $this->db->query('
+            DELETE FROM shipping_addresses 
+            WHERE id_user = :id_user AND id_shipping_address = :id_shipping_address
+        ');
+    
+        $this->db->bind(':id_user', $id_user, PDO::PARAM_INT);
+        $this->db->bind(':id_shipping_address', $id_shipping_address, PDO::PARAM_INT);
+    
+        return $this->db->execute();
+    }
+    
 }

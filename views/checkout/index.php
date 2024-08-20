@@ -27,18 +27,18 @@ requireView("partials/navbar.php");
                                           <?= htmlspecialchars($user['wa_number']); ?>
                                       </h6>
                                       <?php if (isset($address)) : ?>
-                                          <div >
-                                              <h6 style="font-family: nunito; font-weight:lighter;">
-                                                  <?= htmlspecialchars($address['street_address'] . ', Kota ' . $address['city'] . ', ' . $address['state']); ?>
-                                              </h6>
-                                              <?php if (!empty($address['extra_note'])) : ?>
-                                                <p style="font-family: nunito; font-weight:lighter;">
-                                                  <span>
-                                                      <?= htmlspecialchars(strlen($address['extra_note']) > 60 ? substr($address['extra_note'], 0, 60) . '...' : $address['extra_note']); ?>
-                                                  </span>
-                                              </p>
-                                              <?php endif; ?>
-                                          </div>
+                                        <div>
+                                            <h6 class="address-details" style="font-family: nunito; font-weight:lighter;">
+                                                <?= htmlspecialchars($address['street_address'] . ', Kota ' . $address['city'] . ', ' . $address['state'] . ', ' . $address['postal_code']); ?>
+                                            </h6>
+                                            <?php if (!empty($address['extra_note'])) : ?>
+                                                <p class="extra-note-details" style="font-family: nunito; font-weight:lighter;">
+                                                    <span>
+                                                        <?= htmlspecialchars(strlen($address['extra_note']) > 60 ? substr($address['extra_note'], 0, 60) . '...' : $address['extra_note']); ?>
+                                                    </span>
+                                                </p>
+                                            <?php endif; ?>
+                                        </div>
                                       <?php else : ?>
                                           <div class="alert alert-warning" role="alert" style="font-family: nunito;">
                                               Alamat belum diatur. Silakan tambahkan alamat Anda terlebih dahulu.
@@ -143,14 +143,10 @@ requireView("partials/navbar.php");
                         <h6 id="selected_payment_method">Pilih Metode Pembayaran</h6>
                         <h5 class="me20 mt-3">Jenis Pengiriman:</h5>
                         <h6 id="selected_shipping_method">Pilih Metode Pengiriman</h6>
-                        <table class="mt-5">
-    <h6>Biaya Layanan</h6>
-        <h6>: Rp. 500</h6>
-    
-    
-        <h6>Biaya Penanganan</h6>
-        <h6>: Rp. 1000</h6>
-    
+                        <h6 class="mt-3">Biaya Layanan:</h6>
+                        <h6>Rp. 500</h6>
+                        <h6>Biaya Penanganan:</h6>
+                        <h6>Rp. 1000</h6>
                         <h5 class="mt-2 me20">Total Barang:</h5>
                         <h6 id="total_amount">Rp. <?php echo number_format($total_price, 2); ?></h6>
 

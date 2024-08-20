@@ -297,6 +297,7 @@ class OrderController extends Controller{
             $response['products'] = $products;
     
         } elseif ($paymentMethodId == 1) {  // COD
+            $this->updateCartItems($cartItems);
             $this->fillOrderItems($idOrder, $products);
             $response['redirect'] = BASEURL . 'order/detail/' . $idOrder;
         }
@@ -331,20 +332,30 @@ class OrderController extends Controller{
             $this->sendError('Invalid or expired token', 403);
         }
     
+        $this->updateCartItems($data['cartItems']);
+    
+        // Process order items
+        $this->fillOrderItems($data['idOrder'], $data['products']);
+    
+        // Send success response
+        $this->sendSuccess('Order processed successfully');
+    }
+
+    private function updateCartItems($cartItems){
         // Process cart items
-        $cartItems = $data['cartItems'];
+
         foreach ($cartItems as $cartItem) {
-            if (!isset($cartItem['cartItemId'], $cartItem['quantity'])) {
+            if (!isset($cartItem['id'], $cartItem['quantity'])) {
                 $this->sendError('Invalid cart item data', 400);
             }
-    
-            $cartItemId = $cartItem['cartItemId'];
+
+            $cartItemId = $cartItem['id'];
             $quantity = $cartItem['quantity'];
             $cartItemModel = CartItemModel::new()->getCartItemById($cartItemId);
-    
+
             if ($cartItemModel) {
                 $newQuantity = $cartItemModel['quantity'] - $quantity;
-    
+
                 if ($newQuantity > 0) {
                     CartItemModel::new()->updateCartItem($cartItemId, $newQuantity);
                 } else {
@@ -354,12 +365,6 @@ class OrderController extends Controller{
                 $this->sendError('Cart item not found: ' . $cartItemId, 404);
             }
         }
-    
-        // Process order items
-        $this->fillOrderItems($data['idOrder'], $data['products']);
-    
-        // Send success response
-        $this->sendSuccess('Order processed successfully');
     }
     
     private function fillOrderItems($idOrder, $products) {
@@ -372,11 +377,13 @@ class OrderController extends Controller{
             if (!isset($product['combination_id'], $product['price'], $product['stock'], $product['quantity'])) {
                 $this->sendError('Invalid product data', 400);
             }
-    
+            
+            $remainingStock = ((int)$product['stock']) - ((int)$product['quantity']);
+
             VariationCombinationModel::new()->updateVariationCombination(
                 $product['combination_id'],
                 $product['price'],
-                ((int)$product['stock']) - ((int)$product['quantity'])
+                $remainingStock
             );
     
             $items[] = [

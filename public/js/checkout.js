@@ -32,11 +32,11 @@ document.addEventListener('DOMContentLoaded', function() {
         submitOrder(); // Only call submitOrder if the button is not disabled
     });
 });
-
+var addresses = [];
 document.addEventListener("DOMContentLoaded", function() {
     const apiUrl = baseUrl + 'api/user/addresses'; // Replace with your actual API endpoint
     const modalElement = document.getElementById('exampleModalCenter');
-    let addresses = [];
+    addresses = [];
 
     // Fetch and populate modal when 'Ubah Alamat' modal is triggered
     modalElement.addEventListener('show.bs.modal', function () {
@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const modalBody = modalElement.querySelector('.modal-body');
         let prioritizedAddress = null;
         let otherAddresses = [];
+
 
         // Loop through addresses to find the prioritized one and others
         addresses.forEach(address => {
@@ -107,35 +108,46 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    function createAddressCard(address, isPrioritized = false) {
+    function createAddressCard(address) {
         const card = document.createElement('div');
         card.className = 'card mb-3 address-card';
         card.dataset.idShippingAddress = address.id_shipping_address; // Add the id_shipping_address as a data attribute
-
-        // Customize card style based on priority
+    
+        // Determine if this address is the local selected
+        const isSelected = address.id_shipping_address === said;
+    
+        // Customize card style based on selection
+        const bgColor = isSelected ? '#034d26' : '#1e1e1e'; // Focus only on the selected address
+        const checkMark = isSelected ? '<i class="fa-solid fa-check text-success" style="font-size: 24px;"></i>' : '';
+    
         card.innerHTML = `
-            <div class="card-body" style="background-color: ${isPrioritized ? '#034d26' : '#1e1e1e'}; color: #fff;">
+            <div class="card-body" style="background-color: ${bgColor}; color: #fff;">
                 <div class="d-flex justify-content-between">
                     <div>
-                        <h6 class="card-title mb-1">${address.label_name} ${isPrioritized ? '<span class="badge bg-warning text-dark">Utama</span>' : ''}</h6>
+                        <h6 class="card-title mb-1">${address.label_name} 
+                            ${address.is_prioritize ? '<span class="badge bg-warning text-dark">Utama</span>' : ''}
+                        </h6>
                         <p class="card-text mb-1">${address.street_address}, ${address.city}, ${address.state}, ${address.postal_code}</p>
                         <p class="card-text">${address.extra_note || ''}</p>
                     </div>
                     <div class="text-end">
-                        ${isPrioritized ? '<i class="fa-solid fa-check text-success" style="font-size: 24px;"></i>' : `<button type="button" class="btn btn-outline-success mb-2" onclick="selectAddress(${address.id_shipping_address})">Pilih</button>`}
+                        ${checkMark}
+                        ${!isSelected ? `<button type="button" class="btn btn-outline-success mb-2" onclick="selectAddress(${address.id_shipping_address})">Pilih</button>` : ''}
                     </div>
                 </div>
                 <div class="d-flex justify-content-between mt-3">
                     <a href="#" class="text-light"></a>
                     <div>
-                        <a href="#" class="text-light me-3">Ubah Alamat</a>
-                        ${!isPrioritized ? '<a href="#" class="text-light me-3" onclick="makePrimaryAddress(${address.id_shipping_address})">Jadikan Alamat Utama & Pilih</a>' : ''}
+                        <a href="${baseUrl}user/${uid}/profile?edit=true&tab=address" class="text-light me-3">Ubah Alamat</a>
+                        ${!address.is_prioritize ? `<a href="#" class="text-light me-3" onclick="makePrimaryAddress(${address.id_shipping_address})">Jadikan Alamat Utama & Pilih</a>` : ''}
                     </div>
                 </div>
             </div>
         `;
+    
         return card;
     }
+    
 
     function updateModalContent(filteredAddresses) {
         const modalBody = modalElement.querySelector('.modal-body');
@@ -176,18 +188,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Function to select address and update the "Alamat:" field
     window.selectAddress = function(id_shipping_address) {
+
         const address = addresses.find(addr => addr.id_shipping_address === id_shipping_address); // Find the selected address
         if (!address) return;
-
+        said = id_shipping_address;
         // Update the address info on the page
-        const alamatField = document.querySelector('.card-body h6[style*="font-family: nunito;"][text^="Alamat:"]');
-        if (alamatField) {
-            alamatField.textContent = `${address.street_address}, ${address.city}, ${address.state}, ${address.postal_code}`;
+        const addressField = document.querySelector('.address-details');
+        if (addressField) {
+            addressField.textContent = `${address.street_address}, Kota ${address.city}, ${address.state}, ${address.postal_code}`;
         }
-        const extraNoteField = document.querySelector('.card-body h6[style*="font-family: nunito;"][text^="Catatan:"]');
-        if (extraNoteField && address.extra_note) {
-            extraNoteField.textContent = address.extra_note;
+        
+        const extraNoteField = document.querySelector('.extra-note-details span');
+        if (extraNoteField) {
+            extraNoteField.textContent = address.extra_note ? 
+                (address.extra_note.length > 60 ? `${address.extra_note.substring(0, 60)}...` : address.extra_note) 
+                : '';
         }
+        said = parseInt(id_shipping_address)
         const modalElement = document.getElementById('exampleModalCenter');
         const modalInstance = bootstrap.Modal.getInstance(modalElement);
         modalInstance.hide();
@@ -195,12 +212,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Function to make an address primary and select it
     window.makePrimaryAddress = function(id_shipping_address) {
+
         fetch(apiUrl + '/' + id_shipping_address + '/set-primary', {
             method: 'GET'
         })
         .then(response => response.json())
         .then(data => {
-            if (data.status) {
+            if (data.status === 200) {
                 selectAddress(id_shipping_address); // Call selectAddress to update the display
                 // Optionally, refetch addresses and update the modal
                 fetch(apiUrl)
@@ -218,6 +236,15 @@ document.addEventListener("DOMContentLoaded", function() {
         .catch(error => console.error('Error:', error));
     }
 });
+
+
+
+
+
+
+
+
+
 
 
 

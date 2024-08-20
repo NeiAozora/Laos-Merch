@@ -58,61 +58,140 @@ class ProfileController extends Controller
     }
 
 
-    public function addShippingAddress($id_user){
-        $id_user = $_SESSION['user']['id_user'] ?? null;
-        if($id_user AND $_SERVER['REQUEST_METHOD'] === 'POST'){
-            $label_name = $_POST['label_name'];
-            $street_address = $_POST['street_address'];
-            $city = $_POST['city'];
-            $state = $_POST['state'];
-            $postal_code = $_POST['postal_code'];
-            $extra_note = $_POST['extra_note'];
-            $is_prioritize = 0;
-            $is_temporary = 0;
-            $result = $this->shippingAddressModel->addShipAddress($id_user,$label_name,$street_address,$city,$state,$postal_code,$extra_note,$is_prioritize,$is_temporary);
-            if ($result) {
-                $_SESSION['success'] = 'Berhasil Tambah.';
-            } else {
-                $_SESSION['error'] = 'Gagal Tambah.';
+    public function performCRUD() {
+    
+        // Check for JSON errors
+        $data = json_decode(file_get_contents('php://input'), true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $this->sendError('Invalid JSON format', 400);
+        }
+    
+        // Define required keys for validation
+        $requiredKeys = ['addresses', 'token']; // Adjust as needed
+    
+        // Validate required keys
+        foreach ($requiredKeys as $key) {
+            if (empty($data[$key])) {
+                $this->sendError('Missing required field: ' . $key, 400);
             }
-
-            header("Location: " . BASEURL . "user/" . $id_user . "/profile");
-            exit;
-        }else{
-            $_SESSION['error'] = 'Unauthorized request or invalid request method.';
-            header("Location: " . BASEURL . "user/" . $id_user . "/profile");
-            exit;
+        }
+    
+        // Verify token
+        $verifiedIdToken = AuthHelpers::verifyFBAccessIdToken($data['token']);
+        if (empty($verifiedIdToken)) {
+            $this->sendError('Invalid or expired token', 403);
+        }
+    
+        $firebaseId = $verifiedIdToken->claims()->get("sub");
+        $user = UserModel::new()->getUserByFireBaseId($firebaseId);
+        // Get user ID from data
+        $id_user = $user['id_user'];
+    
+        // Instantiate the model
+        $shippingAddressModel = new ShippingAddressModel();
+    
+        // Get current addresses from the database
+        $currentAddresses = $shippingAddressModel->getShipAddressByUser($id_user);
+        $currentAddressIds = array_column($currentAddresses, 'id_shipping_address');
+    
+        // Get the posted data
+        $postedAddresses = $data['addresses'] ?? [];
+    
+        // Separate posted data into updates and inserts
+        $addressesToUpdate = [];
+        $addressesToInsert = [];
+        $addressesToDelete = $currentAddressIds;
+    
+        foreach ($postedAddresses as $address) {
+            if (isset($address['id'])) {
+                // Update address
+                $addressesToUpdate[] = $address;
+                // Remove from delete list
+                if (($key = array_search($address['id'], $addressesToDelete)) !== false) {
+                    unset($addressesToDelete[$key]);
+                }
+            } else {
+                // Insert address
+                $addressesToInsert[] = $address;
+            }
+        }
+    
+        // Validate address fields for updates and inserts
+        foreach (array_merge($addressesToUpdate, $addressesToInsert) as $address) {
+            $this->validateAddress($address);
+        }
+    
+        // Perform updates
+        foreach ($addressesToUpdate as $address) {
+            $shippingAddressModel->updateShipAddress(
+                $id_user,
+                $address['id'],
+                $address['label_name'],
+                $address['street_address'],
+                $address['city'],
+                $address['state'],
+                $address['postal_code'],
+                $address['extra_note']
+            );
+        }
+    
+        // Perform inserts
+        foreach ($addressesToInsert as $address) {
+            $shippingAddressModel->addShipAddress(
+                $id_user,
+                $address['label_name'],
+                $address['street_address'],
+                $address['city'],
+                $address['state'],
+                $address['postal_code'],
+                $address['extra_note'],
+                $address['is_prioritize'] ?? false,
+                $address['is_temporary'] ?? false
+            );
+        }
+    
+        // Perform deletions
+        foreach ($addressesToDelete as $addressId) {
+            $shippingAddressModel->deleteShipAddress($id_user, $addressId);
+        }
+    
+        // Return a success response
+        echo json_encode(['status' => 'success']);
+    }
+    
+    private function validateAddress($address) {
+        // Ensure fields are not empty and match the expected types
+        if (empty($address['label_name'])) {
+            $this->sendError('Missing required field: label_name', 400);
+        }
+        if (empty($address['street_address'])) {
+            $this->sendError('Missing required field: street_address', 400);
+        }
+        if (empty($address['city'])) {
+            $this->sendError('Missing required field: city', 400);
+        }
+        if (empty($address['state'])) {
+            $this->sendError('Missing required field: state', 400);
+        }
+        if (empty($address['postal_code'])) {
+            $this->sendError('Missing required field: postal_code', 400);
+        }
+    
+        // Validate postal_code as a string (or adjust type validation as needed)
+        if (!is_string($address['postal_code'])) {
+            $this->sendError('Invalid data type for postal_code', 400);
+        }
+    
+        // Additional validation as needed
+        // e.g., check that is_prioritize and is_temporary are booleans
+        if (isset($address['is_prioritize']) && !is_bool($address['is_prioritize'])) {
+            $this->sendError('Invalid data type for is_prioritize', 400);
+        }
+        if (isset($address['is_temporary']) && !is_bool($address['is_temporary'])) {
+            $this->sendError('Invalid data type for is_temporary', 400);
         }
     }
-
-    public function updateShippingAddress($id_user)
-    {
-        $id_user = $_SESSION['user']['id_user'] ?? null;
-        if ($id_user && $_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id_shipping_address = $_POST['id_shipping_address'] ?? null;
-            $label_name = $_POST['label_name'] ?? null;
-            $street_address = $_POST['street_address'] ?? null;
-            $city = $_POST['city'] ?? null;
-            $state = $_POST['state'] ?? null;
-            $postal_code = $_POST['postal_code'] ?? null;
-            $extra_note = $_POST['extra_note'] ?? null;
-
-            $result = $this->shippingAddressModel->updateShipAddress($id_user,$id_shipping_address,$label_name,$street_address,$city,$state,$postal_code,$extra_note);
-
-            if ($result) {
-                $_SESSION['success'] = 'Berhasil Update.';
-            } else {
-                $_SESSION['error'] = 'Gagal Update.';
-            }
-
-            header("Location: " . BASEURL . "user/" . $id_user . "/profile");
-            exit;
-        } else {
-            $_SESSION['error'] = 'Unauthorized request or invalid request method.';
-            header("Location: " . BASEURL . "user/" . $id_user . "/profile");
-            exit;
-        }
-    }
+    
 
     public function updateShippingAddressPriority($id_shipping_address) {
         $user = AuthHelpers::getLoggedInUserData();
@@ -124,9 +203,9 @@ class ProfileController extends Controller
         // Update shipping address priority
         $shippingAddressModel = ShippingAddressModel::new();
         try {
-            $result = $shippingAddressModel->updateShippingAddressPriority($user['id_user'], $id_shipping_address, true);
+            $result = $shippingAddressModel->updateShippingAddressPriority($user['id'], $id_shipping_address, true);
             if ($result) {
-                $this->sendResponse(['message' => 'Shipping address priority updated successfully'], 200);
+                $this->sendResponse(['message' => 'Shipping address priority updated successfully', 'status' => 200], 200);
             } else {
                 $this->sendError('Failed to update priority', 500);
             }

@@ -2,6 +2,8 @@
    requireView("partials/head.php");
    requireView("partials/navbar.php");
    ?> 
+
+
 <section class="content">
    <div class="container mt-5">
       <div class="profile-header d-flex justify-content-between align-items-center mb-2">
@@ -100,7 +102,7 @@
                      <a href="#" class="btn btn-danger mt-3 mb-3 me-2" data-bs-toggle="modal" data-bs-target="#cancelModal">
                      Batal Perubahan
                      </a>
-                     <button class="btn btn-success mt-3 mb-3">Simpan</button>
+                     <button id="save-btn" class="btn btn-success mt-3 mb-3">Simpan</button>
                   </div>
                </div>
                <?php endif; ?>
@@ -117,27 +119,31 @@
    <div class="address-entry" data-id="<?php echo $address['id_shipping_address']; ?>">
    <div class="d-flex justify-content-between align-items-center">
       <h5>Alamat <?= $i ?></h5>
-      <button type="button" id="remove-address" class="btn btn-danger">Hapus</button>
+      <button type="button" class="btn btn-danger remove-address" data-id="<?php echo $address['id_shipping_address']; ?>">Hapus</button>
    </div>
       <div class="address-form">
          <!-- Form fields for editing address -->
          <form method="POST" action="<?= BASEURL ?>user/<?= $userData['id']; ?>/profile/update-shipping-address" data-address-id="<?php echo $address['id_user']; ?>">
-            <input type="hidden" name="id_shipping_address" value="<?php echo $address['id_user']; ?>">
+            <input type="hidden" name="id_shipping_address" value="<?php echo $address['id_shipping_address']; ?>">
+            <div class="form-group mt-2">
+               <label for="new_label_name">Label </label>
+               <input type="text" class="form-control" name="label_name" id="new_label_name" value="<?php echo htmlspecialchars($address['label_name']); ?>" placeholder="Label " required>
+            </div>
             <div class="form-group mt-2">
                <label for="street_address">Alamat Jalan</label>
-               <input type="text" class="form-control" name="street_address" id="street_address" value="<?php echo htmlspecialchars($address['street_address']); ?>" placeholder="Alamat Jalan" data-address-form-field="street_address">
+               <input type="text" class="form-control" name="street_address" id="street_address" value="<?php echo htmlspecialchars($address['street_address']); ?>" placeholder="Alamat Jalan" data-address-form-field="street_address" required>
             </div>
             <div class="form-group mt-2">
                <label for="city">Kota</label>
-               <input type="text" class="form-control" name="city" id="city" value="<?php echo htmlspecialchars($address['city']); ?>" placeholder="Kota" data-address-form-field="city">
+               <input type="text" class="form-control" name="city" id="city" value="<?php echo htmlspecialchars($address['city']); ?>" placeholder="Kota" data-address-form-field="city" required>
             </div>
             <div class="form-group mt-2">
                <label for="state">Provinsi</label>
-               <input type="text" class="form-control" name="state" id="state" value="<?php echo htmlspecialchars($address['state']); ?>" placeholder="Provinsi" data-address-form-field="state">
+               <input type="text" class="form-control" name="state" id="state" value="<?php echo htmlspecialchars($address['state']); ?>" placeholder="Provinsi" data-address-form-field="state" required>
             </div>
             <div class="form-group mt-2">
                <label for="postal_code">Kode Pos</label>
-               <input type="text" class="form-control" name="postal_code" id="postal_code" value="<?php echo htmlspecialchars($address['postal_code']); ?>" placeholder="Kode Pos" data-address-form-field="postal_code">
+               <input type="text" class="form-control" name="postal_code" id="postal_code" value="<?php echo htmlspecialchars($address['postal_code']); ?>" placeholder="Kode Pos" data-address-form-field="postal_code" required>
             </div>
             <div class="form-group mt-2">
                <label for="extra_note">Catatan Tambahan</label>
@@ -163,28 +169,35 @@
    </div>
 
    <!-- Display addresses when not in edit mode -->
-   <?php foreach ($addresses as $address): ?>
-   <div class="address-entry">
-   <?php $index = 1; // Example iteration index; replace as needed ?>
-      <h5>Alamat <?php echo $index; ?></h5>
-         <div class="card">
-            <div class="card-body">
-               <p class="mb-0"><strong>Label:</strong> <?php echo htmlspecialchars($address['label_name']); ?></p>
-               <p class="mb-0"><strong>Alamat Jalan:</strong> <?php echo htmlspecialchars($address['street_address']); ?></p>
-               <p class="mb-0"><strong>Kota:</strong> <?php echo htmlspecialchars($address['city']); ?></p>
-               <p class="mb-0"><strong>Provinsi:</strong> <?php echo htmlspecialchars($address['state']); ?></p>
-               <p class="mb-0"><strong>Kode Pos:</strong> <?php echo htmlspecialchars($address['postal_code']); ?></p>
-               <p class="mb-0"><strong>Catatan Tambahan:</strong> <?php echo htmlspecialchars($address['extra_note']); ?></p>
-               <p class="mb-0"><strong>Prioritas:</strong> <?php echo $address['is_prioritize'] ? 'Ya' : 'Tidak'; ?></p>
+   <?php
+   $i = 1; // Initialize the counter before the loop
+   foreach ($addresses as $address): ?>
+      <div class="address-entry">
+      <br>
+         <h5>Alamat <?php echo $i; ?></h5>
+            <div class="card">
+               <div class="card-body">
+                  <p class="mb-0"><strong>Label:</strong> <?php echo htmlspecialchars($address['label_name']); ?></p>
+                  <p class="mb-0"><strong>Alamat Jalan:</strong> <?php echo htmlspecialchars($address['street_address']); ?></p>
+                  <p class="mb-0"><strong>Kota:</strong> <?php echo htmlspecialchars($address['city']); ?></p>
+                  <p class="mb-0"><strong>Provinsi:</strong> <?php echo htmlspecialchars($address['state']); ?></p>
+                  <p class="mb-0"><strong>Kode Pos:</strong> <?php echo htmlspecialchars($address['postal_code']); ?></p>
+                  <p class="mb-0"><strong>Catatan Tambahan:</strong> <?php echo htmlspecialchars($address['extra_note']); ?></p>
+               </div>
             </div>
-         </div>
-   </div>
+      </div>
+      <?php $i++; // Increment $i at the end of each iteration ?>
    <?php endforeach; ?>
+
    <?php endif; ?>
 </div>
+            
+         </div>
+      </div>
+   </div>
 
 
-<!-- Template for adding new address form -->
+   <!-- Template for adding new address form -->
 <div id="new-address-form" class="mt-3 d-none">
    <div class="d-flex justify-content-between align-items-center">
       <h5 class="pt-3">Tambah Alamat Baru</h5>
@@ -192,48 +205,32 @@
    </div>
    <form method="POST" action="<?= BASEURL?>user/<?= $address['id_user']; ?>/profile/addAddress" data-address-form="template">
       <div class="form-group mt-2">
-         <label for="new_label_name">Label Tempat</label>
-         <input type="text" class="form-control" name="label_name" id="new_label_name" placeholder="Label Tempat">
-      </div>
-      <div class="form-group mt-2">
-         <label for="new_label_name">Label Nama</label>
-         <input type="text" class="form-control" name="label_name" id="new_label_name" placeholder="Label Nama">
+         <label for="new_label_name">Label </label>
+         <input type="text" class="form-control" name="label_name" id="new_label_name" placeholder="Label " required>
       </div>
       <div class="form-group mt-2">
          <label for="new_street_address">Alamat Jalan</label>
-         <input type="text" class="form-control" name="street_address" id="new_street_address" placeholder="Alamat Jalan">
+         <input type="text" class="form-control" name="street_address" id="new_street_address" placeholder="Alamat Jalan" required>
       </div>
       <div class="form-group mt-2">
          <label for="new_city">Kota</label>
-         <input type="text" class="form-control" name="city" id="new_city" placeholder="Kota">
+         <input type="text" class="form-control" name="city" id="new_city" placeholder="Kota" required>
       </div>
       <div class="form-group mt-2">
          <label for="new_state">Provinsi</label>
-         <input type="text" class="form-control" name="state" id="new_state" placeholder="Provinsi">
+         <input type="text" class="form-control" name="state" id="new_state" placeholder="Provinsi" required>
       </div>
       <div class="form-group mt-2">
          <label for="new_postal_code">Kode Pos</label>
-         <input type="number" class="form-control" name="postal_code" id="new_postal_code" placeholder="Kode Pos">
+         <input type="number" class="form-control" name="postal_code" id="new_postal_code" placeholder="Kode Pos" required>
       </div>
       <div class="form-group mt-2">
          <label for="new_extra_note">Catatan Tambahan</label>
          <textarea class="form-control" name="extra_note" id="new_extra_note" placeholder="Catatan Tambahan"></textarea>
       </div>
-      <div class="form-group mt-2">
-         <label for="new_is_prioritize">Prioritaskan</label>
-         <input type="checkbox" class="form-control" name="is_prioritize" id="new_is_prioritize">
-      </div>
-      <button type="submit" class="btn btn-primary mt-2">Tambah</button>
    </form>
 </div>
 
-
-
-
-            
-         </div>
-      </div>
-   </div>
    <!-- Modal -->
    <div class="modal fade animate-1sec slineId" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -256,7 +253,9 @@
 <!-- JavaScript for Address Management -->
 <?php if ($isEditMode): ?>
 
-<script>
+   <script type="module">
+   import { QuickConfirmModal } from '<?= BASEURL ?>public/js/components/quickConfirmModal.js';
+
 document.addEventListener('DOMContentLoaded', function() {
    const addButton = document.getElementById('add-address-button');
    const newAddressFormTemplate = document.getElementById('new-address-form');
@@ -293,31 +292,123 @@ document.addEventListener('DOMContentLoaded', function() {
        });
    }
 
-    
-   const addressList = document.getElementById('address-list');
+   document.querySelectorAll('.remove-address').forEach(function(button) {
+      button.addEventListener('click', function(event) {
+         // Prevent default action
+         event.preventDefault();
 
-   // Delegate the click event to the address list container
-   if (addressList) {
-      addressList.addEventListener('click', function(event) {
-         // Check if the clicked element is a delete button with the class remove-address
-         if (event.target && event.target.matches('button.remove-address')) {
-               // Prevent default action
-               event.preventDefault();
+         // Get the nearest address entry
+         const addressEntry = event.target.closest('.address-entry');
 
-               // Find the closest address entry div
-               const addressEntry = event.target.closest('.address-entry');
-
-               // Confirm deletion with the user
-               if (confirm('Apakah Anda yakin ingin menghapus alamat ini?')) {
-                  // Remove the address entry from the DOM
-                  addressEntry.remove();
-               }
-         }
+         // Create and show the confirmation modal
+         const myModal = new QuickConfirmModal('Peringatan', 'Apakah Anda yakin ingin menghapus alamat ini?', true)
+         .setYesButton('Ya, Hapus', function() {
+               addressEntry.remove(); // Remove the address entry
+         }, 'danger')
+         .setNoButton('Tidak', function() {
+               this.remove(); // Remove the modal
+         }, 'secondary')
+         .show();
       });
-   }
+   });
+
+   function save() {
+    const addressList = document.getElementById('address-list');
+    const forms = addressList.querySelectorAll('form'); // Select all forms inside #address-list
+    const addresses = [];
+    let hasErrors = false; // Flag to track if any form has errors
+    let firstInvalidForm = null; // To keep track of the first invalid form
+
+    forms.forEach(form => {
+        const formData = new FormData(form);
+        const addressObject = {};
+        const inputs = form.querySelectorAll('input, select, textarea'); // Select all input fields
+
+        let isFormValid = true; // Flag to check if the current form is valid
+
+        inputs.forEach(input => {
+            // Find nearest .form-control and remove any existing error or success classes
+            const formControl = input.closest('.form-control');
+            if (formControl) {
+                formControl.classList.remove('is-invalid', 'is-valid');
+            }
+
+            if (input.required && input.type !== 'hidden' && input.name !== 'extra_note') {
+                if (!input.value.trim()) {
+                    isFormValid = false;
+                    // Add error class to the nearest .form-control
+                    if (formControl) {
+                        formControl.classList.add('is-invalid');
+                    }
+                    if (!firstInvalidForm) {
+                        firstInvalidForm = form; // Track the first invalid form
+                    }
+                } else {
+                    // Add success class to the nearest .form-control
+                    if (formControl) {
+                        formControl.classList.add('is-valid');
+                    }
+                }
+            }
+            addressObject[input.name] = input.value;
+        });
+
+        if (isFormValid) {
+            addresses.push(addressObject);
+        } else {
+            hasErrors = true; // Set the flag if there's any form with errors
+        }
+    });
+
+    if (hasErrors) {
+        alert('Please fill out all required fields.');
+        if (firstInvalidForm) {
+            // Scroll to the first invalid form
+            firstInvalidForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Optionally, focus on the first input inside the invalid form
+            const firstInput = firstInvalidForm.querySelector('input, select, textarea');
+            if (firstInput) {
+                firstInput.focus(); // Focus the first input inside the form
+            }
+        }
+        return;
+    }
+
+    // Prepare the data to be sent
+    const payload = {
+        addresses: addresses,
+        token: t
+    };
+
+    // Example: If you want to send this data to a server
+    fetch(baseUrl + 'user/profile/process-crud-addresses', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload), // Wrap all data in a single object
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(function(data){
+      window.location.href = baseUrl + `user/<?= $userData['id'] ?>/profile?tab=address`;
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+
+
+
+   document.getElementById('save-btn').onclick = save;
 
 });
 </script>
+
 
 <?php endif; ?>
 

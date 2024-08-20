@@ -15,7 +15,8 @@ Router::get("/api/user/addresses", invokeClass(CheckoutController::class, 'getUs
 Router::get("/api/user/addresses/{uid}/update", invokeClass(CheckoutController::class, 'getUserAddresses'));
 Router::post("/api/prepare-order", invokeClass(OrderController::class, 'prepareOrder'));
 Router::get("/api/user/addresses/{id}/set-primary", invokeClass(ProfileController::class, 'updateShippingAddressPriority'));
-Router::post('api/finalize-transfer-order', invokeClass(OrderController::class, 'finalizeTranferOrder'));
+Router::post('/api/finalize-transfer-order', invokeClass(OrderController::class, 'finalizeTranferOrder'));
+Router::post('/user/profile/process-crud-addresses', invokeClass(ProfileController::class, "performCRUD"));
 
 Router::get('/auth-process', invokeClass(LoginController::class, "processAuth"));
 
@@ -38,10 +39,6 @@ Router::get('/product/{id}', invokeClass(ProductController::class, "getProduct")
 Router::get('/user/{id}/profile', invokeClass(ProfileController::class, "profileSettings"));
 //UpdateUser
 Router::post('/user/{id_user}/profile/update', invokeClass(ProfileController::class, "updateProfile"));
-//Add Address
-Router::post('/user/{id_user}/profile/addAddress', invokeClass(ProfileController::class, "addShippingAddress"));
-//Update Address
-Router::post('/user/{id_user}/profile/updateAddress', invokeClass(ProfileController::class, "updateShippingAddress"));
 
 
 // UserSettings
