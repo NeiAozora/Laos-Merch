@@ -74,6 +74,8 @@ Router::post('/prepareOrder', invokeClass(OrderController::class, "prepareOrder"
 Router::post('/order/updateStatus', invokeClass(OrderController::class, "updateStatus"));
 Router::get('/order/detail/{id}', invokeClass(OrderController::class, "detail"));
 
+
+
 //Atmin
 Router::get('/admin', invokeClass(AdminController::class, "index"));
 

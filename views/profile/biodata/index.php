@@ -26,7 +26,7 @@
          <div class="tab-pane fade show active" id="biodata" role="tabpanel" aria-labelledby="biodata-tab">
             <div class="row">
                <div class="col-md-4 text-center">
-                  <img style="border-radius: 50%;" src="<?php echo htmlspecialchars($userData['picture'] ?? 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'); ?>" alt="Profile Picture">
+                  <img style="border-radius: 50%;" src="<?php echo (!empty($userData['picture'])) ? htmlspecialchars($userData['picture']) : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'; ?>" alt="Profile Picture">
                   <?php if ($isEditMode): ?>
                   <form action="<?= BASEURL ?>user/<?= $userData['id']; ?>/profile/update" method="POST" enctype="multipart/form-data">
                      <div class="form-group">
@@ -169,13 +169,11 @@
    </div>
 
    <!-- Display addresses when not in edit mode -->
-<<<<<<< HEAD
    <?php
    $i = 1; // Initialize the counter before the loop
    foreach ($addresses as $address): ?>
       <div class="address-entry">
-      <br>
-         <h5>Alamat <?php echo $i; ?></h5>
+         <h5 class="mt-3">Alamat <?php echo $i; ?></h5>
             <div class="card">
                <div class="card-body">
                   <p class="mb-0"><strong>Label:</strong> <?php echo htmlspecialchars($address['label_name']); ?></p>
@@ -188,25 +186,6 @@
             </div>
       </div>
       <?php $i++; // Increment $i at the end of each iteration ?>
-=======
-   <?php $index = 1; // Example iteration index; replace as needed ?>
-   <?php foreach ($addresses as $address): ?>
-   <div class="address-entry">
-      <h5 class="mt-3">Alamat <?php echo $index; ?></h5>
-         <div class="card">
-            <div class="card-body">
-               <p class="mb-0"><strong>Label:</strong> <?php echo htmlspecialchars($address['label_name']); ?></p>
-               <p class="mb-0"><strong>Alamat Jalan:</strong> <?php echo htmlspecialchars($address['street_address']); ?></p>
-               <p class="mb-0"><strong>Kota:</strong> <?php echo htmlspecialchars($address['city']); ?></p>
-               <p class="mb-0"><strong>Provinsi:</strong> <?php echo htmlspecialchars($address['state']); ?></p>
-               <p class="mb-0"><strong>Kode Pos:</strong> <?php echo htmlspecialchars($address['postal_code']); ?></p>
-               <p class="mb-0"><strong>Catatan Tambahan:</strong> <?php echo htmlspecialchars($address['extra_note']); ?></p>
-               <p class="mb-0"><strong>Prioritas:</strong> <?php echo $address['is_prioritize'] ? 'Ya' : 'Tidak'; ?></p>
-            </div>
-         </div>
-   </div>
-   <?php $index++; ?>
->>>>>>> 55bd6f437fcef4022f5433a7de8a4077611e717d
    <?php endforeach; ?>
 
    <?php endif; ?>

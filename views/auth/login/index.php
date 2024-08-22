@@ -81,6 +81,7 @@ requireView("partials/head.php");
 
 <script>
     var baseUrl = "<?= BASEURL ?>"
+    const redirectTo = "<?= isset($_GET["to"]) ? $_GET["to"] : BASEURL ?>"
 </script>
 <script>
     function togglePasswordVisibility(inputId, iconId) {

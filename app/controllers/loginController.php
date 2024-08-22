@@ -51,6 +51,8 @@ class LoginController extends Controller{
                     'uid' => $firebaseId,
                     'id_user' => $userId
                 ];
+                
+                header('Content-Type: application/json');
     
                 echo json_encode(['status' => 'success', 'redirect' => $url]);
             } else {

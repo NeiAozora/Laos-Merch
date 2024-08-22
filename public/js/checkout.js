@@ -116,12 +116,15 @@ document.addEventListener("DOMContentLoaded", function() {
         // Determine if this address is the local selected
         const isSelected = address.id_shipping_address === said;
     
-        // Customize card style based on selection
-        const bgColor = isSelected ? '#034d26' : '#1e1e1e'; // Focus only on the selected address
-        const checkMark = isSelected ? '<i class="fa-solid fa-check text-success" style="font-size: 24px;"></i>' : '';
+        // Determine card style based on selection
+        const cardClass = isSelected ? 'bg-success text-white' : '';
+        const checkMark = isSelected ? '<i class="fa-solid fa-check text-white" style="font-size: 24px;"></i>' : '';
+    
+        // Link color classes based on the theme (text-body adjusts for both light and dark modes)
+        const linkClass = isSelected ? 'text-white' : 'text-body';
     
         card.innerHTML = `
-            <div class="card-body" style="background-color: ${bgColor}; color: #fff;">
+            <div class="card-body ${cardClass}">
                 <div class="d-flex justify-content-between">
                     <div>
                         <h6 class="card-title mb-1">${address.label_name} 
@@ -136,10 +139,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
                 </div>
                 <div class="d-flex justify-content-between mt-3">
-                    <a href="#" class="text-light"></a>
+                    <a href="#" class="${linkClass}"></a>
                     <div>
-                        <a href="${baseUrl}user/${uid}/profile?edit=true&tab=address" class="text-light me-3">Ubah Alamat</a>
-                        ${!address.is_prioritize ? `<a href="#" class="text-light me-3" onclick="makePrimaryAddress(${address.id_shipping_address})">Jadikan Alamat Utama & Pilih</a>` : ''}
+                        <a href="${baseUrl}user/${uid}/profile?edit=true&tab=address" class="${linkClass} me-3">Ubah Alamat</a>
+                        ${!address.is_prioritize ? `<a href="#" class="${linkClass} me-3" onclick="makePrimaryAddress(${address.id_shipping_address})">Jadikan Alamat Utama & Pilih</a>` : ''}
                     </div>
                 </div>
             </div>
@@ -147,6 +150,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
         return card;
     }
+    
     
 
     function updateModalContent(filteredAddresses) {
@@ -340,6 +344,7 @@ function submitOrder() {
                     const data = {
                         idOrder: response.idOrder,
                         token: t, // Replace with actual token
+                        shippingMethodId: said,
                         cartItems: response.cartItems,
                         products: response.products
                     };

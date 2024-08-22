@@ -73,7 +73,8 @@ document
     return fetch(url, { method: "GET" })
       .then((result) => {
         if (result.status === 200) {
-          window.location = result.redirect;
+          // console.log(result);
+          window.location = redirectTo;
         } else {
           throw new Error(result.statusText);
         }
@@ -96,7 +97,7 @@ document
   onAuthStateChanged(auth, (user) => {
     if (user) {
       let url =
-        baseUrl + "auth-process?fr=" + user.accessToken + "&br=" + user.uid;
+        baseUrl + "auth-process?fr=" + user.accessToken + "&br=" + user.uid
         // console.log(url);
       fetchWithRetry(url, maxRetries);
     }

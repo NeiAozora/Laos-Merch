@@ -158,8 +158,8 @@
             </svg>';
             
             $unfilledStar = '
-            <svg class="star" width="15" height="14" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 2px;">
-              <path d="M9.76121 0L12.0602 7.07548H19.4998L13.481 11.4484L15.78 18.5238L9.76121 14.151L3.74245 18.5238L6.04141 11.4484L0.0226526 7.07548H7.46225L9.76121 0Z" fill="#D9D9D9"/>
+            <svg width="15" height="14" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.76121 0L12.0602 7.07548H19.4998L13.481 11.4484L15.78 18.5238L9.76121 14.151L3.74245 18.5238L6.04141 11.4484L0.0226526 7.07548H7.46225L9.76121 0Z" fill="#D9D9D9"/>
             </svg>';
 
             $output = '';
@@ -366,7 +366,7 @@ function escapeHtml($string) {
          $image_url = htmlspecialchars($variationOption['image_url'], ENT_QUOTES, 'UTF-8');
       
          if (strpos($image_url, 'public/storage/') !== false) {
-            $image_url = $baseUrl . $image_url;
+            $image_url = BASEURL . $image_url;
         }
 
          echo json_encode([

@@ -184,15 +184,10 @@ requireView("partials/navbar.php");
 
 <style>
   .modal-body .form-control {
-    background-color: #1e1e1e;
     border: 1px solid #04d4a4;
     color: #fff;
   }
   
-
-  .modal-content {
-    background-color: #121212;
-  }
   
   .card {
     border: none;

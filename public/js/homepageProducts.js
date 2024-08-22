@@ -64,9 +64,10 @@ document.addEventListener('DOMContentLoaded', function() {
         </svg>`;
         
         const unfilledStar = `
-        <svg class="star" width="15" height="14" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 2px;">
-          <path d="M9.76121 0L12.0602 7.07548H19.4998L13.481 11.4484L15.78 18.5238L9.76121 14.151L3.74245 18.5238L6.04141 11.4484L0.0226526 7.07548H7.46225L9.76121 0Z" fill="#D9D9D9"/>
-        </svg>`;
+        <svg width="15" height="14" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9.76121 0L12.0602 7.07548H19.4998L13.481 11.4484L15.78 18.5238L9.76121 14.151L3.74245 18.5238L6.04141 11.4484L0.0226526 7.07548H7.46225L9.76121 0Z" fill="#D9D9D9"/>
+        </svg>
+`;
         
         const officialMerchHeading = document.getElementById("official-merch-heading");
         
@@ -135,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <img src="${product.product_image}" class="card-img-top img-fluid" alt="${product.product_name}">
                     </div>
                     <div class="card-body">
-                        <div class="d-flex flex-row mb-2">
+                        <div class="d-flex flex-row mb-2 review-rating">
                             ${starRatingHTML}
                         </div>
                         <p class="card-text">

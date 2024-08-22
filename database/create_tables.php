@@ -139,24 +139,6 @@ CREATE TABLE product_tags (
   FOREIGN KEY (id_tag) REFERENCES tags(id_tag) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CREATE TABLE reviews (
-  id_review BIGINT PRIMARY KEY AUTO_INCREMENT,
-  id_combination BIGINT NOT NULL,
-  id_user BIGINT,
-  rating INT CHECK (rating BETWEEN 1 AND 5),
-  comment TEXT,
-  anonymity BOOLEAN DEFAULT FALSE,
-  date_posted TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (id_combination) REFERENCES variation_combinations(id_combination) ON UPDATE CASCADE ON DELETE CASCADE,
-  FOREIGN KEY (id_user) REFERENCES users(id_user) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-CREATE TABLE review_images (
-  id_review_image BIGINT PRIMARY KEY AUTO_INCREMENT,
-  id_review BIGINT NOT NULL,
-  image_url VARCHAR(255),
-  FOREIGN KEY (id_review) REFERENCES reviews(id_review) ON UPDATE CASCADE ON DELETE CASCADE
-);
 
 CREATE TABLE cart_items (
   id_cart_item BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -241,7 +223,6 @@ CREATE TABLE order_items (
   FOREIGN KEY (id_combination) REFERENCES variation_combinations(id_combination) ON UPDATE CASCADE ON DELETE CASCADE,
   FOREIGN KEY (id_order) REFERENCES orders(id_order) ON UPDATE CASCADE ON DELETE CASCADE
 );
-
 CREATE TABLE shipment_companies (
   id_shipment_company BIGINT AUTO_INCREMENT PRIMARY KEY,
   company_name VARCHAR(255) NOT NULL,
@@ -254,35 +235,60 @@ CREATE TABLE carriers (
   carrier_name VARCHAR(255) NOT NULL,
   wa_number VARCHAR(20),
   email VARCHAR(255),
-  id_shipment_company BIGINT,
+  id_shipment_company BIGINT NOT NULL,
   FOREIGN KEY (id_shipment_company) REFERENCES shipment_companies(id_shipment_company)
 );
 
-
 CREATE TABLE shipments (
-  id_shipment BIGINT PRIMARY KEY AUTO_INCREMENT,
+  id_shipment BIGINT AUTO_INCREMENT PRIMARY KEY,
   id_order BIGINT,
-  id_carrier BIGINT,
-  shipping_method VARCHAR(255),
+  id_shipment_company BIGINT,
+  id_carrier BIGINT, -- Optional, for detailed carrier info
   tracking_number VARCHAR(255) UNIQUE,
   shipment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   expected_delivery_date DATE,
   actual_delivery_date DATE,
-  status VARCHAR(50),
   FOREIGN KEY (id_order) REFERENCES orders(id_order) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (id_shipment_company) REFERENCES shipment_companies(id_shipment_company) ON UPDATE CASCADE ON DELETE SET NULL,
   FOREIGN KEY (id_carrier) REFERENCES carriers(id_carrier) ON UPDATE CASCADE ON DELETE SET NULL
 );
 
 CREATE TABLE shipment_statuses (
-  id_shipment_status BIGINT PRIMARY KEY AUTO_INCREMENT,
+  id_status BIGINT AUTO_INCREMENT PRIMARY KEY,
+  status_name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE shipment_details (
+  id_detail BIGINT AUTO_INCREMENT PRIMARY KEY,
   id_shipment BIGINT,
-  status_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  status_description VARCHAR(255),
-  FOREIGN KEY (id_shipment) REFERENCES shipments(id_shipment) ON UPDATE CASCADE ON DELETE CASCADE
+  id_status BIGINT,
+  detail_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  detail_description VARCHAR(255),
+  FOREIGN KEY (id_shipment) REFERENCES shipments(id_shipment) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (id_status) REFERENCES shipment_statuses(id_status) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
+CREATE TABLE reviews (
+  id_review BIGINT PRIMARY KEY AUTO_INCREMENT,
+  id_combination BIGINT NOT NULL,
+  id_user BIGINT,
+  id_order_item BIGINT,
+  rating INT CHECK (rating BETWEEN 1 AND 5),
+  comment TEXT,
+  anonymity BOOLEAN DEFAULT FALSE,
+  date_posted TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (id_combination) REFERENCES variation_combinations(id_combination) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (id_user) REFERENCES users(id_user) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (id_order_item) REFERENCES order_items(id_order_item) ON UPDATE CASCADE ON DELETE SET NULL
+);
 
+CREATE TABLE review_images (
+  id_review_image BIGINT PRIMARY KEY AUTO_INCREMENT,
+  id_review BIGINT NOT NULL,
+  image_url VARCHAR(255),
+  FOREIGN KEY (id_review) REFERENCES reviews(id_review) ON UPDATE CASCADE ON DELETE CASCADE
+);
 
 ";
 

@@ -41,5 +41,45 @@ class OrderItemModel extends Model {
         return true;
     }
 
+    public function getOrderItemsByIdOrder($idUser, $idOrder){
+        $this->db->query("
+            SELECT oi.id_order_item,
+            o.id_user,
+            oi.id_combination,
+            oi.quantity,
+            pi.image_url,
+            GROUP_CONCAT(DISTINCT vo.option_name ORDER BY vo.option_name SEPARATOR ', ') AS option_names,
+            GROUP_CONCAT(DISTINCT vt.name ORDER BY vt.name SEPARATOR ', ') AS variation_types,
+            p.product_name,
+            p.description,
+            p.weight,
+            p.dimensions,
+            oi.price,
+            oi.discount_value
+        FROM order_items oi
+        JOIN orders o ON o.id_order = oi.id_order
+        JOIN variation_combinations vc ON oi.id_combination = vc.id_combination
+        JOIN combination_details cd ON cd.id_combination = vc.id_combination
+        JOIN variation_options vo ON vo.id_option = cd.id_option
+        JOIN variation_types vt ON vt.id_variation_type = vo.id_variation_type
+        JOIN products p ON vc.id_product = p.id_product
+        LEFT JOIN product_images pi ON pi.id_product = p.id_product
+        WHERE o.id_order = :id_order AND o.id_user = :id_user
+        GROUP BY oi.id_order_item, o.id_user, oi.id_combination, oi.quantity, pi.image_url, p.product_name, p.description, p.weight, p.dimensions, vc.price;
+        
+        ");
+
+        $this->db->bind(':id_user', $idUser);
+        $this->db->bind(':id_order', $idOrder);
+
+        // Execute the query and return the results
+        $orders = $this->db->resultSet();
+        if (!$orders) {
+            $orders = [];
+        }
+    
+        return $orders;
+    }
+
 }
 

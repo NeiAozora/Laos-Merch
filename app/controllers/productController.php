@@ -95,9 +95,9 @@ class ProductController extends Controller {
         if (array_key_exists('category', $_GET)){
             $criteria["category_name"] = $searchValue;
         }
-    
+
         $products = $this->productModel->getProducts($criteria, true);
-    
+
         // Get total number of products
         $totalProducts = $this->productModel->getTotalProducts($criteria, true);
         $totalPages = ceil($totalProducts / $limit);

@@ -2,9 +2,15 @@
 
 class OrderController extends Controller{
     private $orderModel;
+    private $shipmentModel;
+    private $shipmentStatusModel;
+    private $shipmentDetailModel;
 
     public function __construct(){
         $this->orderModel = new OrderModel();
+        $this->shipmentModel = new ShipmentModel;
+        $this->shipmentStatusModel = new ShipmentStatusModel;
+        $this->shipmentDetailModel = new ShipmentDetailModel;
     }
 
     public function index()
@@ -35,14 +41,18 @@ class OrderController extends Controller{
             // Log status yang diterima
             error_log("Selected Status: " . $status);
             error_log("Mapped Status: " . $statusDb);
-    
-            $orders = $this->orderModel->getAllOrders($id_user, $statusDb);
+            if(isset($_GET["id"])){
+                $orders = $this->orderModel->getAllOrderItemsById($id_user, $_GET['id'], $statusDb);
+            } else {
+                $orders = $this->orderModel->getAllOrders($id_user, $statusDb);
+            }
     
             // Loop through orders to update the status to Indonesian
             foreach ($orders as &$order) {
                 $order['status_name'] = $reverseStatusMapping[$order['status_name']] ?? 'Semua';
             }
             unset($order); // Unset reference to avoid unintended side effects
+            // dd($orders);
 
             view('order/index', ['orders' => $orders, 'status' => $status]);
         } else {
@@ -53,14 +63,35 @@ class OrderController extends Controller{
     
     
     public function detail($id){
-        $id_user = $_SESSION['user']['id_user'] ?? null;
+        $idUser = $_SESSION['user']['id_user'] ?? null;
 
-        if($id_user){
-            $order = $this->orderModel->getOrderById($id, $id_user);
-            d($order);
-            die;
-            if($order){
-                view('orderdetail/index', ['order' => $order]);
+
+
+        if($idUser){
+            $orderItem = OrderItemModel::new()->get($id);
+            if($orderItem){
+                $order = $this->orderModel->getOrderById($orderItem['id_order'], $idUser);
+                $orderItems = OrderItemModel::new()->getOrderItemsByIdOrder($idUser, $orderItem['id_order']);
+                $shipmentDetails = [];
+                $shipment = $this->shipmentModel->getShipmentByIdOrder($order['id_order']);
+                if (!empty($shipment)){
+                    $shipmentDetails = $this->shipmentDetailModel->getShipmentDetailsWithStatus($shipment['id_shipment']);
+                }
+                
+                
+                $data =  [
+            
+                'order' => $order, 
+                'idOrderItem' => $id,
+                'orderItems' => $orderItems,
+                'shipment' => $shipment, 
+                'shipmentDetails' => $shipmentDetails        
+                ];
+
+
+            
+                view('orderdetail/index', 
+               $data);
             }else{
                 view('404/index');
             }
@@ -107,11 +138,6 @@ class OrderController extends Controller{
     }
 
     public function prepareOrder() {
-        $user = AuthHelpers::getLoggedInUserData();
-        
-        if (empty($user)) {
-            $this->sendError('Forbidden', 403);
-        }
     
         $requiredKeys = ['shippingMethodId', 'paymentMethodId', 'idShippingAddress', 'token', 'selectedProductsParameters'];
         
@@ -140,6 +166,9 @@ class OrderController extends Controller{
             $this->sendError('Forbidden', 403);
         }
         
+        $firebaseId = $verifiedIdToken->claims()->get("sub");
+        $user = UserModel::new()->get(['id_firebase', $firebaseId])[0];
+
         function decode_obfuscated_data($data) {
             return base64_decode($data);
         }
@@ -201,10 +230,10 @@ class OrderController extends Controller{
             $this->sendError('Missing product parameters', 400);
         }
     
-        OrderModel::new()->deleteOrdersByInterval($user['id'], '30m');
+        OrderModel::new()->deleteOrdersByInterval($user['id_user'], '30m');
     
         $orderData = [
-            'id_user' => $user['id'],
+            'id_user' => $user['id_user'],
             'id_status' => $paymentMethodId == 2 ? 1 : 2,
             'total_price' => $totalPrice,
             'shipping_fee' => 0,
@@ -298,8 +327,8 @@ class OrderController extends Controller{
     
         } elseif ($paymentMethodId == 1) {  // COD
             $this->updateCartItems($cartItems);
-            $this->fillOrderItems($idOrder, $products);
-            $response['redirect'] = BASEURL . 'order/detail/' . $idOrder;
+            $this->fillOrderItems($idOrder, $shippingMethodId, $products);
+            $response['redirect'] = BASEURL . 'order?id='. $idOrder;
         }
     
         header('Content-Type: application/json');
@@ -335,7 +364,7 @@ class OrderController extends Controller{
         $this->updateCartItems($data['cartItems']);
     
         // Process order items
-        $this->fillOrderItems($data['idOrder'], $data['products']);
+        $this->fillOrderItems($data['idOrder'], $data["idShipmentMethod"], $data['products']);
     
         // Send success response
         $this->sendSuccess('Order processed successfully');
@@ -367,7 +396,7 @@ class OrderController extends Controller{
         }
     }
     
-    private function fillOrderItems($idOrder, $products) {
+    private function fillOrderItems($idOrder, $idShipmentMethod, $products) {
         if (!is_array($products)) {
             $this->sendError('Invalid products data', 400);
         }
@@ -395,7 +424,22 @@ class OrderController extends Controller{
             ];
         }
     
+        $shipment = [
+            'id_order' => $idOrder,
+            'id_shipment_company' => $idShipmentMethod,
+            'id_carrier' => NULL, // Set to null or a valid carrier ID if available
+            'tracking_number' => 'T' . random_str(13, '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'),
+            'expected_delivery_date' => date('Y-m-d', strtotime('+6 days')), // Calculate expected delivery date
+            'actual_delivery_date' => NULL // Set to NULL initially
+        ];
+        
         OrderItemModel::new()->insertItems($items);
+        $idShipment = ShipmentModel::new()->createShipment($shipment);
+        $result = ShipmentDetailModel::new()->insertShipmentDetail($idShipment, 1, "Pesanan Dibuat");
+        if (!$result){
+            $this->sendError("Cannot insert Shipment Detail!", 500);
+        }
+        
     }
     
     private function sendError($message, $statusCode) {

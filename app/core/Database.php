@@ -7,7 +7,7 @@ class Database {
     private $dbName = DB_NAME;
 
     public $dbh;
-    private $stmt;
+    public $stmt;
 
     public function __construct()
     {

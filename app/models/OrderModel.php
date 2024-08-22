@@ -11,58 +11,204 @@ class OrderModel extends Model {
     }
     
     public function getAllOrders($id_user, $status = null){
-        $query ="
-            SELECT o.id_order, oi.id_order_item, p.product_name, pi.image_url, oi.quantity, GROUP_CONCAT(vo.option_name SEPARATOR ',') as option_names, o.total_price, os.status_name, o.order_date
-            FROM orders o
-            JOIN order_items oi ON o.id_order = oi.id_order
-            JOIN order_statuses os ON o.id_status = os.id_status
-            JOIN variation_combinations vc ON oi.id_combination = vc.id_combination
-            JOIN combination_details cd ON vc.id_combination = cd.id_combination
-            JOIN variation_options vo ON cd.id_option = vo.id_option
-            JOIN products p ON vc.id_product = p.id_product
-            LEFT JOIN product_images pi ON p.id_product = pi.id_product -- Updated to LEFT JOIN to handle cases where there may be no images
-            WHERE o.id_user = :id_user
+        $query = "
+        SELECT 
+        o.id_order, 
+        oi.id_order_item, 
+        p.product_name, 
+        pi.image_url, 
+        oi.quantity, 
+        GROUP_CONCAT(DISTINCT vo.option_name SEPARATOR ', ') AS option_names, 
+        oi.price, 
+        oi.discount_value, 
+        os.status_name, 
+        o.order_date,
+        CASE 
+            WHEN r.id_review IS NOT NULL THEN TRUE 
+            ELSE FALSE 
+        END AS has_review
+    FROM 
+        orders o
+    JOIN 
+        order_items oi ON o.id_order = oi.id_order
+    JOIN 
+        order_statuses os ON o.id_status = os.id_status
+    JOIN 
+        variation_combinations vc ON oi.id_combination = vc.id_combination
+    JOIN 
+        combination_details cd ON vc.id_combination = cd.id_combination
+    JOIN 
+        variation_options vo ON cd.id_option = vo.id_option
+    JOIN 
+        products p ON vc.id_product = p.id_product
+    LEFT JOIN 
+        product_images pi ON p.id_product = pi.id_product
+    LEFT JOIN 
+        reviews r ON oi.id_order_item = r.id_order_item
+    WHERE 
+        o.id_user = :id_user 
+
         ";
+    
+        // Add condition for status if provided
         if ($status !== null && $status !== 'Semua') {
             $query .= ' AND os.status_name = :status';
         }
-
-        $query .= " GROUP BY o.id_order, oi.id_order_item, p.product_name, pi.image_url, oi.quantity, o.total_price, os.status_name, o.order_date";
-
+    
+        // Complete the query with the GROUP BY clause
+        $query .= "
+            GROUP BY 
+                oi.id_order_item
+        ";
+    
+        // Prepare and bind parameters
         $this->db->query($query);
         $this->db->bind(':id_user', $id_user);
         if ($status !== null && $status !== 'Semua') {
             $this->db->bind(':status', $status);
         }
-
+    
+        // Execute the query and return the results
         $this->db->execute();
         $orders = $this->db->resultSet(PDO::FETCH_ASSOC);
         if (!$orders) {
             $orders = [];
         }
-
+    
         return $orders;
     }
 
+    public function getAllOrderItemsById($id_user, $idOrder, $status = null) {
+        // Start building the base query
+        $query = "
+        SELECT 
+        o.id_order, 
+        oi.id_order_item, 
+        p.product_name, 
+        pi.image_url, 
+        oi.quantity, 
+        GROUP_CONCAT(DISTINCT vo.option_name SEPARATOR ', ') AS option_names, 
+        oi.price, 
+        oi.discount_value, 
+        os.status_name, 
+        o.order_date,
+        CASE 
+            WHEN r.id_review IS NOT NULL THEN TRUE 
+            ELSE FALSE 
+        END AS has_review
+    FROM 
+        orders o
+    JOIN 
+        order_items oi ON o.id_order = oi.id_order
+    JOIN 
+        order_statuses os ON o.id_status = os.id_status
+    JOIN 
+        variation_combinations vc ON oi.id_combination = vc.id_combination
+    JOIN 
+        combination_details cd ON vc.id_combination = cd.id_combination
+    JOIN 
+        variation_options vo ON cd.id_option = vo.id_option
+    JOIN 
+        products p ON vc.id_product = p.id_product
+    LEFT JOIN 
+        product_images pi ON p.id_product = pi.id_product
+    LEFT JOIN 
+        reviews r ON oi.id_order_item = r.id_order_item
+    WHERE 
+        o.id_user = :id_user AND o.id_order = :id_order
+
+        ";
+    
+        // Add condition for status if provided
+        if ($status !== null && $status !== 'Semua') {
+            $query .= ' AND os.status_name = :status';
+        }
+    
+        // Complete the query with the GROUP BY clause
+        $query .= "
+            GROUP BY 
+                oi.id_order_item
+        ";
+    
+        // Prepare and bind parameters
+        $this->db->query($query);
+        $this->db->bind(':id_user', $id_user);
+        $this->db->bind(':id_order', $idOrder);
+        if ($status !== null && $status !== 'Semua') {
+            $this->db->bind(':status', $status);
+        }
+    
+        // Execute the query and return the results
+        $orders = $this->db->resultSet();
+        if (!$orders) {
+            $orders = [];
+        }
+    
+        return $orders;
+    }
+    
+
+
+    
+
     public function getOrderById($id, $id_user){
         $this->db->query("
-            SELECT o.id_order, o.order_date, os.status_name, o.total_price, o.shipping_fee, o.service_fee, o.handling_fee, pm.method_name as payment_method,
-                   CONCAT_WS(', ', sa.street_address, sa.city, sa.state, sa.postal_code) as address, sa.label_name as recipient_name, u.wa_number, p.product_name, pi.image_url, 
-                   oi.quantity, oi.price, GROUP_CONCAT(vo.option_name SEPARATOR ',') as option_names
-            FROM orders o
-            JOIN order_statuses os ON o.id_status = os.id_status
-            LEFT JOIN shipments s ON o.id_order = s.id_order
-            JOIN users u ON o.id_user = u.id_user
-            LEFT JOIN carriers c ON s.id_carrier = c.id_carrier
-            LEFT JOIN shipping_addresses sa ON sa.id_shipping_address = o.id_shipping_address
-            JOIN order_items oi ON o.id_order = oi.id_order
-            JOIN variation_combinations vc ON oi.id_combination = vc.id_combination
-            JOIN products p ON vc.id_product = p.id_product
-            LEFT JOIN product_images pi ON p.id_product = pi.id_product -- Updated to LEFT JOIN to handle cases where there may be no images
-            JOIN combination_details cd ON vc.id_combination = cd.id_combination
-            JOIN variation_options vo ON cd.id_option = vo.id_option
-            JOIN payment_methods pm ON o.id_payment_method = pm.id_payment_method
-            WHERE o.id_order = :id_order AND o.id_user = :id_user
+        SELECT 
+        o.id_order, 
+        o.order_date, 
+        os.status_name, 
+        o.total_price, 
+        o.shipping_fee, 
+        o.service_fee, 
+        o.handling_fee, 
+        pm.method_name AS payment_method,
+        CONCAT_WS(', ', 
+            sa.street_address, 
+            CONCAT('Kota ', sa.city), 
+            CONCAT('Provinsi ', sa.state), 
+            CONCAT('Kode Pos ', sa.postal_code)
+        ) AS address, 
+        sa.extra_note, 
+        COALESCE(
+            CONCAT(u.first_name, ' ', u.last_name), 
+            u.username
+        ) AS recipient_name, 
+        u.wa_number, 
+        p.product_name, 
+        pi.image_url, 
+        oi.quantity, 
+        oi.price, 
+        GROUP_CONCAT(vo.option_name SEPARATOR ', ') AS option_names
+    FROM 
+        orders o
+    JOIN 
+        order_statuses os ON o.id_status = os.id_status
+    LEFT JOIN 
+        shipments s ON o.id_order = s.id_order
+    JOIN 
+        users u ON o.id_user = u.id_user
+    LEFT JOIN 
+        carriers c ON s.id_carrier = c.id_carrier
+    LEFT JOIN 
+        shipping_addresses sa ON sa.id_shipping_address = o.id_shipping_address
+    JOIN 
+        order_items oi ON o.id_order = oi.id_order
+    JOIN 
+        variation_combinations vc ON oi.id_combination = vc.id_combination
+    JOIN 
+        products p ON vc.id_product = p.id_product
+    LEFT JOIN 
+        product_images pi ON p.id_product = pi.id_product -- LEFT JOIN to handle cases where there may be no images
+    JOIN 
+        combination_details cd ON vc.id_combination = cd.id_combination
+    JOIN 
+        variation_options vo ON cd.id_option = vo.id_option
+    JOIN 
+        payment_methods pm ON o.id_payment_method = pm.id_payment_method
+    WHERE 
+        o.id_order = :id_order 
+        AND o.id_user = :id_user;
+    
         ");
         $this->db->bind(':id_order', $id);
         $this->db->bind(':id_user', $id_user);

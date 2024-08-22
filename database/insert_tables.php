@@ -44,20 +44,28 @@ VALUES
 INSERT INTO categories (category_name, category_description)
 VALUES
     ('Elektronik', 'Perangkat dan aksesoris elektronik.'),
+    ('Minuman', 'PErrangkat Minuman.'),
     ('Pakaian', 'Pakaian dan aksesoris.');
 
 -- Insert Products
 INSERT INTO products (id_category, product_name, description, weight, dimensions, discontinued)
 VALUES
-    (1, 'Smartphone', 'Smartphone model terbaru dengan fitur canggih', '150g', '145 x 70 x 7 mm', FALSE),
-    (2, 'Kaos', 'Kaos katun yang nyaman', '200g', 'Medium', FALSE);
+    (1, 'Smartphone', 'Smartphone model terbaru dengan fitur canggih', '150g', '145 x 70 x 7 mm',false),
+    (3, 'Kaos', 'Kaos katun yang nyaman', '200g', 'Medium',false),
+    (1, 'Ubuntu 24.04', 'Salinan Fisik dari Distro linux yag paling populer', '14–33 grams', '4.75 diameter', false),
+    (2, 'Botol Minumann', 'Botol air dengan desain warna yang unik', '150g', '25 x 4 cm', false),
+    (1, 'Kamera Fujifilm', 'Kamera asli buatan FujiFilm', '800g', '6 x 6 cm', false);
 
 -- Insert Variation Types
 INSERT INTO variation_types (id_product, name)
 VALUES
     (1, 'Warna'), -- id 1 untuk Smartphone
     (1, 'Storage'), -- id 2 untuk Smartphone
-    (2, 'Ukuran'); -- id 3 untuk Kaos
+    (2, 'Ukuran'), -- id 3 untuk Kaos
+    (3, 'Warna'),
+    (4, 'Tipe'),
+    (5, 'Tipe');
+
 
 -- Insert Variation Options
 INSERT INTO variation_options (id_variation_type, option_name, image_url)
@@ -67,7 +75,11 @@ VALUES
     (2, '64GB', NULL),    -- Pilihan untuk Storage
     (2, '128GB', NULL),   -- Pilihan untuk Storage
     (3, 'Medium', NULL),  -- Pilihan untuk Ukuran
-    (3, 'Large', NULL);   -- Pilihan untuk Ukuran
+    (3, 'Large', NULL),   -- Pilihan untuk Ukuran
+    (4, 'Coklat', 'public/storage/ubuntu_2.svg'),
+    (4, 'Merah', 'public/storage/ubuntu_3.png'),
+    (5, 'Original', NULL),
+    (6, 'Original', NULL);
 
 -- Insert Variation Combinations
 INSERT INTO variation_combinations (id_product, price, stock)
@@ -77,7 +89,13 @@ VALUES
     (1, 750000.00, 20),  -- Smartphone, Warna: Putih, Storage: 64GB
     (1, 850000.00, 10),  -- Smartphone, Warna: Putih, Storage: 128GB
     (2, 150000.00, 100),  -- Kaos, Ukuran: Medium
-    (2, 150000.00, 80);   -- Kaos, Ukuran: Large
+    (2, 150000.00, 80),   -- Kaos, Ukuran: Large
+    (3, 7000.00, 100),  
+    (3, 7000.00, 80),  
+    (4, 24000.00, 30),   
+    (5, 1000000.00, 15);   
+
+
 
 -- Insert Combination Details
 INSERT INTO combination_details (id_combination, id_option)
@@ -91,13 +109,22 @@ VALUES
     (4, 2),  -- Smartphone, warna Putih
     (4, 4),  -- Smartphone, storage 128GB
     (5, 5),  -- Kaos, ukuran Medium
-    (6, 6);  -- Kaos, ukuran Large
+    (6, 6),  -- Kaos, ukuran Large
+    (7, 7),  
+    (8, 8),  
+    (9, 9),
+    (10, 10);
 
 -- Insert Product Images
 INSERT INTO product_images (id_product, image_url)
 VALUES
     (1, 'https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?cs=srgb&dl=pexels-tracy-le-blanc-67789-607812.jpg&fm=jpg'),
-    (2, 'public/storage/kaos.webp');
+    (2, 'public/storage/kaos.webp'),
+    (3, 'public/storage/ubuntu_2.svg'),
+    (4, 'public/storage/botol.svg'),
+    (5, 'public/storage/fujifilm-kamera.jpeg');
+
+
 
 -- Insert Tags
 INSERT INTO tags (tag_name)
@@ -115,12 +142,14 @@ VALUES
 -- Insert Carousels
 INSERT INTO carousels (name, image_url, link, title, subtitle, button_text, button_link)
 VALUES
-    ('Kaos', 'public/storage/carausel_kaos.webp', 'product/2', 'Kaos T-Shirt', 'Kaos Berkualitas', 'Beli Sekarang', 'product/2');
+    ('Kaos', 'public/storage/carausel_kaos.webp', 'product/2', 'Kaos T-Shirt', 'Kaos Berkualitas', 'Beli Sekarang', 'product/2'),
+    ('Kaos', 'public/storage/carausel_ubuntu.webp', 'product/3', 'Ubuntu 24.04', 'Salinan Fisik Linux Ubuntu 24.04', 'Beli Sekarang', 'product/3');
+
 
 -- Insert Reviews
 INSERT INTO reviews (id_combination, id_user, rating, comment, anonymity)
 VALUES
-    (1, 1, 5, 'Smartphone yang luar biasa dengan fitur-fitur hebat!', FALSE);
+    (1, 1, 3, 'Smartphonenya lumayan bagus, namun kurirnya kurang ganteng, bintang 3!', FALSE);
 
 -- Insert Review Images
 INSERT INTO review_images (id_review, image_url)
@@ -158,7 +187,7 @@ VALUES
 -- Insert Shipping Addresses
 INSERT INTO shipping_addresses (id_user, label_name, street_address, city, state, postal_code, extra_note, is_prioritize, is_temporary)
 VALUES
-    (1, 'Rumah', 'Jl. Merdeka No. 10', 'Jakarta', 'DKI Jakarta', '10110', 'Tinggalkan di depan pintu', TRUE, FALSE);
+    (1, 'Rumah', 'Jl. X No. 10', 'Banyuwangi', 'Jawa Timur', '9999', 'Tinggalkan di depan pintu', TRUE, FALSE);
 
 -- Insert Order Statuses
 INSERT INTO order_statuses (status_name)
@@ -172,7 +201,7 @@ VALUES
 -- Insert Orders
 INSERT INTO orders (id_user, order_date, total_price, id_status, id_shipping_address, shipping_fee, service_fee, handling_fee, id_payment_method)
 VALUES
-    (1, NOW(), 120000.00, 2, 1, 10000.00, 5000.00, 2000.00, 1);
+    (1, NOW(),  630000.00, 4, 1, 10000.00, 5000.00, 2000.00, 1);
 
 -- Insert Order Items
 INSERT INTO order_items (id_order, quantity, id_combination, discount_value, price)
@@ -192,14 +221,53 @@ VALUES
     ('Kushiro', '0856-7890-1234', 'kushiro@gmail.com', 2);
 
 -- Insert Shipments
-INSERT INTO shipments (id_order, id_carrier, shipping_method, tracking_number, shipment_date, expected_delivery_date, status)
+INSERT INTO shipments (id_order, id_shipment_company, id_carrier, tracking_number, shipment_date, expected_delivery_date, actual_delivery_date)
 VALUES
-    (1, 1, 'Pengiriman Standar', 'TRACK12345', NOW(), DATE_ADD(NOW(), INTERVAL 5 DAY), 'Dalam Perjalanan');
+    (1, 2, NULL, 'T7252GTHH6262', NOW(), DATE_ADD(NOW(), INTERVAL 5 DAY), NULL);
+
 
 -- Insert Shipment Statuses
-INSERT INTO shipment_statuses (id_shipment, status_date, status_description)
+INSERT INTO shipment_statuses (status_name)
 VALUES
-    (1, NOW(), 'Kurir telah ditugaskan, dan sedanng dalam perjalanan.');
+    ('Pesanan Dibuat'),
+    ('Sedang Dikemas'),
+    ('Pesanan dalam Pengiriman'),
+    ('Terkirim');
+
+-- Insert Shipment Details
+INSERT INTO shipment_details (id_shipment, id_status, detail_date, detail_description)
+VALUES
+    (1, 4, '2024-07-07 09:00:00', 'Pesanan telah sampai diterima oleh Yang bersangkutan. Penerima: AhmadFauzan. Lihat Bukti Pengiriman.'),
+    (1, 3, '2024-07-07 07:49:00', 'Pesanan sedang diantar ke alamat tujuan.'),
+    (1, 3, '2024-07-07 07:48:00', 'Kurir sudah ditugaskan. Pesanan segera dikirim.'),
+    (1, 3, '2024-07-07 07:08:00', 'Pesanan telah sampai di lokasi transit Hub terakhir Srono Hub.'),
+    (1, 3, '2024-07-07 05:48:00', 'Pesanan diproses di lokasi transit terakhir.'),
+    (1, 3, '2024-07-07 03:04:00', 'Pesanan sedang dalam perjalanan menuju ke Virtual Jember DC.'),
+    (1, 3, '2024-07-06 14:06:00', 'Pesanan telah sampai di lokasi sortir Jember DC.'),
+    (1, 3, '2024-07-06 13:44:00', 'Pesanan diproses di lokasi transit terakhir.'),
+    (1, 3, '2024-07-05 11:33:00', 'Pesanan sedang dalam perjalanan menuju ke Jember DC.'),
+    (1, 3, '2024-07-05 07:58:00', 'Pesanan telah sampai di lokasi sortir Tapos DC.'),
+    (1, 3, '2024-07-05 04:13:00', 'Pesanan telah sampai di lokasi transit Hub.'),
+    (1, 3, '2024-07-05 01:08:00', 'Pesanan telah dikirim dari lokasi transit Hub.'),
+    (1, 3, '2024-07-04 15:44:00', 'Pesanan telah sampai di lokasi transit Hub Kalideres First Mile Hub.'),
+    (1, 3, '2024-07-04 14:14:00', 'Pesanan telah diserahkan ke jasa kirim untuk diproses.'),
+    (1, 3, '2024-07-03 22:23:00', 'Pesanan telah diterima oleh: Agen SPX Express DOP OnDelivery Ruko Palm Boulevard.'),
+    (1, 2, '2024-07-03 12:30:00', 'Kurir ditugaskan untuk menjemput pesanan.'),
+    (1, 2, '2024-07-02 18:11:00', 'Penjual telah mengatur pengiriman. Menunggu pesanan diserahkan ke pihak jasa kirim.'),
+    (1, 1, '2024-07-02 17:59:00', 'Pesanan Dibuat.');
+
+
+    -- Insert Reviews
+    INSERT INTO reviews (id_combination, id_user, id_order_item, rating, comment, anonymity)
+    VALUES
+        (1, 1, NULL, 3, 'Smartphone nya bagus tapi kurirnya kurang ganteng, bintang 3', FALSE);
+
+    -- Insert Review Images
+    INSERT INTO review_images (id_review, image_url)
+    VALUES
+        (1, 'https://images.pexels.com/photos/699122/pexels-photo-699122.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+
+
 ";
 
 $db = new Database();
