@@ -3,8 +3,7 @@ import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.3/fir
 const auth = getAuth();
 
 signOut(auth).then(() => {
-    const currentUrl = window.location.href;
-    const redirectUrl =  baseUrl + "logout?to=" + encodeURIComponent(currentUrl);
+    const redirectUrl =  baseUrl + "logout";
     console.log(redirectUrl);
     // window.location.href = redirectUrl;
 }).catch((error) => {

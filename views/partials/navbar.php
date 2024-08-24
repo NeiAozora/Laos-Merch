@@ -128,6 +128,14 @@ function encodeBase64(data) {
                 <div class="d-inline-flex gap-1">
                     <?php if (AuthHelpers::isLoggedIn()): ?>
 
+                        <?php
+
+                        if (empty(AuthHelpers::getLoggedInUserData()) && isset($_SESSION['user'])){
+                            jsRedirect(BASEURL . 'login?to=' . urlencode(getGlobalVar('url')));
+                            return;       
+                        }
+
+                        ?>
 
                         <?php if(AuthHelpers::getLoggedInUserData()["role_name"] == "Admin"): ?>
                             <a style="text-decoration: none; color: inherit" href="<?= BASEURL ?>admin">
@@ -150,14 +158,6 @@ function encodeBase64(data) {
                             <button class="btn btn-warning active dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-user"></i>
                             </button>
-                            <?php
-
-                            if (empty(AuthHelpers::getLoggedInUserData()) && isset($_SESSION['user'])){
-                                jsRedirect(BASEURL . 'login?to=' . urlencode(getGlobalVar('url')));
-                                return;       
-                            }
-
-                            ?>
                             <ul class="dropdown-menu dropdown-menu-end animate slideIn" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item decoration-none" href="<?= BASEURL ?>user/<?= AuthHelpers::getLoggedInUserData()["id"] ?>/profile">Profil Saya</a></li>
                                 <li><a class="dropdown-item decoration-none" href="<?= BASEURL?>order">Pesanan Saya</a></li>

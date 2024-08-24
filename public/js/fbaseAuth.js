@@ -39,7 +39,7 @@ function fetchWithRetry(url, retries) {
           .then(() => {
             const currentUrl = window.location.href;
             const redirectUrl =
-              baseUrl + "Laos-Merch/logout?to=" + encodeURIComponent(currentUrl);
+              baseUrl + "logout?to=" + encodeURIComponent(currentUrl);
             window.location.href = redirectUrl;
           })
           .catch((signOutError) => {
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(() => {
           const currentUrl = window.location.href;
           const redirectUrl =
-            baseUrl + "Laos-Merch/logout?to=" + encodeURIComponent(currentUrl);
+            baseUrl + "logout?to=" + encodeURIComponent(currentUrl);
           window.location.href = redirectUrl;
         })
         .catch((error) => {
