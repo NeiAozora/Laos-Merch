@@ -2,6 +2,7 @@
 
 Router::getInstance()->addGlobalMiddleware(function () {
     if (session_status() == PHP_SESSION_NONE) {
+        // ASli Kalau ERROR NYA DISII AKU GAK TAU ERROR XAMPP NYA
         session_start();
     }
 });

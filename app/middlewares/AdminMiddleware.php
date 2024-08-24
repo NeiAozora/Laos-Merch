@@ -4,9 +4,6 @@ class AdminMiddleware extends Middleware
 {
     public function checkLoginSession()
     {
-        if (!array_key_exists("fr", $_SESSION)){
-            jsRedirect(BASEURL . "login?message=" . urlencode("Maaf anda diharuskan untuk login!"));
-        }
 
         $accessToken = $_SESSION["fr"];
         $uid = $_SESSION["br"];

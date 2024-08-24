@@ -45,14 +45,7 @@ class UserModel extends Model
     {
         $this->db->query('
     SELECT 
-        u.id_user,
-        u.id_firebase, 
-        u.username, 
-        u.first_name, 
-        u.last_name, 
-        u.email, 
-        u.wa_number, 
-        u.is_active, 
+        u.*,
         r.role_name, 
         r.role_description
     FROM 
