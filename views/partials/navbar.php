@@ -127,6 +127,17 @@ function encodeBase64(data) {
                 </ul>
                 <div class="d-inline-flex gap-1">
                     <?php if (AuthHelpers::isLoggedIn()): ?>
+
+
+                        <?php if(AuthHelpers::getLoggedInUserData()["role_name"] == "Admin"): ?>
+                            <a style="text-decoration: none; color: inherit" href="<?= BASEURL ?>admin">
+                                <button class="btn btn-warning active me-2 dropdown-toggle">
+                                    <i class="fa-solid fa-key me-2"></i>
+                                    Admin
+                                </button>
+                            </a>
+                        <?php endif; ?>
+
                         <div class="dropdown">
                             <button class="btn btn-warning active me-2 dropdown-toggle" type="button" id="cartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-cart-shopping"></i>
@@ -153,14 +164,7 @@ function encodeBase64(data) {
                                 <li><a class="dropdown-item decoration-none" id="logout" href="#">Logout</a></li>
                             </ul>
                         </div>
-                        <?php if(AuthHelpers::getLoggedInUserData()["role_name"] == "Admin"): ?>
-                            <a style="text-decoration: none; color: inherit" href="<?= BASEURL ?>admin">
-                                <button class="btn btn-warning active me-2 dropdown-toggle">
-                                    <i class="fa-solid fa-key me-2"></i>
-                                    Admin
-                                </button>
-                            </a>
-                        <?php endif; ?>
+
                     <?php else: ?>
                         <button class="btn btn-success"><a style="text-decoration: none; color: inherit" href="<?= BASEURL ?>login">Login</a></button>
                     <?php endif; ?>
