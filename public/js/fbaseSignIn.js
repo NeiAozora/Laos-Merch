@@ -76,6 +76,7 @@ document
           // console.log(result);
           window.location = redirectTo;
         } else {
+          console.log(result)
           throw new Error(result.statusText);
         }
       })

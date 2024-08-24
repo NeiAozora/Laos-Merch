@@ -45,6 +45,7 @@ class UserModel extends Model
     {
         $this->db->query('
     SELECT 
+        u.id_user,
         u.id_firebase, 
         u.username, 
         u.first_name, 
@@ -59,7 +60,7 @@ class UserModel extends Model
     JOIN 
         roles r 
     ON 
-        u.id_role = r.id WHERE id_firebase = :id_firebase');
+        u.id_role = r.id_role WHERE id_firebase = :id_firebase');
         $this->db->bind(':id_firebase', $id_firebase, PDO::PARAM_STR);
 
         return $this->db->single();
