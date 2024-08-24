@@ -43,7 +43,23 @@ class UserModel extends Model
     // Get a single user by Firebase id
     public function getUserByFireBaseId($id_firebase)
     {
-        $this->db->query('SELECT * FROM users WHERE id_firebase = :id_firebase');
+        $this->db->query('
+    SELECT 
+        u.id_firebase, 
+        u.username, 
+        u.first_name, 
+        u.last_name, 
+        u.email, 
+        u.wa_number, 
+        u.is_active, 
+        r.role_name, 
+        r.role_description
+    FROM 
+        users u
+    JOIN 
+        roles r 
+    ON 
+        u.id_role = r.id WHERE id_firebase = :id_firebase');
         $this->db->bind(':id_firebase', $id_firebase, PDO::PARAM_STR);
 
         return $this->db->single();

@@ -120,7 +120,8 @@ class AuthHelpers
                 'first_name' => $firstName,
                 'last_name' => $lastName,
                 'wa_number' => $user['wa_number'],
-                'picture' => $user["profile_picture"]
+                'picture' => $user["profile_picture"],
+                'role_name' => $user["role_name"]
             ];
         }
 

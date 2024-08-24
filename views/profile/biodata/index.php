@@ -26,19 +26,17 @@
          <div class="tab-pane fade show active" id="biodata" role="tabpanel" aria-labelledby="biodata-tab">
             <div class="row">
                <div class="col-md-4 text-center">
-                  <img style="border-radius: 50%;" src="<?php echo (!empty($userData['picture'])) ? htmlspecialchars($userData['picture']) : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'; ?>" alt="Profile Picture">
+                  <img style="border-radius: 50%; max-width: 20rem;" src="<?php echo (!empty($userData['picture'])) ? htmlspecialchars($userData['picture']) : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'; ?>" alt="Profile Picture">
                   <?php if ($isEditMode): ?>
                   <form action="<?= BASEURL ?>user/<?= $userData['id']; ?>/profile/update" method="POST" enctype="multipart/form-data">
                      <div class="form-group">
                         <label for="formFile">Pilih Foto</label>
                         <input class="form-control w-3" type="file" name="profile_picture" id="formFile">
                      </div>
-                  </form>
                   <?php endif; ?>
                </div>
                <div class="col-md-8">
                   <?php if ($isEditMode): ?>
-                  <form action="<?= BASEURL ?>user/<?= $userData['id']; ?>/profile/update" method="POST">
                      <input type="hidden" name="id_user" value="<?= htmlspecialchars($userData['id']); ?>">
                      <div class="form-group mt-1">
                         <label for="username">Username</label>

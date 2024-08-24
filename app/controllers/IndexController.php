@@ -11,6 +11,7 @@ class IndexController extends Controller{
     public function index(){
 
         $carousels = CarouselModel::new()->getAll();
+
         $this->view('homepage/index', ["carousel_items" => $carousels]);
     }
 

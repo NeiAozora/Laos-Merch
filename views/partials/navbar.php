@@ -139,12 +139,23 @@ function encodeBase64(data) {
                             <button class="btn btn-warning active dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-user"></i>
                             </button>
+                            <?php
+
+                            if (empty(AuthHelpers::getLoggedInUserData()) && isset($_SESSION['user'])){
+                                jsRedirect(BASEURL . 'login?to=' . urlencode(getGlobalVar('url')));
+                                return;       
+                            }
+
+                            ?>
                             <ul class="dropdown-menu dropdown-menu-end animate slideIn" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item decoration-none" href="<?= BASEURL ?>user/<?= AuthHelpers::getLoggedInUserData()["id"] ?>/profile">Profil Saya</a></li>
                                 <li><a class="dropdown-item decoration-none" href="<?= BASEURL?>order">Pesanan Saya</a></li>
                                 <li><a class="dropdown-item decoration-none" id="logout" href="#">Logout</a></li>
                             </ul>
                         </div>
+                        <?php if(AuthHelpers::getLoggedInUserData()["role_name"] == "Admin"): ?>
+                        <button class="btn btn-success"><a style="text-decoration: none; color: inherit" href="<?= BASEURL ?>admin">Admin Dashboard</a></button>
+                        <?php endif; ?>
                     <?php else: ?>
                         <button class="btn btn-success"><a style="text-decoration: none; color: inherit" href="<?= BASEURL ?>login">Login</a></button>
                     <?php endif; ?>
