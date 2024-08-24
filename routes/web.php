@@ -77,12 +77,7 @@ Router::get('/order/detail/{id}', invokeClass(OrderController::class, "detail"))
 
 
 //Atmin
-Router::get('/admin', function(){
-    $middleware = invokeClass(AdminMiddleware::class, 'checkLoginSession');
-    $middleware();
-    $controller = invokeClass(AdminController::class, "index");
-    $controller();
-});
+Router::get('/admin', invokeClass(AdminController::class, "index"));
 
 Router::get("/about/privacy-policy", function () {
     view("/about/privacy-policy/index");
