@@ -154,10 +154,12 @@ function encodeBase64(data) {
                             </ul>
                         </div>
                         <?php if(AuthHelpers::getLoggedInUserData()["role_name"] == "Admin"): ?>
-                            <button class="btn btn-warning active me-2 dropdown-toggle">
-                                <i class="fa-solid fa-key me-2"></i>
-                                <a style="text-decoration: none; color: inherit" href="<?= BASEURL ?>admin">Admin</a>
-
+                            <a style="text-decoration: none; color: inherit" href="<?= BASEURL ?>admin">
+                                <button class="btn btn-warning active me-2 dropdown-toggle">
+                                    <i class="fa-solid fa-key me-2"></i>
+                                    Admin
+                                </button>
+                            </a>
                         <?php endif; ?>
                     <?php else: ?>
                         <button class="btn btn-success"><a style="text-decoration: none; color: inherit" href="<?= BASEURL ?>login">Login</a></button>
