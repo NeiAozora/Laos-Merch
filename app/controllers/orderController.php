@@ -321,7 +321,11 @@ class OrderController extends Controller{
                 'item_details' => $itemDetails
             ];
     
-            $response['snapToken'] = \Midtrans\Snap::getSnapToken($params);
+            try {
+                $response['snapToken'] = \Midtrans\Snap::getSnapToken($params);
+            } catch (\Throwable $th) {
+                $this->sendError($th->getMessage(), 400);
+            }
             $response['cardItems'] = $cartItems;
             $response['products'] = $products;
     

@@ -13,6 +13,7 @@ class OrderModel extends Model {
     public function getAllOrders($id_user, $status = null){
         $query = "
         SELECT 
+        p.id_product,
         o.id_order, 
         oi.id_order_item, 
         p.product_name, 
@@ -23,6 +24,7 @@ class OrderModel extends Model {
         oi.discount_value, 
         os.status_name, 
         o.order_date,
+        vc.id_combination,
         CASE 
             WHEN r.id_review IS NOT NULL THEN TRUE 
             ELSE FALSE 
@@ -92,6 +94,7 @@ class OrderModel extends Model {
         oi.discount_value, 
         os.status_name, 
         o.order_date,
+        vc.id_combination,
         CASE 
             WHEN r.id_review IS NOT NULL THEN TRUE 
             ELSE FALSE 
@@ -154,6 +157,7 @@ class OrderModel extends Model {
     public function getOrderById($id, $id_user){
         $this->db->query("
         SELECT 
+        p.id_product,
         o.id_order, 
         o.order_date, 
         os.status_name, 

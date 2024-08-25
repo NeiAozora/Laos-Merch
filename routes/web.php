@@ -11,6 +11,7 @@ Router::getInstance()->addGlobalMiddleware(function () {
 // API
 Router::get("/api/products", invokeClass(ProductController::class, "list"));
 Router::get("/api/reviews", invokeClass(ReviewController::class, "getReviews"));
+Router::post("/api/get-mini-cart", invokeClass(CartController::class, 'getSimpleCartData'));
 Router::get("/api/reviews/product/{id}", invokeClass(ReviewController::class, "getReviewsByProductId"));
 Router::get("/api/user/addresses", invokeClass(CheckoutController::class, 'getUserAddresses'));
 Router::get("/api/user/addresses/{uid}/update", invokeClass(CheckoutController::class, 'getUserAddresses'));
@@ -62,6 +63,9 @@ Router::get('/purchase', function () {
 Router::get('/purchase/order', function () {
     view("/404/index");
 });
+
+Router::post('/review/submit', invokeClass(ReviewController::class, 'submitReview'));
+
 
 // Keranjang
 Router::get('/cart', invokeClass(CartController::class, "index"));

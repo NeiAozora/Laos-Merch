@@ -35,9 +35,9 @@ class CartItemModel extends Model{
     }
 
     // Get all cart items by user id
-    public function getCartItemsByUserId($id_user)
+    public function getCartItemsByUserId($id_user, $limit = null)
     {
-        $this->db->query("SELECT 
+        $query = "SELECT 
         ci.id_cart_item,
         ci.id_user,
         ci.id_combination,
@@ -61,11 +61,21 @@ class CartItemModel extends Model{
     LEFT JOIN discounts d ON dp.id_discount = d.id_discount AND d.end_date > NOW() -- Ensure discount is not expired
     LEFT JOIN product_images pi ON pi.id_product = p.id_product
     WHERE ci.id_user = :id_user
-    GROUP BY ci.id_cart_item, ci.id_user, ci.id_combination, ci.quantity, pi.image_url, p.product_name, p.description, p.weight, p.dimensions, vc.price;
-    ");
-        $this->db->bind(':id_user', $id_user, PDO::PARAM_INT);
-        
-        return $this->db->resultSet();
+    GROUP BY ci.id_cart_item, ci.id_user, ci.id_combination, ci.quantity, pi.image_url, p.product_name, p.description, p.weight, p.dimensions, vc.price
+    ";
+
+    if ($limit) {
+        $query .= " LIMIT :limit";
+    }
+
+    $this->db->query($query);
+    $this->db->bind(':id_user', $id_user, PDO::PARAM_INT);
+
+    if ($limit) {
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+    }
+
+    return $this->db->resultSet();
     }
 
     // Get product variation combination

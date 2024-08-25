@@ -13,8 +13,9 @@ class ReviewModel extends Model {
     public function getAllReviews(?int $limit = null) {
         $query = "
             SELECT r.id_review, 
-                   r.id_combination,  -- Ensure this column exists and is correct
+                   r.id_combination, 
                    r.id_user, 
+                   r.id_order_item, 
                    u.username, 
                    CONCAT(u.first_name, ' ', u.last_name) AS full_name, 
                    u.profile_picture, 
@@ -23,7 +24,7 @@ class ReviewModel extends Model {
                    r.anonymity, 
                    r.date_posted, 
                    p.product_name,
-                   vc.id_combination, -- Ensure this column exists and is correct
+                   vc.id_combination,
                    vt.name AS variation_type_name,
                    vo.option_name AS variation_name,
                    ri.id_review_image,
@@ -62,7 +63,7 @@ class ReviewModel extends Model {
                    ri.id_review_image, 
                    ri.image_url, 
                    p.product_name, 
-                   vc.id_combination,  -- Ensure this column exists and is correct
+                   vc.id_combination,
                    vo.option_name AS variation_name
             FROM reviews r
             LEFT JOIN review_images ri ON r.id_review = ri.id_review
@@ -80,22 +81,23 @@ class ReviewModel extends Model {
 
     public function getReviewsByProductId(int $idProduct) {
         $this->db->query("
-        SELECT r.id_review, 
-                    r.id_combination,  -- Ensure this column exists and is correct
-                    r.id_user, 
-                    u.username, 
-                    CONCAT(u.first_name, ' ', u.last_name) AS full_name, 
-                    u.profile_picture, 
-                    r.rating, 
-                    r.comment, 
-                    r.anonymity, 
-                    r.date_posted, 
-                    p.product_name,
-                    vc.id_combination, -- Ensure this column exists and is correct
-                    vt.name AS variation_type_name,
-                    vo.option_name AS variation_name,
-                    ri.id_review_image,
-                    ri.image_url
+            SELECT r.id_review, 
+                   r.id_combination, 
+                   r.id_user, 
+                   r.id_order_item, 
+                   u.username, 
+                   CONCAT(u.first_name, ' ', u.last_name) AS full_name, 
+                   u.profile_picture, 
+                   r.rating, 
+                   r.comment, 
+                   r.anonymity, 
+                   r.date_posted, 
+                   p.product_name,
+                   vc.id_combination,
+                   vt.name AS variation_type_name,
+                   vo.option_name AS variation_name,
+                   ri.id_review_image,
+                   ri.image_url
             FROM reviews r
             LEFT JOIN review_images ri ON r.id_review = ri.id_review
             LEFT JOIN users u ON r.id_user = u.id_user
@@ -113,15 +115,17 @@ class ReviewModel extends Model {
 
     public function createReview($data) {
         $this->db->query("
-            INSERT INTO reviews (id_combination, id_user, rating, comment, anonymity) 
-            VALUES (:id_combination, :id_user, :rating, :comment, :anonymity)
+            INSERT INTO reviews (id_combination, id_user, id_order_item, rating, comment, anonymity) 
+            VALUES (:id_combination, :id_user, :id_order_item, :rating, :comment, :anonymity)
         ");
         $this->db->bind(':id_combination', $data['id_combination'], PDO::PARAM_INT);
         $this->db->bind(':id_user', $data['id_user'], PDO::PARAM_INT);
+        $this->db->bind(':id_order_item', $data['id_order_item'], PDO::PARAM_INT);
         $this->db->bind(':rating', $data['rating'], PDO::PARAM_INT);
         $this->db->bind(':comment', $data['comment'], PDO::PARAM_STR);
         $this->db->bind(':anonymity', $data['anonymity'], PDO::PARAM_BOOL);
-        return $this->db->execute();
+        $this->db->execute();
+        return $this->db->getLastInsertedId();
     }
 
     public function deleteReview(int $id) {
@@ -138,8 +142,9 @@ class ReviewModel extends Model {
             if (!isset($reviews[$result['id_review']])) {
                 $reviews[$result['id_review']] = [
                     'id_review' => $result['id_review'],
-                    'id_combination' => $result['id_combination'],  // Adjust to match query results
+                    'id_combination' => $result['id_combination'],
                     'id_user' => $result['id_user'],
+                    'id_order_item' => $result['id_order_item'],
                     'username' => $result['username'],
                     'full_name' => $result['full_name'],
                     'profile_picture' => $result['profile_picture'],
@@ -154,7 +159,7 @@ class ReviewModel extends Model {
             }
 
             // Collect variation options
-            if (isset($result['variation_name'])) {  // Check if the key exists
+            if (isset($result['variation_name'])) {
                 $reviews[$result['id_review']]['variations'][] = [
                     'variation_name' => $result['variation_name']
                 ];

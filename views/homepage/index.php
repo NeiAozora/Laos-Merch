@@ -23,6 +23,7 @@ requireView("partials/navbar.php");
 
         .card img {
             max-height: 80%; /* Ensures the image scales down to fit within the container */
+            border-radius: 10px;
             width: auto; /* Maintain the aspect ratio */
             object-fit: cover; /* Scale down larger images to fit within the container */
             display: block;
@@ -106,7 +107,6 @@ requireView("partials/navbar.php");
     formSearch = document.getElementById("search-form");
     formSearch.setAttribute("action", "")
 </script>
-<script src="<?= BASEURL ?>public/js/components/loadingAnimation.js"></script>
 <script src="<?= BASEURL ?>public/js/homepageProducts.js"></script>
 
 

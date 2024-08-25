@@ -2,6 +2,31 @@
    requireView("partials/head.php");
    requireView("partials/navbar.php");
    ?>
+
+<style>
+        .card {
+            text-align: left;
+            margin: auto;
+        }
+
+        .card .img-container {
+            height: 200px; /* Fixed height for the container */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .card img {
+            max-height: 80%; /* Ensures the image scales down to fit within the container */
+            border-radius: 10px;
+            width: auto; /* Maintain the aspect ratio */
+            object-fit: cover; /* Scale down larger images to fit within the container */
+            display: block;
+            margin: auto; /* Center the image horizontally */
+        }
+
+    </style>
 <section class="content mt-5">
     <div class="row container-fluid d-flex">
       <!-- gambar produk -->
@@ -9,35 +34,34 @@
          <img src="" alt="productImage" id="productMainImage" class="img-fluid" style="border-radius:8px; max-height: 17rem">
          <nav aria-label="Page navigation example">
             <ul class="image-pagination pagination">
-               <li class="page-item disabled">
-                  <a class="page-link" style="text-decoration: none; color: inherit;"><</a>
-               </li>
-               <?php $i = 1 ?>
-               <?php foreach($productImages as $productImage): ?>
-               <li class="page-item animate-1sec slideIn ">
-                <?php
-
-                    if (strpos($productImage['image_url'], 'public/storage/') !== false) {
-                        $productImage['image_url'] = BASEURL . $productImage['image_url'];
-                    }
-
-                ?>
-                  <a class="page-link" href="#" style="text-decoration: none; color: inherit;">
-                  <img src="<?= $productImage['image_url'] ?>" alt="Gambar Produk <?= $i ?>">
-                  </a>
-               </li>
-               <?php $i++ ?>
-               <?php endforeach; ?>
-               <li class="page-item">
-                  <a class="page-link" href="#" style="text-decoration: none; color: inherit;">></a>
-               </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" style="text-decoration: none; color: inherit;" aria-label="Previous"><</a>
+                </li>
+                <?php $i = 1 ?>
+                <?php foreach($productImages as $productImage): ?>
+                <li class="page-item animate-1sec slideIn">
+                    <?php
+                        if (strpos($productImage['image_url'], 'public/storage/') !== false) {
+                            $productImage['image_url'] = BASEURL . $productImage['image_url'];
+                        }
+                    ?>
+                    <a class="page-link" href="#" style="text-decoration: none; color: inherit;">
+                        <img src="<?= $productImage['image_url'] ?>" alt="Gambar Produk <?= $i ?>" style="width: 50px;">
+                    </a>
+                </li>
+                <?php $i++ ?>
+                <?php endforeach; ?>
+                <li class="page-item">
+                    <a class="page-link" href="#" style="text-decoration: none; color: inherit;" aria-label="Next">></a>
+                </li>
             </ul>
-         </nav>
+        </nav>
+
       </div>
       <!-- info produk -->
       <div class="col-sm-4 col-md-4 col-12 p-4 container">
          <h2><?= $product["product_name"] ?></h2>
-         <p class="title-detail">Stok Tersedia: <span id="stock-value"></span></p>
+         <p class="title-detail"><span class="fw-bold">Stok Tersedia: </span><span id="stock-value"></span></p>
          <div class="d-flex">
             <h3><span id="price"></span></h3>
             <?php if (!empty($discount)): ?>
@@ -51,9 +75,9 @@
          </div>
          <h6><span id="full-price" style="text-decoration: line-through;"></span></h6>
          <?php if (!empty($discount)): ?>
-         <div class="d-flex">
-            <p class="title-detail">Diskon Berakhir Dalam:</p>
-            <div id="countdown"></div>
+         <div class="d-block">
+            <p class="title-detail fw-bold">Diskon Berakhir Dalam:</p>
+            <div id="countdown" class="text-danger"></div>
          </div>
          <script>
             // Set the end date for the countdown (format: YYYY-MM-DDTHH:MM:SS)
@@ -90,9 +114,9 @@
             updateCountdown();
          </script>
          <?php endif ?>
-         <p class="title-detail">Deskripsi Produk</p>
+         <p class="title-detail fw-bold">Deskripsi Produk</p>
          <p><?= $product["description"] ?></p>
-         <p class="title-detail">Pilih Variasi Anda</p>
+         <p class="title-detail fw-bold">Pilih Variasi Anda</p>
          <div id="variations-container">
             <?php foreach($productVariations as $variation): ?>
             <div class="variation-group" data-variation-type="<?= $variation['id_variation_type'] ?>">
@@ -275,11 +299,13 @@ function escapeHtml($string) {
 
         <?php
         $reviewHtmls = '';
+        $reviews = array_reverse($reviews);
         foreach ($reviews as $review) {
-            $profilePicture = !empty($review['profile_picture']) ? $review['profile_picture'] : "https://via.placeholder.com/60";
+            $profilePicture = !empty($review['profile_picture']) ? $review['profile_picture'] : "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
             $name = !empty($review['full_name']) ? $review['full_name'] : $review['username'];
             if ($review['anonymity'] > 0) {
                 $name = censorName($name);
+                $profilePicture = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
             }
             $stars = str_repeat('&#9733;', $review['rating']) . str_repeat('&#9734;', 5 - $review['rating']);
             $variation_name = implode(', ', array_map(function($variation) {
@@ -288,7 +314,7 @@ function escapeHtml($string) {
             $comment = escapeHtml($review['comment']);
             
             $reviewHtmls .= '
-                <div class="review-card">
+                <div class="review-card" id="review-' . $review['id_review'] .'">
                     <div class="review-image">
                         <img src="' . $profilePicture . '" alt="User Image">
                     </div>
@@ -303,6 +329,9 @@ function escapeHtml($string) {
                     </div>';
             if (!empty($review['images'])) {
                 foreach ($review['images'] as $image) {
+                    if (str_contains($image['image_url'], 'public/storage/')) {
+                        $image['image_url'] = BASEURL . $image['image_url'];
+                    }
                     $reviewHtmls .= '
                         <div class="review-product-image">
                             <img src="' . $image['image_url'] . '" alt="Product Image">
@@ -365,7 +394,7 @@ function escapeHtml($string) {
          $option_name = htmlspecialchars($variationOption['option_name'], ENT_QUOTES, 'UTF-8');
          $image_url = htmlspecialchars($variationOption['image_url'], ENT_QUOTES, 'UTF-8');
       
-         if (strpos($image_url, 'public/storage/') !== false) {
+         if (str_contains($image_url, 'public/storage/')) {
             $image_url = BASEURL . $image_url;
         }
 
@@ -395,7 +424,6 @@ function escapeHtml($string) {
          <?php endforeach; ?>
    };
 </script>
-<script src="<?= BASEURL ?>public/js/components/loadingAnimation.js"></script>
 <script src="<?= BASEURL ?>public/js/customerPageProduct.js"></script>
 <?php
    requireView("partials/footer.php");

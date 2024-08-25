@@ -100,7 +100,12 @@ function encodeBase64(data) {
         font-style: normal;
     }
 
+
+
+
 </style>
+
+
 
 <nav class="navbar navbar-light navbar-expand-lg shadow-lg fixed-top" style="background-color: #fff;">
     <div class="container-fluid">
@@ -146,14 +151,20 @@ function encodeBase64(data) {
                             </a>
                         <?php endif; ?>
 
-                        <div class="dropdown">
-                            <button class="btn btn-warning active me-2 dropdown-toggle" type="button" id="cartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-cart-shopping"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end animate slideIn" aria-labelledby="cartDropdown">
-                                <li class="dropdown-item"><a href="<?= BASEURL?>cart" class="decoration-none">Keranjang Saya</a></li>
-                            </ul>
-                        </div>
+                        <?php if(!isset($hideCart)): ?>
+
+                            <div class="dropdown">
+                                <button class="btn btn-warning active me-2 dropdown-toggle" type="button" id="cartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end animate slideIn" aria-labelledby="cartDropdown" id="cartDropdownMenu">
+                                    <!-- List items will be dynamically added here -->
+                                </ul>
+                            </div>
+
+
+                        <?php endif; ?>
+
                         <div class="dropdown">
                             <button class="btn btn-warning active dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-user"></i>
@@ -174,6 +185,8 @@ function encodeBase64(data) {
         </div>
     </div>
 </nav>
+
+<script src="<?= BASEURL ?>public/js/components/loadingAnimation.js"></script>
 
 <script>
     let formSearch = document.getElementById("search-form");
@@ -201,4 +214,95 @@ function removeTrailingZeros(number) {
   return str;
 }
 
+function fetchCart(maxRetries = 5, retryDelay = 1000) {
+    let attempt = 0;
+
+    function attemptFetch() {
+        return fetch(baseUrl + "api/get-mini-cart", { // Replace with your API endpoint
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'token': t
+            })
+        })
+        .then(response => {
+            const contentType = response.headers.get('Content-Type');
+
+            if (contentType.includes('text/html')) {
+                return response.text().then(htmlContent => {
+                    openHtmlContentToNewPage(htmlContent);
+                    throw Error('Received HTML instead of JSON');
+                });
+            }
+
+            return response.json();
+        })
+        .then(data => {
+            return data.data; // Adjust based on your API response structure
+        })
+        .catch(error => {
+            console.error('Error fetching cart items:', error);
+
+            // Retry logic
+            if (attempt < maxRetries) {
+                attempt++;
+                return new Promise((resolve) => setTimeout(resolve, retryDelay))
+                    .then(() => attemptFetch());
+            } else {
+                return []; // Return an empty array on error after retries
+            }
+        });
+    }
+
+    return attemptFetch();
+}
+
+const menu = document.getElementById('cartDropdownMenu');
+
+document.getElementById('cartDropdown').addEventListener('click', function() {
+    injectBarLoader('cartDropdownMenu');
+    fetchCart().then(cartItems => {
+        console.log(cartItems);
+
+
+        menu.innerHTML = ''; // Clear existing items
+
+        let htmlContent = '<ul class="list-unstyled mb-0">';
+
+        if (cartItems.length === 0) {
+            // If there are no items, show "Keranjang Kosong" centered
+            htmlContent += `
+                <li class="text-center">Keranjang Kosong</li>
+            `;
+        } else {
+            // Populate the list with cart items
+            cartItems.forEach(item => {
+                htmlContent += `
+                    <li class="d-flex align-items-center mb-2 dropdown-item">
+                        <a href="${baseUrl}cart?id=${item.id_cart_item}" class="d-flex align-items-center w-100 text-decoration-none text-dark" style="cursor: pointer;">
+                            <img src="${item.image_url}" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px;" alt="${item.product_name}">
+                            <span class="flex-grow-1">${item.product_name.length > 20 ? item.product_name.substring(0, 20) + '...' : item.product_name}</span>
+                            <span class="text-end" style="width: 100px;">Rp. ${item.price}</span>
+                        </a>
+                    </li>
+                `;
+            });
+
+            htmlContent += `
+                <li class="text-center mt-2">
+                    <a href="${baseUrl}cart" class="text-decoration-none" 
+                       onmouseover="this.style.textDecoration='underline'"
+                       onmouseout="this.style.textDecoration='none'">
+                       Tampilkan Semua
+                    </a>
+                </li>
+            `;
+        }
+
+        htmlContent += '</ul>';
+        menu.innerHTML = htmlContent;
+    });
+});
 </script>

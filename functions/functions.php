@@ -17,7 +17,8 @@ function view($view, $data = [])
     require_once 'views/' . $view . '.php';
 }
 
-function requireView($view){
+function requireView($view, $data = []){
+    extract($data);
     try {
         require_once VIEWS . $view;
     } catch (\Throwable $th) {

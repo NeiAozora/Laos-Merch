@@ -48,13 +48,12 @@ VALUES
     ('Pakaian', 'Pakaian dan aksesoris.');
 
 -- Insert Products
-INSERT INTO products (id_category, product_name, description, weight, dimensions, discontinued)
-VALUES
-    (1, 'Smartphone', 'Smartphone model terbaru dengan fitur canggih', '150g', '145 x 70 x 7 mm',false),
-    (3, 'Kaos', 'Kaos katun yang nyaman', '200g', 'Medium',false),
-    (1, 'Ubuntu 24.04', 'Salinan Fisik dari Distro linux yag paling populer', '14–33 grams', '4.75 diameter', false),
-    (2, 'Botol Minumann', 'Botol air dengan desain warna yang unik', '150g', '25 x 4 cm', false),
-    (1, 'Kamera Fujifilm', 'Kamera asli buatan FujiFilm', '800g', '6 x 6 cm', false);
+INSERT INTO products (id_category, product_name, description, weight, dimensions, discontinued) VALUES
+(1, 'Smartphone', 'Temukan teknologi mutakhir dengan smartphone terbaru kami. Dirancang untuk menawarkan performa optimal dengan fitur-fitur canggih, seperti layar beresolusi tinggi, kamera berkualitas, dan kapasitas penyimpanan yang luas. Dengan desain ramping dan elegan, smartphone ini ideal untuk kebutuhan sehari-hari Anda.', '150 g', '145 x 70 x 7 mm', false),
+(3, 'Kaos', 'Rasakan kenyamanan maksimal dengan kaos katun premium kami. Dibuat dari bahan katun berkualitas tinggi, kaos ini memberikan keleluasaan bergerak dan sirkulasi udara yang baik. Desain yang simpel namun stylish cocok untuk berbagai kesempatan, dari santai hingga semi-formal.', '200 g', 'Medium', false),
+(1, 'Ubuntu 24.04', 'Dapatkan salinan fisik dari distribusi Linux paling populer dengan Ubuntu 24.04. Ideal untuk para pengembang dan pengguna Linux, versi ini menawarkan stabilitas dan keamanan dengan berbagai fitur baru. Datang dalam format yang mudah digunakan, memastikan Anda mendapatkan semua manfaat dari sistem operasi open-source ini.', '14–33 g', '4.75 inci (disk)', false),
+(1, 'Botol Minuman', 'Botol air dengan desain yang menarik dan warna yang unik, sempurna untuk gaya hidup aktif dan modern. Terbuat dari material berkualitas tinggi, botol ini menjaga minuman Anda tetap segar dan dingin. Ideal untuk dibawa kemana saja, baik saat berolahraga maupun bepergian.', '150 g', '25 x 4 cm', false),
+(1, 'Kamera Fujifilm', 'Kamera Fujifilm ini merupakan pilihan sempurna bagi pecinta fotografi yang menginginkan kualitas gambar yang tajam dan warna yang akurat. Dengan desain retro dan fungsionalitas canggih, kamera ini ideal untuk berbagai situasi pemotretan, dari potret hingga pemandangan. Nikmati pengalaman fotografi yang menyenangkan dengan keandalan dari FujiFilm.', '800 g', '6 x 6 cm', false);
 
 -- Insert Variation Types
 INSERT INTO variation_types (id_product, name)
@@ -76,7 +75,7 @@ VALUES
     (2, '128GB', NULL),   -- Pilihan untuk Storage
     (3, 'Medium', NULL),  -- Pilihan untuk Ukuran
     (3, 'Large', NULL),   -- Pilihan untuk Ukuran
-    (4, 'Coklat', 'public/storage/ubuntu_2.svg'),
+    (4, 'Coklat', 'public/storage/ubuntu_2.png'),
     (4, 'Merah', 'public/storage/ubuntu_3.png'),
     (5, 'Original', NULL),
     (6, 'Original', NULL);
@@ -118,10 +117,10 @@ VALUES
 -- Insert Product Images
 INSERT INTO product_images (id_product, image_url)
 VALUES
-    (1, 'https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?cs=srgb&dl=pexels-tracy-le-blanc-67789-607812.jpg&fm=jpg'),
-    (2, 'public/storage/kaos.webp'),
-    (3, 'public/storage/ubuntu_2.svg'),
-    (4, 'public/storage/botol.svg'),
+    (1, 'public/storage/smartphone.png'),
+    (2, 'public/storage/kaos.png'),
+    (3, 'public/storage/ubuntu_2.png'),
+    (4, 'public/storage/botol.png'),
     (5, 'public/storage/fujifilm-kamera.jpeg');
 
 
@@ -142,19 +141,8 @@ VALUES
 -- Insert Carousels
 INSERT INTO carousels (name, image_url, link, title, subtitle, button_text, button_link)
 VALUES
-    ('Kaos', 'public/storage/carausel_kaos.webp', 'product/2', 'Kaos T-Shirt', 'Kaos Berkualitas', 'Beli Sekarang', 'product/2'),
-    ('Kaos', 'public/storage/carausel_ubuntu.webp', 'product/3', 'Ubuntu 24.04', 'Salinan Fisik Linux Ubuntu 24.04', 'Beli Sekarang', 'product/3');
-
-
--- Insert Reviews
-INSERT INTO reviews (id_combination, id_user, rating, comment, anonymity)
-VALUES
-    (1, 1, 3, 'Smartphonenya lumayan bagus, namun kurirnya kurang ganteng, bintang 3!', FALSE);
-
--- Insert Review Images
-INSERT INTO review_images (id_review, image_url)
-VALUES
-    (1, 'https://images.pexels.com/photos/699122/pexels-photo-699122.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+    ('Kaos', 'public/storage/carausel_kaos.png', 'product/2', 'Kaos T-Shirt', 'Kaos Berkualitas', 'Beli Sekarang', 'product/2'),
+    ('Kaos', 'public/storage/carausel_ubuntu.png', 'product/3', 'Ubuntu 24.04', 'Salinan Fisik Linux Ubuntu 24.04', 'Beli Sekarang', 'product/3');
 
 -- Insert Cart Items
 INSERT INTO cart_items (id_user, id_combination, quantity)
@@ -260,7 +248,7 @@ VALUES
     -- Insert Reviews
     INSERT INTO reviews (id_combination, id_user, id_order_item, rating, comment, anonymity)
     VALUES
-        (1, 1, NULL, 3, 'Smartphone nya bagus tapi kurirnya kurang ganteng, bintang 3', FALSE);
+        (1, 1, NULL, 3, 'Smartphone nya bagus tapi kurirnya kurang ramah, bintang 3', FALSE);
 
     -- Insert Review Images
     INSERT INTO review_images (id_review, image_url)

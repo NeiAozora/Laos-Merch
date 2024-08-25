@@ -76,8 +76,10 @@ requireView("partials/navbar.php");
                                 Pesanan Selesai
                             </button>
                             <?php else:?>
-                                <a href="#" class="btn btn-warning" id="openRatingModal">Beri Rating</a>
-                                <!-- <button type="button" class="btn btn-success" disabled>Pesanan Selesai</button> -->
+                                <?php if(!$order['has_review']): ?>
+                                    <a href="#" class="btn btn-warning" id="openRatingModal" onclick="setSelected(<?= $order['id_combination'] ?>, <?= $order['id_order_item'] ?>, <?= $order['id_product'] ?>)">Beri Rating</a>
+                                <?php endif;?>
+                                <button type="button" class="btn btn-success mt-1" disabled>Pesanan Selesai</button>
                             <?php endif;?>
                             <!-- Modal -->
                             <div class="modal fade" id="exampleModal<?= $order['id_order']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -183,6 +185,7 @@ requireView("partials/navbar.php");
                         </div>
                         <!-- Submit Button -->
                         <button type="submit" class="btn btn-primary">Submit</button>
+                        <div id="loading-review"></div>
                     </form>
                 </div>
             </div>
@@ -191,68 +194,125 @@ requireView("partials/navbar.php");
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const stars = document.querySelectorAll('.star-rating .star');
-        const selectedImagesContainer = document.getElementById('selectedImages');
-        const reviewImagesInput = document.getElementById('reviewImages');
-        let selectedRating = 0;
-        let selectedImages = [];
 
-        // Star Rating Functionality
-        stars.forEach(star => {
-            star.addEventListener('click', function () {
-                selectedRating = this.getAttribute('data-value');
-                stars.forEach(s => {
-                    s.classList.toggle('active', s.getAttribute('data-value') <= selectedRating);
-                });
+var idComb = 0;
+var idOi = 0;
+var pid = 0;
+
+function setSelected(a, b, c){
+    idComb = a;
+    idOi = b;
+    pid = c;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const stars = document.querySelectorAll('.star-rating .star');
+    const selectedImagesContainer = document.getElementById('selectedImages');
+    const reviewImagesInput = document.getElementById('reviewImages');
+    const ratingForm = document.getElementById('ratingForm');
+    let selectedRating = 0;
+    let selectedImages = [];
+
+    // Star Rating Functionality
+    stars.forEach(star => {
+        star.addEventListener('click', function () {
+            selectedRating = this.getAttribute('data-value');
+            stars.forEach(s => {
+                s.classList.toggle('active', s.getAttribute('data-value') <= selectedRating);
             });
-        });
-
-        // Image Preview and Remove Functionality
-        reviewImagesInput.addEventListener('change', function () {
-            Array.from(this.files).forEach(image => {
-                selectedImages.push(image);
-
-                const imageContainer = document.createElement('div');
-                imageContainer.classList.add('image-container');
-
-                const imgElement = document.createElement('img');
-                imgElement.src = URL.createObjectURL(image);
-
-                const removeButton = document.createElement('button');
-                removeButton.classList.add('remove-image');
-                removeButton.innerHTML = '&times;';
-                removeButton.addEventListener('click', function () {
-                    const index = selectedImages.indexOf(image);
-                    if (index > -1) {
-                        selectedImages.splice(index, 1);
-                    }
-                    imageContainer.remove();
-                });
-
-                imageContainer.appendChild(imgElement);
-                imageContainer.appendChild(removeButton);
-                selectedImagesContainer.appendChild(imageContainer);
-            });
-
-            reviewImagesInput.value = ''; // Reset the input so the same file can be re-selected if removed
-        });
-
-        // Form Submission Handling
-        document.getElementById('ratingForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-            const reviewText = document.getElementById('reviewText').value;
-            const anonymousCheck = document.getElementById('anonymousCheck').checked;
-            console.log('Review Submitted:', reviewText, 'Anonymous:', anonymousCheck, 'Rating:', selectedRating, 'Images:', selectedImages);
-            // Perform the actual submission here
-        });
-
-        // Modal Trigger
-        const ratingModal = new bootstrap.Modal(document.getElementById('ratingModal'));
-        document.getElementById('openRatingModal').addEventListener('click', function () {
-            ratingModal.show();
         });
     });
+
+    // Image Preview and Remove Functionality
+    reviewImagesInput.addEventListener('change', function () {
+        Array.from(this.files).forEach(image => {
+            selectedImages.push(image);
+
+            const imageContainer = document.createElement('div');
+            imageContainer.classList.add('image-container');
+
+            const imgElement = document.createElement('img');
+            imgElement.src = URL.createObjectURL(image);
+
+            const removeButton = document.createElement('button');
+            removeButton.classList.add('remove-image');
+            removeButton.innerHTML = '&times;';
+            removeButton.addEventListener('click', function () {
+                const index = selectedImages.indexOf(image);
+                if (index > -1) {
+                    selectedImages.splice(index, 1);
+                }
+                imageContainer.remove();
+            });
+
+            imageContainer.appendChild(imgElement);
+            imageContainer.appendChild(removeButton);
+            selectedImagesContainer.appendChild(imageContainer);
+        });
+
+        reviewImagesInput.value = ''; // Reset the input so the same file can be re-selected if removed
+    });
+
+    // Form Submission Handling
+ratingForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+
+    const formData = new FormData(ratingForm);
+    formData.append('rating', selectedRating);
+    formData.append('anonymity', document.getElementById('anonymousCheck').checked ? 1 : 0);
+    formData.append('reviewText', document.getElementById('reviewText').value);
+    formData.append('id_combination', idComb);
+    formData.append('id_order_item', idOi);
+    formData.append('token', t);
+
+    // Append selected images
+    selectedImages.forEach((image) => {
+        formData.append('reviewImages[]', image, image.name);
+    });
+    injectBarLoader("loading-review")
+    fetch(baseUrl + 'review/submit', { // Replace with your actual URL
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        removeBarLoader("loading-review")
+        const contentType = response.headers.get('Content-Type');
+
+        if (contentType.includes('text/html')) {
+            return response.text().then(htmlContent => {
+                openHtmlContentToNewPage(htmlContent);
+                throw Error('Received HTML instead of JSON');
+            });
+        }
+
+        if (!response.ok) {
+            console.error(response.message);
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            console.log('Review submitted successfully:', data);
+            window.location = baseUrl + "product/" + pid + "#review-" + data.reviewId;
+        } else {
+            console.error('Submission failed:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+
+
+    // Modal Trigger
+    const ratingModal = new bootstrap.Modal(document.getElementById('ratingModal'));
+    document.getElementById('openRatingModal').addEventListener('click', function () {
+        ratingModal.show();
+    });
+});
+
 </script>
 <?php
 requireView("partials/footer.php");

@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', function() {
         submitOrder(); // Only call submitOrder if the button is not disabled
     });
 });
+
+
+
 var addresses = [];
 document.addEventListener("DOMContentLoaded", function() {
     const apiUrl = baseUrl + 'api/user/addresses'; // Replace with your actual API endpoint
@@ -57,8 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const modalBody = modalElement.querySelector('.modal-body');
         let prioritizedAddress = null;
         let otherAddresses = [];
-
-
+    
         // Loop through addresses to find the prioritized one and others
         addresses.forEach(address => {
             if (address.is_prioritize) {
@@ -67,16 +69,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 otherAddresses.push(address);
             }
         });
-
+    
         // If there's no prioritized address, select the first one
         if (!prioritizedAddress && addresses.length > 0) {
             prioritizedAddress = addresses[0];
             otherAddresses = addresses.slice(1);
         }
-
-        // Clear existing cards
+    
+        // Clear existing content in modal body
         modalBody.innerHTML = '';
-
+    
         // Add the search bar
         const searchBar = document.createElement('div');
         searchBar.className = 'mb-3 position-relative';
@@ -87,26 +89,55 @@ document.addEventListener("DOMContentLoaded", function() {
             <input type="text" class="form-control ps-5" placeholder="Cari alamat yang dimiliki">
         `;
         modalBody.appendChild(searchBar);
-
+    
         // Add the "Kelola Alamat" button at the top, just below the search bar
         const addNewAddressButton = document.createElement('button');
         addNewAddressButton.className = 'btn btn-outline-success w-100 mb-3';
         addNewAddressButton.textContent = 'Kelola Alamat';
         addNewAddressButton.addEventListener('click', function(){
-            window.location = baseUrl + `user/${uid}/profile?edit=true&tab=address`
+            window.location = baseUrl + `user/${uid}/profile?edit=true&tab=address`;
         });
         modalBody.appendChild(addNewAddressButton);
-
+    
+        // Create a container for the address cards
+        const addressContainer = document.createElement('div');
+        modalBody.appendChild(addressContainer);
+    
         // Add the prioritized address card first
         if (prioritizedAddress) {
-            modalBody.appendChild(createAddressCard(prioritizedAddress, true));
+            addressContainer.appendChild(createAddressCard(prioritizedAddress, true));
         }
-
+    
         // Add other address cards with 'Pilih' and 'Jadikan Alamat Utama & Pilih' options
         otherAddresses.forEach(address => {
-            modalBody.appendChild(createAddressCard(address));
+            addressContainer.appendChild(createAddressCard(address));
+        });
+    
+        // Add search functionality
+        const searchInput = searchBar.querySelector('input');
+        searchInput.addEventListener('input', function() {
+            const query = searchInput.value.toLowerCase();
+            
+            const filteredAddresses = addresses.filter(address => {
+                return (
+                    address.label_name.toLowerCase().includes(query) ||
+                    address.street_address.toLowerCase().includes(query) ||
+                    address.city.toLowerCase().includes(query) ||
+                    address.state.toLowerCase().includes(query) ||
+                    address.postal_code.toLowerCase().includes(query)
+                );
+            });
+    
+            // Clear the address container and populate it with filtered results
+            addressContainer.innerHTML = '';
+    
+            filteredAddresses.forEach(address => {
+                addressContainer.appendChild(createAddressCard(address));
+            });
         });
     }
+    
+    
 
     function createAddressCard(address) {
         const card = document.createElement('div');
@@ -151,44 +182,6 @@ document.addEventListener("DOMContentLoaded", function() {
         return card;
     }
     
-    
-
-    function updateModalContent(filteredAddresses) {
-        const modalBody = modalElement.querySelector('.modal-body');
-        modalBody.innerHTML = '';
-
-        let prioritizedAddress = filteredAddresses.find(addr => addr.is_prioritize);
-        if (!prioritizedAddress && filteredAddresses.length > 0) {
-            prioritizedAddress = filteredAddresses[0];
-        }
-
-        // Add the search bar back
-        const searchBar = document.createElement('div');
-        searchBar.className = 'mb-3 position-relative';
-        searchBar.innerHTML = `
-            <span class="position-absolute top-50 start-0 translate-middle-y ms-3">
-                <i class="fa-solid fa-magnifying-glass text-muted"></i>
-            </span>
-            <input type="text" class="form-control ps-5" placeholder="Cari alamat yang dimiliki">
-        `;
-        modalBody.appendChild(searchBar);
-
-        // Add the "Kelola Alamat" button back at the top
-        const addNewAddressButton = document.createElement('button');
-        addNewAddressButton.className = 'btn btn-outline-success w-100 mb-3';
-        addNewAddressButton.textContent = 'Kelola Alamat';
-        modalBody.appendChild(addNewAddressButton);
-
-        if (prioritizedAddress) {
-            modalBody.appendChild(createAddressCard(prioritizedAddress, true));
-        }
-
-        filteredAddresses
-            .filter(addr => addr !== prioritizedAddress)
-            .forEach(address => {
-                modalBody.appendChild(createAddressCard(address));
-            });
-    }
 
     // Function to select address and update the "Alamat:" field
     window.selectAddress = function(id_shipping_address) {
@@ -264,7 +257,7 @@ document.querySelectorAll('input[name="payment_method"]').forEach(function(radio
     });
 });
 
-function ajaxGetToken(transactionData, callback) {
+function ajaxGetToken(transactionData, callback, retryCount = 0) {
     fetch(baseUrl + 'api/prepare-order', { 
         method: 'POST',
         headers: {
@@ -274,6 +267,16 @@ function ajaxGetToken(transactionData, callback) {
     })
     .then(response => {
         const contentType = response.headers.get('Content-Type');
+
+        if (response.status === 400) {
+            return response.json().then(data => {
+                if (data.message && data.message.includes('order_id has already been taken') && retryCount < 3) {
+                    return ajaxGetToken(transactionData, callback, retryCount + 1);
+                } else {
+                    callback(new Error(`Error 400: ${data.message}`), null);
+                }
+            });
+        }
 
         if (contentType.includes('application/json')) {
             return response.json();
@@ -303,6 +306,7 @@ function ajaxGetToken(transactionData, callback) {
         callback(error, null);
     });
 }
+
 
 function revertButton() {
     removeLoader('submitOrderButton');

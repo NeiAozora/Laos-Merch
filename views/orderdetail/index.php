@@ -222,7 +222,8 @@ $order = $data['order'];
                                 <?php endif; ?>
                                 <h6 class=""><?= htmlspecialchars($order['recipient_name']); ?></h6>
                                 <h6 class=""><?= htmlspecialchars($order['wa_number']); ?></h6>
-                                <h6 class=""><?= htmlspecialchars($order['address']); ?></h6>
+                                
+                                <h6 class=""><?= htmlspecialchars($order['address'] ?? '<span class="text-danger">(Dihapus)</span>'); ?></h6>
                                 <h6 class=""><?= htmlspecialchars($order['extra_note']); ?></h6>
 
                             </div>
@@ -237,7 +238,7 @@ $order = $data['order'];
                             <div class="d-flex flex-column">
                                 <div class="d-flex flex-column text-end">
                                     <h6>Metode Pembayaran:</h6>
-                                    <h6>Sub Total Harga Produk:</h6>
+                                    <h6>Sub Total Produk:</h6>
                                     <h6>Biaya Penanganan:</h6>
                                     <h6>Biaya Layanan:</h6>
                                     <h6>Total Ongkos Kirim:</h6>

@@ -1,6 +1,6 @@
 <?php
-requireView("partials/head.php");
-requireView("partials/navbar.php");
+requireView("partials/head.php", $data);
+requireView("partials/navbar.php", $data);
 ?>
 
 <style>
@@ -31,6 +31,9 @@ requireView("partials/navbar.php");
             <div class="col-12 text-start mb-2">
                 <input type="checkbox" class="cursor-pointer" id="selectAll">
                 <label for="selectAll" class="title-detail">Pilih Semua</label>
+                <?php if(isset($_GET['id'])): ?>
+                    <a href="<?= BASEURL ?>cart" class="title-detail text-decoration-none" style="padding-left: 5px;">Tampilkan Semua Item</a>
+                <?php endif; ?>
             </div>
             <div class="col-lg-8 col-md-10 col-sm-12">
                 <?php if (!empty($cartItems)) : ?>

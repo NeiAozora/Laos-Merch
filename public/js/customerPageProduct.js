@@ -213,10 +213,37 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedElement.style.border = '2px solid gray'; // Highlight selected image
     }
 
+    // Remove duplicate images and return image URLs
+    function getUniqueImageUrls() {
+        const seenUrls = new Set();
+        const uniqueUrls = [];
+        document.querySelectorAll('.image-pagination .page-item img').forEach(img => {
+            if (!seenUrls.has(img.src)) {
+                seenUrls.add(img.src);
+                uniqueUrls.push(img.src);
+            }
+        });
+        return uniqueUrls;
+    }
+
+    // Remove duplicate images by URL
+    function removeDuplicateImages() {
+        const uniqueUrls = getUniqueImageUrls();
+        const allImages = document.querySelectorAll('.image-pagination .page-item img');
+        const seenUrls = new Set();
+
+        allImages.forEach(img => {
+            if (seenUrls.has(img.src)) {
+                img.closest('.page-item').remove(); // Remove the parent <li> of the duplicate image
+            } else {
+                seenUrls.add(img.src);
+            }
+        });
+    }
+
     // Append option images to pagination if image_url is present
     const pagination = document.querySelector('.image-pagination');
     
-
     variationOptions.forEach(option => {
         if (option.image_url) {
             const listItem = document.createElement('li');
@@ -245,13 +272,108 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Remove duplicates after adding new images
+    removeDuplicateImages();
+
     // Initialize first image if necessary
     const firstImage = pagination.querySelector('.page-item img');
     if (firstImage) {
         updateMainImage(firstImage.src);
         highlightSelectedImage(firstImage);
     }
+
+    // Add click event listeners to newly added images
+    document.querySelectorAll('.image-pagination .page-item img').forEach(img => {
+        img.addEventListener('click', () => {
+            updateMainImage(img.src);
+            highlightSelectedImage(img);
+        });
+    });
+    
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const pagination = document.querySelector('.image-pagination');
+    const items = Array.from(pagination.querySelectorAll('.page-item:not(.disabled):not(:last-child)')); // Exclude the disabled and last items
+
+    let currentIndex = 0;
+
+    // Function to update the main image
+    function updateMainImage(imageUrl) {
+        document.getElementById('productMainImage').src = imageUrl;
+    }
+
+    // Function to highlight the selected image
+    function highlightSelectedImage(selectedElement) {
+        document.querySelectorAll('.image-pagination .page-item img').forEach(img => {
+            img.style.border = 'none'; // Remove highlight from all images
+        });
+        selectedElement.style.border = '2px solid gray'; // Highlight selected image
+    }
+
+    // Update pagination buttons
+    function updatePaginationButtons() {
+        const prevButton = pagination.querySelector('.page-item.disabled');
+        const nextButton = pagination.querySelector('.page-item:not(.disabled):last-child');
+        
+        if (currentIndex === 0) {
+            prevButton.classList.add('disabled');
+        } else {
+            prevButton.classList.remove('disabled');
+        }
+        
+        if (currentIndex === items.length - 1) {
+            nextButton.classList.add('disabled');
+        } else {
+            nextButton.classList.remove('disabled');
+        }
+    }
+
+    // Show the image at the given index
+    function showImageAtIndex(index) {
+        const img = items[index].querySelector('img');
+        updateMainImage(img.src);
+        highlightSelectedImage(img);
+    }
+
+    // Event listener for pagination buttons
+    pagination.addEventListener('click', (event) => {
+        const target = event.target.closest('.page-item');
+        if (!target) return;
+        
+        if (target.querySelector('a').textContent === '<') {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showImageAtIndex(currentIndex);
+                updatePaginationButtons();
+            }
+        } else if (target.querySelector('a').textContent === '>') {
+            if (currentIndex < items.length - 1) {
+                currentIndex++;
+                showImageAtIndex(currentIndex);
+                updatePaginationButtons();
+            }
+        } else {
+            // Clicked on an image
+            const imgIndex = items.indexOf(target);
+            if (imgIndex !== -1) {
+                currentIndex = imgIndex;
+                showImageAtIndex(currentIndex);
+                updatePaginationButtons();
+            }
+        }
+    });
+
+    // Initialize first image and pagination buttons
+    if (items.length > 0) {
+        showImageAtIndex(0);
+        updatePaginationButtons();
+    }
+});
+
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const reviewsContainer = document.getElementById('reviews-container');

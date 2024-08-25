@@ -223,13 +223,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
 
-        let profilePicture = reviews.profile_picture ?? "https://via.placeholder.com/60";
+        let profilePicture = reviews.profile_picture ?? "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
+
+        reviews.reverse()
 
         reviews.forEach(review => {
             let name = (review.full_name.length > 0) ? review.full_name : review.username;
             
-            if (review.anonimity < 1){
+            if (review.anonymity === 1){
                 name = censorName(name);
+                profilePicture = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
+
             }
         
             let reviewImages = ''; // Ensure reviewImages is initialized

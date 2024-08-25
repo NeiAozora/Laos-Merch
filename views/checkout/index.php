@@ -98,18 +98,18 @@ requireView("partials/navbar.php");
                             <div class="mb-2">
                                 <div class="card">
                                     <div class="card-body row justify-content-between align-items-center">
-                                        <div class="col-sm-4 col-md-4 col-12 d-flex">
-                                            <img src="<?php echo htmlspecialchars($product['image_url']); ?>" alt="Product Image" class="img-fluid" style="max-height: 5rem; border-radius:8px">
-                                            <div class="product-name ms-3">
-                                                <h4><?php echo htmlspecialchars($product['product_name']); ?></h4>
-                                                <div style="display: flex;">
-                                                    <div class="me20">
-                                                        <h6 class="title-detail">Variasi:</h6>
-                                                        <p><?php echo htmlspecialchars($product['selected_options']); ?></p>
-                                                    </div>
+                                    <div class="col-sm-4 col-md-4 col-12 d-flex">
+                                        <img src="<?php echo htmlspecialchars($product['image_url']); ?>" alt="Product Image" class="img-fluid" style="max-height: 5rem; border-radius:8px">
+                                        <div class="product-name ms-3">
+                                            <h4 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?php echo htmlspecialchars($product['product_name']); ?></h4>
+                                            <div style="display: flex;">
+                                                <div class="me-20" style="max-width: 100%;">
+                                                    <h6 class="title-detail">Variasi:</h6>
+                                                    <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?php echo htmlspecialchars($product['selected_options']); ?></p>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
                                         <div class="col-sm-4 col-md-4 col-12">
                                             <h6 class="title-detail mb-1">Jumlah:</h6>
                                             <h5><?php echo htmlspecialchars($product['quantity']); ?></h5>
@@ -137,23 +137,41 @@ requireView("partials/navbar.php");
                 <div class="card d-flex flex-column justify-content-between">
                     <h4 class="m-2 title-detail text-start">Rincian:</h4>
                     <div class="ms-2">
-                        <h5 class="me20">Nama Pembeli:</h5>
-                        <h6><?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></h6>
-                        <h5 class="me20 mt-3">Metode Pembayaran:</h5>
-                        <h6 id="selected_payment_method">Pilih Metode Pembayaran</h6>
-                        <h5 class="me20 mt-3">Jenis Pengiriman:</h5>
-                        <h6 id="selected_shipping_method">Pilih Metode Pengiriman</h6>
-                        <h6 class="mt-3">Biaya Layanan:</h6>
-                        <h6>Rp. 500</h6>
-                        <h6>Biaya Penanganan:</h6>
-                        <h6>Rp. 1000</h6>
-                        <h5 class="mt-2 me20">Total Barang:</h5>
-                        <h6 id="total_amount">Rp. <?php echo number_format($total_price, 2); ?></h6>
-
-
-                        <h5 class="mt-5 me20">SubTotal:</h5>
-                        <h6>Rp. <?php echo number_format($total_price + 500 + 1000, 2); ?></h6>
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td class="text-end small"><strong>Nama Pembeli:</strong></td>
+                                    <td class="text-end"><h6><?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></h6></td>
+                                </tr>
+                                <tr>
+                                    
+                                    <td class="text-end small"><strong>Metode Pembayaran:</strong></td>
+                                    <td class="text-end"><h6 id="selected_payment_method"><span style="color: #888; font-size:smaller;">Pilih Metode Pembayaran</span></h6></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-end small"><strong>Jenis Pengiriman:</strong></td>
+                                    <td class="text-end"><h6 id="selected_shipping_method"><span style="color: #888; font-size:smaller;">Pilih Metode Pengiriman</span></h6></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-end small"><strong>SubTotal Barang:</strong></td>
+                                    <td class="text-end"><h6 id="total_amount">Rp. <?php echo number_format($total_price, 2); ?></h6></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-end small"><strong>Biaya Layanan:</strong></td>
+                                    <td class="text-end"><h6>Rp. 500</h6></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-end small"><strong>Biaya Penanganan:</strong></td>
+                                    <td class="text-end"><h6>Rp. 1000</h6></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-end small"><strong>Total:</strong></td>
+                                    <td class="text-end"><h6>Rp. <?php echo number_format($total_price + 500 + 1000, 2); ?></h6></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
+
                     <div class="mt-2 text-center mb-3">
                         <button class="btn btn-success" style="width: 12rem;" id="submitOrderButton">Lanjut Bayar</button>
                     </div>
@@ -185,7 +203,6 @@ requireView("partials/navbar.php");
 <style>
   .modal-body .form-control {
     border: 1px solid #04d4a4;
-    color: #fff;
   }
   
   
@@ -212,7 +229,6 @@ requireView("partials/navbar.php");
     const uid = <?= $user['id'] ?>;
     var said = <?= (isset($address)) ? $address['id_shipping_address'] : 0 ?>
 </script>
-<script src="<?= BASEURL ?>public/js/components/loadingAnimation.js"></script>
 <script type="text/javascript" 
     src="https://app.sandbox.midtrans.com/snap/snap.js"
     data-client-key="Mid-client-VVa8MqsfFdh9WpVr"></script>
