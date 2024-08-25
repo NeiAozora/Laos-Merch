@@ -185,7 +185,7 @@ requireView("partials/navbar.php");
                         </div>
                         <!-- Submit Button -->
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <div id="loading-review"></div>
+                        <div id="loading-review" class="mt-1"></div>
                     </form>
                 </div>
             </div>
